@@ -240,7 +240,7 @@
                         let leaveT = formatTime(leaveDate);
                         workTime.innerText = attendTime;
                         leaveTime.innerHTML = leaveT;
-                        if (rslt.dclzLvffcTm != "2000-01-01 00:00:00.0") { //출 퇴근 다 찍혀있을 때
+                        if (rslt.dclzLvffcTm != "2000-01-01 00:00:00") { //출 퇴근 다 찍혀있을 때
                             leave.setAttribute("disabled", "true");
                         }
                     }
