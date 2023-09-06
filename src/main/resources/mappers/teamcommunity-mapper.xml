@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.co.groovy.teamcommunity.SntncMapper">
+<mapper namespace="kr.co.groovy.teamcommunity.CommunityMapper">
     <insert id="inputPost" parameterType="sntncVO">
         Insert Into SNTNC(SNTNC_ETPR_CODE,
                           SNTNC_WRTING_EMPL_ID,
@@ -16,6 +16,15 @@
 
     <select id="getSeq" resultType="int">
         SELECT sntnc_seq.nextval from dual
+    </select>
+
+    <select id="findRecomend" parameterType="String" resultType="String">
+        select COMMON_CODE_RECOMEND_AT
+        from RECOMEND r
+        WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId};
+    </select>
+    <select id="findPost" resultType="sntncVO" parameterType="map">
+
     </select>
 
     <insert id="uploadPostFile" parameterType="map">
