@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.groovy.facility.FacilityMapper">
+    <insert id="inputVehicleReservation" parameterType="vehicleVO">
+        insert into VHCLE_RESVE
+        values (VHCLE_RESVE_SEQ.nextval, #{vhcleResveBeginTime}, #{vhcleResveEndTime}, #{vhcleNo}, #{vhcleResveEmplId},
+                #{commonCodeResveAt})
+    </insert>
+    <delete id="deleteReservedByVhcleResveNo" parameterType="int">
+        delete
+        from vhcle_resve
+        where vhcle_resve_no = #{vhcleResveNo}
+    </delete>
+
+
+    <select id="getVehicles" resultType="vehicleVO">
+        select *
+        from VHCLE
+    </select>
+    <select id="getReservedVehicleByVhcleNo" resultType="vehicleVO" parameterType="String">
+        select *
+        from VHCLE v
+                 full outer join VHCLE_RESVE vr on v.VHCLE_NO = vr.VHCLE_NO
+        where TRUNC(vr.VHCLE_RESVE_BEGIN_TIME) = TRUNC(sysdate)
+          and v.VHCLE_NO = #{vhcleNo}
+    </select>
+    <select id="getReservedVehicleByEmplId" resultType="vehicleVO" parameterType="String">
+        select *
+        from VHCLE_RESVE
+        where VHCLE_RESVE_EMPL_ID = #{vhcleResveEmplId}
+          and TRUNC(VHCLE_RESVE_BEGIN_TIME) = TRUNC(sysdate)
+    </select>
+
+</mapper>

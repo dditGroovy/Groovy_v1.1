@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.groovy.admin.generalaffairs.GeneralAffairsMapper">
+
+    <!-- 총무팀 공지사항 관리   -->
+    <insert id="inputNotice" parameterType="NoticeVO">
+        INSERT INTO NOTI(NOTI_ETPR_CODE,
+                         NOTI_TITLE,
+                         NOTI_CONTENT,
+                         NOTI_DATE,
+                         NOTI_CTGRY_ICON_FILE_STRE_NM,
+                         COMMON_CODE_NOTI_KIND)
+        VALUES (#{notiEtprCode},
+                #{notiTitle},
+                #{notiContent},
+                sysdate,
+                #{notiCtgryIconFileStreNm},
+                'NOTI020')
+    </insert>
+    <!--    'NOTI-' || NOTI_SEQ.nextval || '-' || TO_CHAR(sysdate, 'yyyyMMdd')-->
+    <insert id="uploadNoticeFile" parameterType="map">
+        INSERT INTO UPLOAD_FILE(UPLOAD_FILE_SN,
+                                UPLOAD_FILE_ETPR_CODE,
+                                UPLOAD_FILE_ORGINL_NM,
+                                UPLOAD_FILE_STRE_NM,
+                                UPLOAD_FILE_SIZE,
+                                UPLOAD_FILE_RGSDE)
+        VALUES (UPLOAD_FILE_SEQ.nextval,
+                #{notiEtprCode},
+                #{originalFileName},
+                #{newFileName},
+                #{fileSize},
+                sysdate)
+    </insert>
+    <select id="getNotiSeq" resultType="int">
+        SELECT NOTI_SEQ.nextval
+        FROM dual
+    </select>
+    <update id="deleteNotice">
+        UPDATE NOTI
+        SET COMMON_CODE_NOTI_KIND = 'NOTI021'
+        WHERE NOTI_ETPR_CODE = #{notiEtprCode}
+    </update>
+    <update id="modifyNotice">
+        UPDATE NOTI
+        SET NOTI_TITLE                   = #{notiTitle},
+            NOTI_CONTENT                 = #{notiContent},
+            NOTI_DATE                    = sysdate,
+            NOTI_CTGRY_ICON_FILE_STRE_NM = #{notiCtgryIconFileStreNm}
+        WHERE NOTI_ETPR_CODE = #{notiEtprCode}
+    </update>
+
+</mapper>
+

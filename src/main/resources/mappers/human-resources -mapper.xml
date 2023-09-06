@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.groovy.admin.humanresources.HumanResourcesMapper">
+    <select id="loadConnectionLog" parameterType="String" resultType="connectionLogVO">
+        SELECT C.EMPL_ID,
+               C.CONECT_LOG_MACADRS,
+               C.CONECT_LOG_IP,
+               C.CONECT_LOG_DATE,
+               E.EMPL_MACADRS
+        FROM CONECT_LOG C,
+             EMPL E
+        WHERE C.EMPL_ID = E.EMPL_ID
+          AND TO_CHAR(CONECT_LOG_DATE, 'yyyy-MM-dd') = #{today}
+    </select>
+</mapper>
+

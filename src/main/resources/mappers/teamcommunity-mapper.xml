@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.groovy.teamcommunity.SntncMapper">
+    <insert id="inputPost" parameterType="sntncVO">
+        Insert Into SNTNC(SNTNC_ETPR_CODE,
+                          SNTNC_WRTING_EMPL_ID,
+                          SNTNC_CN,
+                          SNTNC_WRITNG_DATE,
+                          COMMON_CODE_SNTNC_CTGRY)
+        VALUES (#{sntncEtprCode},
+                #{sntncWritingEmplId},
+                #{sntncCn},
+                sysdate,
+                'SNTNC010')
+    </insert>
+
+    <select id="getSeq" resultType="int">
+        SELECT sntnc_seq.nextval from dual
+    </select>
+
+    <insert id="uploadPostFile" parameterType="map">
+        INSERT INTO UPLOAD_FILE(UPLOAD_FILE_SN,
+                                UPLOAD_FILE_ETPR_CODE,
+                                UPLOAD_FILE_ORGINL_NM,
+                                UPLOAD_FILE_STRE_NM,
+                                UPLOAD_FILE_SIZE,
+                                UPLOAD_FILE_RGSDE)
+        VALUES (UPLOAD_FILE_SEQ.nextval,
+                #{sntncEtprCode},
+                #{originalFileName},
+                #{newFileName},
+                #{fileSize},
+                sysdate)
+    </insert>
+
+
+</mapper>
