@@ -59,6 +59,7 @@ public class CustomLoginSuccessHandler extends
                 connectionLogVO.setConectLogIp(ip.getHostAddress());
                 NetworkInterface network = NetworkInterface.getByInetAddress(ip);
                 byte[] mac = network.getHardwareAddress();
+                log.info(mac+"");
                 if (mac != null) {
                     String macAddress = "";
                     for (int i = 0; i < mac.length; i++) {
@@ -75,6 +76,7 @@ public class CustomLoginSuccessHandler extends
                     */
 
                     connectionLogVO.setConectLogMacadrs(macAddress);
+                    log.info(macAddress);
                     mapper.inputConectLog(connectionLogVO);
                 }
             }
