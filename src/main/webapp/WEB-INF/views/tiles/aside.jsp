@@ -23,7 +23,7 @@
       <div class="btn-wrap">
         <button id = "logout" class="font-11 btn-free-white"><a href="${pageContext.request.contextPath}/signOut" style="color: black;" >로그아웃<i class="icon i-signOut"></i></a></button>
         <button id="videoConference" class="font-11 btn-free-white"><a href="${pageContext.request.contextPath}/employee/manageEmp"><span class="btn-detail">사원관리</span></a></button>
-        <button id="reservation" class="font-11 btn-free-white"><a href="${pageContext.request.contextPath}/facility/vehicle"><span class="btn-detail">예약</span></a></button>
+        <button id="reservation" class="font-11 btn-free-white"><a href="${pageContext.request.contextPath}/facility/rest"><span class="btn-detail">예약</span></a></button>
       </div>
     </div>
   </header>
