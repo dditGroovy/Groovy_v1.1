@@ -37,8 +37,9 @@ public class CommunityService {
         vo.setSntncEtprCode(sntncEtprCode);
         log.info(vo.getSntncCn(), vo.getSntncWrtingEmplId(), vo.getSntncEtprCode());
         mapper.inputPost(vo);
-
-        if(postFile != null){
+        boolean hasFile = postFile.isEmpty();
+        log.info(postFile + "");
+        if(postFile!= null && postFile.getSize() != 0 && !postFile.getName().equals("")){
             String path = uploadPath + "/teamCommunity";
             log.debug("path: " + path);
             File uploadDir = new File(path);
