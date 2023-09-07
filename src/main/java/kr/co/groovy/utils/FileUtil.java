@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -27,7 +28,9 @@ public class FileUtil {
     }
 
     @GetMapping("/download/{dir}")
-    public void fileDownload(int uploadFileSn, HttpServletResponse resp, @PathVariable String dir) throws Exception {
+    public void fileDownload(@PathVariable("dir") String dir,
+                             @RequestParam("uploadFileSn") int uploadFileSn,
+                             HttpServletResponse resp) throws Exception {
         try {
             UploadFileVO vo = service.downloadFile(uploadFileSn);
             String originalName = new String(vo.getUploadFileOrginlNm().getBytes("utf-8"), "iso-8859-1");
