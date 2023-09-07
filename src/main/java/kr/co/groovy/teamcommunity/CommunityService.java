@@ -69,8 +69,8 @@ public class CommunityService {
 
     }
 
-    public List<SntncVO> findPost(String emplId){
-        return mapper.findPost(emplId);
+    public List<SntncVO> loadPost(String emplId){
+        return mapper.loadPost(emplId);
     };
     public String findRecomend(String sntncEtprCode, String recomendEmplId) {
         return mapper.findRecomend(sntncEtprCode, recomendEmplId);
