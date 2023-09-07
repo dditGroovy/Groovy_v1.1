@@ -1,10 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal" var="CustomUser"/>
 <h1>팀 커뮤니티</h1>
 <h4>인사팀만을 위한 공간입니다.</h4>
 
 <h2>포스트 등록</h2>
-<form action="${pageContext.request.contextPath}/employee/inputPost" method="post" enctype="multipart/form-data">
+<form action="${pageContext.request.contextPath}/teamCommunity/inputPost" method="post" enctype="multipart/form-data">
     <table border="1">
         <tr>
             <th>글 내용</th>
@@ -28,6 +34,7 @@
             <th>포스트 내용</th>
             <th>좋아요</th>
             <th>수정/삭제</th>
+            <th>파일</th>
         </tr>
         <!--<tr>
             <td><input type="text" name="getSntncEtprCode" id="getSntncEtprCode" value="1"></td>
@@ -41,17 +48,37 @@
                 <button type="button" id="deleteBtn">삭제</button>
             </td>
         </tr>-->
+        <c:forEach var="sntncVO" items="${sntncList}">
         <tr>
-            <td>1</td>
-            <td>강서주</td>
-            <td>2023/08/08 21:42:00</td>
-            <td>Lorem ipsum dolor sit amet consectetur. In malesuada sed vitae pharetra id. Cras cong</td>
-            <td>1</td>
+            <td>${sntncVO.sntncEtprCode}</td>
+            <td>${sntncVO.emplNm}</td>
+            <td>${sntncVO.sntncWrtingDate}</td>
+            <td>${sntncVO.sntncCn}</td>
+            <td>${sntncVO.recomendCnt}</td>
+            <td>${sntncVO.sntncWrtingEmplId}</td>
+
+            <td>
+                <c:choose>
+                    <c:when test="${sntncVO.uploadFileSn != null && sntncVO.uploadFileSn != 0.0}">
+
+                        <a href="/file/download/teamCommunity?uploadFileSn=${sntncVO.uploadFileSn}">
+                                ${sntncVO.uploadFileOrginlNm}
+                        </a>
+                        <fmt:formatNumber value="${sntncVO.uploadFileSize / 1024.0}" type="number" minFractionDigits="1" maxFractionDigits="1"/> KB
+                    </c:when>
+                    <c:otherwise>
+                        파일없음
+                    </c:otherwise>
+                </c:choose>
+            </td>
+            <c:if test="${sntncVO.sntncWrtingEmplId} == ${CustomUser.employeeVO.emplNm}" var="emplId" scope="session">
             <td>
                 <button type="button" id="modifyBtn">수정</button>
                 <button type="button" id="deleteBtn">삭제</button>
             </td>
+            </c:if>
         </tr>
+        </c:forEach>
     </table>
     <hr /><br />
     <h2>포스트에 등록한 댓글 불러오기</h2>
@@ -282,6 +309,7 @@
     </form>
     <button type="button" id="insertNotice">등록</button>
 </div>
+</sec:authorize>
 <br /><hr />
 <script>
     document.addEventListener("DOMContentLoaded", () => {

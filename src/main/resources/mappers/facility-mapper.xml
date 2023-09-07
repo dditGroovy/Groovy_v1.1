@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.groovy.facility.FacilityMapper">
+    <insert id="inputRestReservation" parameterType="facilityVO">
+        insert into FCLTY_RESVE
+        values (FCLTY_RESVE_SEQ.nextval, #{fcltyResveBeginTime}, #{fcltyResveEndTime}, 'n', #{fcltyResveEmplId},
+                #{commonCodeResveAt}, #{commonCodeFcltyKind})
+    </insert>
+    <delete id="deleteReservedByFcltyResveSn" parameterType="int">
+        delete from FCLTY_RESVE where FCLTY_RESVE_SN = #{fcltyResveSn}
+    </delete>
 
     <select id="getMeetingRooms" resultType="facilityVO">
-        select *
-        from fclty
-        where COMMON_CODE_FCLTY_KIND like 'FCLTY010%'
+        select fc.COMMON_CODE_FCLTY_KIND, fc.FCLTY_PSNCPA, fx.COMMON_CODE_FXRPS_KIND
+        from FCLTY fc
+                 left outer join FXTRS fx on fc.COMMON_CODE_FCLTY_KIND = fx.COMMON_CODE_FCLTY_KIND
+        where fc.COMMON_CODE_FCLTY_KIND like 'FCLTY010%'
+        order by fc.COMMON_CODE_FCLTY_KIND
     </select>
 
     <select id="getRestRooms" resultType="facilityVO">
@@ -13,5 +23,30 @@
         from fclty
         where COMMON_CODE_FCLTY_KIND like 'FCLTY011%'
     </select>
+
+    <select id="getReservedRestRoomsByFcltyKind" resultType="facilityVO" parameterType="String">
+        select *
+        from FCLTY f
+                 inner join FCLTY_RESVE fr on f.COMMON_CODE_FCLTY_KIND = fr.COMMON_CODE_FCLTY_KIND
+        where TRUNC(fr.FCLTY_RESVE_BEGIN_TIME) = TRUNC(sysdate)
+          and f.COMMON_CODE_FCLTY_KIND = #{commonCodeFcltyKind}
+    </select>
+
+    <select id="getReservedRestRoomByFcltyResveEmplId" resultType="facilityVO" parameterType="String">
+        select f.COMMON_CODE_FCLTY_KIND,
+               fr.FCLTY_RESVE_SN,
+               fr.FCLTY_RESVE_BEGIN_TIME,
+               fr.FCLTY_RESVE_END_TIME,
+               fr.FCLTY_RESVE_EMPL_ID,
+               fr.COMMON_CODE_RESVE_AT
+        from FCLTY f
+                 inner join FCLTY_RESVE fr on f.COMMON_CODE_FCLTY_KIND = fr.COMMON_CODE_FCLTY_KIND
+        where TRUNC(fr.FCLTY_RESVE_BEGIN_TIME) = TRUNC(sysdate)
+          and fr.FCLTY_RESVE_EMPL_ID = #{fcltyResveEmplId}
+    </select>
+
+
+
+
 
 </mapper>

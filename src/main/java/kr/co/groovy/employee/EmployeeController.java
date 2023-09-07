@@ -94,9 +94,9 @@ public class EmployeeController {
         return "employee/commute";
     }
 
-    @GetMapping("/task")
+    @GetMapping("/job")
     public String task() {
-        return "employee/task";
+        return "employee/job";
     }
 
     @GetMapping("/teamCommunity")

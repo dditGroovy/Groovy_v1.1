@@ -1,8 +1,52 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <style>
+  .border {
+    border: 1px solid #333333;
+    display: flex;
+    gap: 24px;
+  }
+  .taskBoxWrapper {
+    display: flex; gap: 24px;
+    margin: 48px;
+  }
+  .inTaskBox {
+    border: 1px solid #333333;
+    flex: 7;
+  }
+  .outTaskBox {
+    border: 1px solid #333333;
+    flex: 3;
+  }
   .todoBoardListWrapper {display: flex; gap: 24px;}
   .list-header {display: flex; justify-content: space-between; align-items: center;}
 </style>
+<a href="#">할 일</a>
+<a href="/job/jobDiary">업무 일지</a>
+<div class="taskBoxWrapper">
+  <div class="inTaskBox">
+    <h1>들어온 업무 요청</h1>
+    <ul>
+      <li class="border">
+        <span>이혜진</span>
+        <p>스마트홈 시스템 확장, 인공지능 비서가 집안 생활을 편리하게 지원</p>
+        <p>2023년 03월 05일</p>
+        <button type="button">거절</button>
+        <button type="button">동의</button>
+      </li>
+    </ul>
+  </div>
+  <div class="outTaskBox">
+    <h1>요청한 업무</h1>
+    <button type="button">업무 요청하기</button>
+    <ul>
+      <li class="border">
+        <p>[최서연]회의록 작성 건</p>
+        <p>2023년 03월 05일</p>
+      </li>
+    </ul>
+  </div>
+</div>
+
 <div id="todoBoard">
   <div class="todoBoardListWrapper">
     <div class="todoBoardList">
@@ -177,7 +221,7 @@
     </div>
   </div>
 </div>
-<br /><br/><br />
+<br /><br/><br /> <!--- 아래의 목록 클릭했을 때 -->
 <h1>업무 상세보기</h1>
 <table border="1" style="width: 50%;">
   <colgroup>
@@ -303,6 +347,9 @@
     </form>
   </div>
 </div>
+
+<h1>들어온 업무 요청</h1>
+<table></table>
 
 <script>
   const newJobBtn = document.querySelector("#newJobBtn");

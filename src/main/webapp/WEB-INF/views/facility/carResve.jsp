@@ -7,7 +7,7 @@
 
 <hr/>
 <c:forEach var="vehicleVO" items="${vehicles}">
-    <button type="button" onclick="setRoomNumber(this); loadReservation(this);">
+    <button type="button" onclick="setRoomNumber(this); loadReservedList(this);">
         <i></i>
         <div>
             <h3>${vehicleVO.vhcleVhcty}</h3> <!-- 차량 -->
@@ -22,7 +22,6 @@
 <hr/>
 <h2 onclick="goReservation()">예약하기</h2>
 <div id="reserveBox">
-    <!-- 차량 클릭시 차 번호가 name값으로 들어옴 -->
     <input type="hidden" name="vhcleNo" id="vhcleNo"/>
     <p id="today"></p>
     <p id="time"></p>
@@ -61,9 +60,6 @@
         <option value="21:00">21:00</option>
         <option value="22:00">22:00</option>
     </select>
-    <%--    <h3>요청사항</h3>--%>
-    <%--    <input type="text" name="" value="" placeholder="비품 등 요청 사항을 적어주세요 :)"/>--%>
-
     <div>
         <p><i></i>가능</p>
         <p><i></i>불가능</p>
@@ -96,10 +92,10 @@
 
     const selectVhcleResveBeginTime = document.getElementById("selectVhcleResveBeginTime");
 
-    function loadReservation(vhcle) {
+    function loadReservedList(vhcle) {
         vhcleNo = $(vhcle).find(".no").html();
         let xhr = new XMLHttpRequest();
-        xhr.open("get", `/facility/vehicle/reservedVehicles/\${vhcleNo}`, true);
+        xhr.open("get", `/facility/vehicle/reserved/\${vhcleNo}`, true);
         xhr.setRequestHeader("ContentType", "application/json;charset=utf-8");
         xhr.onreadystatechange = function () {
             if (xhr.status == 200 && xhr.readyState == 4) {
@@ -144,11 +140,10 @@
     function loadMyReserveList() {
         let tableStr = `<table border=1><tr><td>차번호</td><td>예약시간</td><td>취소</td></tr>`;
         let xhr = new XMLHttpRequest();
-        xhr.open("get", "/facility/vehicle/myReservedVehicles", true);
+        xhr.open("get", "/facility/vehicle/myReservations", true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let myReservedList = JSON.parse(xhr.responseText);
-                console.log(myReservedList);
                 if (myReservedList.length > 0) {
                     for (let i = 0; i < myReservedList.length; i++) {
                         let beginHour = new Date(myReservedList[i].vhcleResveBeginTime).getHours().toString() + ":00";
@@ -192,13 +187,12 @@
         }
 
         $.ajax({
-            url: "/facility/vehicle/inputReservation",
+            url: "/facility/vehicle",
             type: "post",
             data: JSON.stringify(vehicleVO),
             contentType: "application/json;charset=utf-8",
             dataType: 'json',
             success: function (result) {
-                console.log(result);
                 if (result) {
                     alert("예약이 완료되었습니다. 총무팀에서 차키를 받을 수 있습니다.");
                 }
@@ -230,7 +224,6 @@
             type: "delete",
             dataType: 'json',
             success: function (result) {
-                console.log(result);
                 loadMyReserveList();
             },
             error: function (xhr, status, error) {

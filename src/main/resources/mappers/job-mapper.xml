@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.groovy.job.JobMapper">
+    <select id="getLeader" parameterType="String" resultType="String">
+        SELECT EMPL_ID
+        FROM EMPL
+        WHERE COMMON_CODE_DEPT = (SELECT COMMON_CODE_DEPT
+                                  FROM EMPL
+                                  WHERE EMPL_ID = #{emplId})
+          AND COMMON_CODE_CLSF = 'CLSF012'
+    </select>
+    <insert id="insertDiary" parameterType="jobVO">
+        INSERT INTO JOB_DIARY (
+             JOB_DIARY_REPORT_DATE,
+             JOB_DIARY_WRTING_EMPL_ID,
+             JOB_DIARY_RECPTN_EMPL_ID,
+             JOB_DIARY_SBJ,
+             JOB_DIARY_CN
+             )
+        VALUES (
+                SYSDATE,
+                #{jobDiaryWrtingEmplId},
+                #{jobDiaryRecptnEmplId},
+                #{jobDiarySbj},
+                #{jobDiaryCn}
+                )
+    </insert>
+</mapper>

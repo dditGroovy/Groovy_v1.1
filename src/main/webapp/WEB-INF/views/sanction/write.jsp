@@ -1,14 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec"
+           uri="http://www.springframework.org/security/tags" %>
+
 <h2>
     <a href="#">결재 요청</a>
     <a href="#">결재 진행함</a>
     <a href="#">개인 문서함</a>
-</h2> <br /><br />
+</h2> <br/><br/>
 <div id="formCard">
     <div class="formHeader">
         <div class="btnWrap">
-            <button>결재선</button>
-        </div><br />
+            <button id="getLine">결재선</button>
+            <div id="sanctionLine">
+                <%@include file="line/line.jsp" %>
+            </div>
+        </div>
+        <br/>
         <div class="formTitle">
             연차 신청   <!--이것도 각자 끌어오면 좋게씀-->
         </div>
@@ -49,7 +57,8 @@
                 </tr>
                 <tr>
                     <td class="form-title">제목</td>
-                    <td colspan="3"><input type="text" name="elctrnSanctnSj" id="elctrnSanctnSj" style="width: 99%"></td>
+                    <td colspan="3"><input type="text" name="elctrnSanctnSj" id="elctrnSanctnSj" style="width: 99%">
+                    </td>
                 </tr>
                 <tr>
                     <td class="form-title">종류</td>
@@ -80,6 +89,21 @@
                 </tr>
             </table>
         </form>
-    </div> <br /><br />
+    </div>
+    <br/><br/>
     <button type="button">결재 제출</button>
 </div>
+
+<script>
+    $("#getLine").on("click", function () {
+        // $("#sanctionLine").prop("hidden", false);
+        // 인사,HRT
+        // 회계,AT
+        // 영업,ST
+        // 홍보,PRT
+        // 총무,GAT
+        // 경영자,CEO
+
+
+    })
+</script>

@@ -18,4 +18,8 @@ public class CommuteVO {
     private int dclzDailWorkTime;
     private int dclzWikWorkTime;
     private String commonCodeLaborSttus;
+    private String EmplNm;
+    private String DeptNm;
+    private String ClsfNm;
+    private int realWikWorkCnt;
 }

@@ -30,5 +30,4 @@
         where VHCLE_RESVE_EMPL_ID = #{vhcleResveEmplId}
           and TRUNC(VHCLE_RESVE_BEGIN_TIME) = TRUNC(sysdate)
     </select>
-
 </mapper>
