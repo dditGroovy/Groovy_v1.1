@@ -1,6 +1,7 @@
 package kr.co.groovy.facility;
 
 import kr.co.groovy.enums.Facility;
+import kr.co.groovy.enums.Fixtures;
 import kr.co.groovy.enums.Hipass;
 import kr.co.groovy.vo.FacilityVO;
 import kr.co.groovy.vo.VehicleVO;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -40,28 +42,33 @@ public class FacilityService {
         return mapper.deleteReservedByVhcleResveNo(vhcleResveNo);
     }
 
-//    public List<FacilityVO> getMeetingRooms() {
-//        List<FacilityVO> meetingRooms = mapper.getMeetingRooms();
-//        for (FacilityVO meetingRoom : meetingRooms) {
-//            meetingRoom.setCommonCodeFcltyKind(Facility.valueOf(meetingRoom.getCommonCodeFcltyKind()).getLabel());
-//        }
-//        return meetingRooms;
-//    }
-
-    public List<FacilityVO> getRestRooms() {
-        List<FacilityVO> restRooms = mapper.getRestRooms();
+    public List<FacilityVO> getRooms(String commonCodeFcltyKind) {
+        List<FacilityVO> restRooms = mapper.getRooms(commonCodeFcltyKind);
         changeCommonCodeToEnum(restRooms);
         return restRooms;
     }
 
-    public List<FacilityVO> getReservedRestRoomsByFcltyKind(String commonCodeFcltyKind) {
-        List<FacilityVO> reservedRestRoomsByFcltyKind = mapper.getReservedRestRoomsByFcltyKind(commonCodeFcltyKind);
-        changeCommonCodeToEnum(reservedRestRoomsByFcltyKind);
-        return reservedRestRoomsByFcltyKind;
+    public FacilityVO getFixturesByFcltyKind(String commonCodeFcltyKind) {
+        FacilityVO fixture = mapper.getFixturesByFcltyKind(commonCodeFcltyKind);
+        try {
+            fixture.setProjector(Fixtures.valueOf(fixture.getProjector()).getLabel());
+            fixture.setScreen(Fixtures.valueOf(fixture.getScreen()).getLabel());
+            fixture.setExtinguisher(Fixtures.valueOf(fixture.getExtinguisher()).getLabel());
+            fixture.setWhiteBoard(Fixtures.valueOf(fixture.getWhiteBoard()).getLabel());
+        } catch (NullPointerException e) {
+            e.getMessage();
+        }
+        return fixture;
     }
 
-    public List<FacilityVO> getReservedRestRoomByFcltyResveEmplId(String fcltyResveEmplId) {
-        List<FacilityVO> reservedRestRoomByFcltyResveEmplId = mapper.getReservedRestRoomByFcltyResveEmplId(fcltyResveEmplId);
+    public List<FacilityVO> getReservedRoomsByFcltyKind(String commonCodeFcltyKind) {
+        List<FacilityVO> reservedRoomsByFcltyKind = mapper.getReservedRoomsByFcltyKind(commonCodeFcltyKind);
+        changeCommonCodeToEnum(reservedRoomsByFcltyKind);
+        return reservedRoomsByFcltyKind;
+    }
+
+    public List<FacilityVO> getReservedRoomByFcltyResveEmplId(Map<String, String> map) {
+        List<FacilityVO> reservedRestRoomByFcltyResveEmplId = mapper.getReservedRoomByFcltyResveEmplId(map);
         changeCommonCodeToEnum(reservedRestRoomByFcltyResveEmplId);
         return reservedRestRoomByFcltyResveEmplId;
     }

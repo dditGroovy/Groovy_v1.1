@@ -196,6 +196,7 @@
                 if (result) {
                     alert("예약이 완료되었습니다. 총무팀에서 차키를 받을 수 있습니다.");
                 }
+                getMyReserveList();
             },
             error: function (xhr, status, error) {
                 console.log("code: " + xhr.status);

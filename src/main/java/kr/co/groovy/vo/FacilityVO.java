@@ -18,6 +18,9 @@ public class FacilityVO {
     private String fcltyResveRequstMatter;
     private String fcltyResveEmplId;
     private String commonCodeResveAt;
-    private String commonCodeFxrpsKind;
+    private String projector;
+    private String screen;
+    private String whiteBoard;
+    private String extinguisher;
 
 }

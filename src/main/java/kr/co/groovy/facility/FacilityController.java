@@ -11,7 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -27,7 +29,7 @@ public class FacilityController {
             mav.addObject("vehicles", vehicles);
             mav.setViewName("facility/carResve");
         } else if (code.equals("rest")) {
-            List<FacilityVO> restRooms = service.getRestRooms();
+            List<FacilityVO> restRooms = service.getRooms("FCLTY011%");
             List<FacilityVO> bedList = new ArrayList<>();
             List<FacilityVO> sofaList = new ArrayList<>();
             for (int i = 0; i < restRooms.size(); i++) {
@@ -41,6 +43,19 @@ public class FacilityController {
                 }
             }
             mav.setViewName("facility/restResve");
+        } else if (code.equals("meeting")) {
+            List<FacilityVO> meetingRooms = service.getRooms("FCLTY010%");
+            for (FacilityVO meetingRoom : meetingRooms) {
+                String fcltyKind = Facility.getValueByLabel(meetingRoom.getCommonCodeFcltyKind());
+                FacilityVO fixturesByFcltyKind = service.getFixturesByFcltyKind(fcltyKind);
+                meetingRoom.setScreen(fixturesByFcltyKind.getScreen());
+                meetingRoom.setProjector(fixturesByFcltyKind.getProjector());
+                meetingRoom.setWhiteBoard(fixturesByFcltyKind.getWhiteBoard());
+                meetingRoom.setExtinguisher(fixturesByFcltyKind.getExtinguisher());
+            }
+            log.info("meetingRooms: " + meetingRooms);
+            mav.addObject("meetingRooms", meetingRooms);
+            mav.setViewName("facility/meetingResve");
         }
         return mav;
     }
@@ -92,19 +107,25 @@ public class FacilityController {
         int count = service.deleteReservedByFcltyResveSn(fcltyResveSn);
         return String.valueOf(count);
     }
-
-
-    @GetMapping("/rest/reserved/{seatNo}")
+    @GetMapping("/rest/reserved/{roomNo}")
     @ResponseBody
-    public List<FacilityVO> getReservedRestRoomsByFcltyKind(@PathVariable String seatNo) {
-        String commonCodeFcltyKind = Facility.getValueByLabel(seatNo);
-        return service.getReservedRestRoomsByFcltyKind(commonCodeFcltyKind);
+    public List<FacilityVO> getReservedRestRoomsByFcltyKind(@PathVariable String roomNo) {
+        String commonCodeFcltyKind = Facility.getValueByLabel(roomNo);
+        log.info("reservedRoom: " + service.getReservedRoomsByFcltyKind(commonCodeFcltyKind));
+        return service.getReservedRoomsByFcltyKind(commonCodeFcltyKind);
     }
 
-    @GetMapping("/rest/myReservations")
+    @GetMapping("/{code}/myReservations")
     @ResponseBody
-    public List<FacilityVO> getReservedRestRoomByFcltyResveEmplId(Principal fcltyResveEmplId) {
-        return service.getReservedRestRoomByFcltyResveEmplId(fcltyResveEmplId.getName());
+    public List<FacilityVO> getReservedRestRoomByFcltyResveEmplId(Principal fcltyResveEmplId, @PathVariable String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("fcltyResveEmplId", fcltyResveEmplId.getName());
+        if (code.equals("rest")) {
+            map.put("fcltyKind", "FCLTY011%");
+        } else if (code.equals("meeting")) {
+            map.put("fcltyKind", "FCLTY010%");
+        }
+        return service.getReservedRoomByFcltyResveEmplId(map);
     }
 
     @PostMapping("/rest")
@@ -129,8 +150,6 @@ public class FacilityController {
             return String.valueOf(count);
         }
     }
-
-
 
 
 }

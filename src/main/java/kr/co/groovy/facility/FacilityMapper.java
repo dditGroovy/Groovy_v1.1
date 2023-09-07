@@ -5,6 +5,7 @@ import kr.co.groovy.vo.VehicleVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface FacilityMapper {
@@ -20,13 +21,17 @@ public interface FacilityMapper {
 
 //    public List<FacilityVO> getMeetingRooms();
 
-    public List<FacilityVO> getRestRooms();
+    public List<FacilityVO> getRooms(String commonCodeFcltyKind);
 
-    public List<FacilityVO> getReservedRestRoomsByFcltyKind(String commonCodeFcltyKind);
+    public List<FacilityVO> getReservedRoomsByFcltyKind(String commonCodeFcltyKind);
 
-    public List<FacilityVO> getReservedRestRoomByFcltyResveEmplId(String fcltyResveEmplId);
+    public List<FacilityVO> getReservedRoomByFcltyResveEmplId(Map<String, String> map);
 
     public int inputRestReservation(FacilityVO facilityVO);
 
     public int deleteReservedByFcltyResveSn(int fcltyResveSn);
+
+    public FacilityVO getFixturesByFcltyKind(String commonCodeFcltyKind);
+
+
 }

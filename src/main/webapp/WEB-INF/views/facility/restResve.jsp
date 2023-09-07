@@ -86,8 +86,8 @@
 
     //좌석 번호
     function setRoomNumber(seat) {
-        seatNo = $(seat).find("h3").html();
-        $("#facltyNo").attr("value", seatNo);
+        restNo = $(seat).find("h3").html();
+        $("#facltyNo").attr("value", restNo);
     }
 
     function goReservation() {
@@ -106,9 +106,9 @@
     }
 
     function loadReservedList(seat) {
-        seatNo = $(seat).find("h3").html();
+        roomNo = $(seat).find("h3").html();
         let xhr = new XMLHttpRequest();
-        xhr.open("get", `/facility/rest/reserved/\${seatNo}`, true);
+        xhr.open("get", `/facility/rest/reserved/\${roomNo}`, true);
         xhr.setRequestHeader("ContentType", "application/json;charset=utf-8");
         xhr.onreadystatechange = function () {
             if (xhr.status == 200 && xhr.readyState == 4) {
@@ -117,8 +117,9 @@
                     selectBeginTimeList[i].removeAttribute("disabled");
                 }
                 let result = JSON.parse(xhr.responseText); // 어차피 예약된 애들만 옴
+                console.log(result);
                 for (let i = 0; i < result.length; i++) {
-                    const reservedDate = new Date();
+                    const reservedDate = new Date(result[i].fcltyResveBeginTime);
                     let reservedYear = reservedDate.getFullYear();
                     let reservedMonth = reservedDate.getMonth() + 1;
                     let reservedDay = reservedDate.getDate();
@@ -136,11 +137,11 @@
                 }
             }
         }
-        xhr.send(seatNo);
+        xhr.send(roomNo);
     }
 
     function loadMyReserveList(seat) {
-        seatNo = $(seat).find("h3").html();
+        restNo = $(seat).find("h3").html();
         let tableStr = `<table border=1><tr><td>휴게실 번호</td><td>예약시간</td><td>취소</td></tr>`;
         let xhr = new XMLHttpRequest();
         xhr.open("get", "/facility/rest/myReservations", true);
@@ -179,7 +180,8 @@
             fcltyResveBeginTime: $selectResveBeginTime,
             fcltyResveEndTime: $selectResveEndTime,
             commonCodeFcltyKind: $("input[name='facltyNo']").val(),
-            commonCodeResveAt: 'RESVE011'
+            commonCodeResveAt: 'RESVE011',
+            fcltyResveRequstMatter: "n"
         }
 
         $.ajax({
@@ -192,6 +194,7 @@
                 if (result) {
                     alert("예약이 완료되었습니다. 총무팀에서 차키를 받을 수 있습니다.");
                 }
+                getMyReserveList();
             },
             error: function (xhr, status, error) {
                 console.log("code: " + xhr.status);
