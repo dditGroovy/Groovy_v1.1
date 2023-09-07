@@ -106,6 +106,7 @@
         $.ajax({
             url: '/sanction/loadOrgChart',
             method: 'GET',
+            contentType: "application/json;charset=utf-8",
             dataType: 'json',
             success: function (data) {
                 data.forEach(function (employee) {
