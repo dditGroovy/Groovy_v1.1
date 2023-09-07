@@ -4,6 +4,7 @@ import kr.co.groovy.vo.UploadFileVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -25,8 +26,8 @@ public class FileUtil {
         this.service = service;
     }
 
-    @GetMapping("/download")
-    public void fileDownload(int uploadFileSn, HttpServletResponse resp, String dir) throws Exception {
+    @GetMapping("/download/{dir}")
+    public void fileDownload(int uploadFileSn, HttpServletResponse resp, @PathVariable String dir) throws Exception {
         try {
             UploadFileVO vo = service.downloadFile(uploadFileSn);
             String originalName = new String(vo.getUploadFileOrginlNm().getBytes("utf-8"), "iso-8859-1");
