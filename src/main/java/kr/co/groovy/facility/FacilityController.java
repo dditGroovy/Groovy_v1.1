@@ -1,6 +1,6 @@
 package kr.co.groovy.facility;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import kr.co.groovy.enums.Facility;
 import kr.co.groovy.vo.FacilityVO;
 import kr.co.groovy.vo.VehicleVO;
 import lombok.RequiredArgsConstructor;
@@ -32,18 +32,16 @@ public class FacilityController {
     @GetMapping("/vehicle/reservedVehicles/{vhcleNo}")
     @ResponseBody
     public List<VehicleVO> getReservedVehicle(@PathVariable String vhcleNo) {
-        List<VehicleVO> reservedVehicle = service.getReservedVehicle(vhcleNo);
-        return reservedVehicle;
+        return service.getReservedVehicle(vhcleNo);
     }
 
-    @GetMapping("/vehicle/myReservedVehicles")
+    @GetMapping("/vehicle/myReservations")
     @ResponseBody
     public List<VehicleVO> getReservedVehicleByEmplId(Principal vhcleResveEmplId) {
-        List<VehicleVO> reservedVehicleByEmplId = service.getReservedVehicleByEmplId(vhcleResveEmplId.getName());
-        return reservedVehicleByEmplId;
+        return service.getReservedVehicleByEmplId(vhcleResveEmplId.getName());
     }
 
-    @PostMapping("/vehicle/inputReservation")
+    @PostMapping("/vehicle")
     @ResponseBody
     public String inputReservation(Principal vhcleResveEmplId, @RequestBody VehicleVO vehicleVO) {
         if (vehicleVO.getVhcleNo() == null || vehicleVO.getVhcleNo() == "") {
@@ -72,11 +70,43 @@ public class FacilityController {
         return String.valueOf(count);
     }
 
-    @GetMapping("/meeting")
-    public String getMeetingRooms(Model model) {
-        List<FacilityVO> meetingRooms = service.getMeetingRooms();
-        model.addAttribute("meetingRooms", meetingRooms);
-        return "facility/meetingResve";
+//    @GetMapping("/meeting")
+//    public String getMeetingRooms(Model model) {
+//        List<FacilityVO> meetingRooms = service.getMeetingRooms();
+//
+//        log.info("meetingRooms: " + meetingRooms);
+//        model.addAttribute("meetingRooms", meetingRooms);
+//        return "facility/meetingResve";
+//    }
+
+    @GetMapping("/rest")
+    public String getRestRooms(Model model) {
+        List<FacilityVO> restRooms = service.getRestRooms();
+        List<FacilityVO> bedList = new ArrayList<>();
+        List<FacilityVO> sofaList = new ArrayList<>();
+        for (int i = 0; i < restRooms.size(); i++) {
+            if (restRooms.get(i).getCommonCodeFcltyKind().startsWith("R00")) {
+                bedList.add(restRooms.get(i));
+                model.addAttribute("bedList", bedList);
+            }
+            if (restRooms.get(i).getCommonCodeFcltyKind().startsWith("R01")) {
+                sofaList.add(restRooms.get(i));
+                model.addAttribute("sofaList", sofaList);
+            }
+        }
+        return "facility/restResve";
     }
 
+    @GetMapping("/rest/reservedRestRoom/{seatNo}")
+    @ResponseBody
+    public List<FacilityVO> getReservedRestRoomsByFcltyKind(@PathVariable String seatNo) {
+        String commonCodeFcltyKind = Facility.getValueByLabel(seatNo);
+        return service.getReservedRestRoomsByFcltyKind(commonCodeFcltyKind);
+    }
+
+    @GetMapping("/rest/myReservations")
+    @ResponseBody
+    public List<FacilityVO> getReservedRestRoomByFcltyResveEmplId(Principal fcltyResveEmplId) {
+        return service.getReservedRestRoomByFcltyResveEmplId(fcltyResveEmplId.getName());
+    }
 }
