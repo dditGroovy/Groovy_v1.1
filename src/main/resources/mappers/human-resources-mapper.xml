@@ -13,5 +13,58 @@
           AND TO_CHAR(CONECT_LOG_DATE, 'yyyy-MM-dd') = #{today}
     </select>
 
+    <select id="loadAllDclz" resultType="commuteVO">
+        WITH DCLZ_INFO AS (
+            SELECT
+                D.DCLZ_EMPL_ID,
+                E.EMPL_NM,
+                (SELECT C.COMMON_NAME FROM COMMON C WHERE C.COMMON_CODE = E.COMMON_CODE_DEPT) AS DEPT_NM,
+                (SELECT C.COMMON_NAME FROM COMMON C WHERE C.COMMON_CODE = E.COMMON_CODE_CLSF) AS CLSF_NM,
+                D.DCLZ_DAIL_WORK_TIME,
+                D.DCLZ_WIK_WORK_TIME
+            FROM DCLZ D
+                     JOIN EMPL E ON E.EMPL_ID = D.DCLZ_EMPL_ID
+            WHERE DCLZ_WORK_DE = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+              AND COMMON_CODE_LABOR_STTUS = 'LABOR_STTUS015'
+        ),
+             WORK_DAYS AS (
+                 SELECT
+                     DCLZ_EMPL_ID,
+                     COUNT(*) AS REAL_WIK_WORK_CNT
+                 FROM DCLZ
+                 WHERE TO_CHAR(DCLZ_WORK_DE, 'IYYY-IW') = TO_CHAR(SYSDATE, 'IYYY-IW')
+                   AND COMMON_CODE_LABOR_STTUS = 'LABOR_STTUS015'
+                 GROUP BY DCLZ_EMPL_ID
+             )
+        SELECT DI.*, WD.REAL_WIK_WORK_CNT
+        FROM DCLZ_INFO DI
+                 JOIN WORK_DAYS WD ON DI.DCLZ_EMPL_ID = WD.DCLZ_EMPL_ID
+    </select>
+
+    <select id="loadDeptList" resultType="String">
+        SELECT COMMON_CODE AS DEPT_CODE
+        FROM COMMON
+        WHERE COMMON_PARENT_CODE = 'DEPT01'
+          AND COMMON_SECTION_VALUE != 'CEO'
+    </select>
+
+    <select id="deptTotalWorkTime" parameterType="string" resultType="integer">
+        SELECT
+            COALESCE(SUM(D.DCLZ_DAIL_WORK_TIME) / 60, 0) AS DEPT_TOTAL_WORK_TIME
+        FROM EMPL E
+                 JOIN DCLZ D ON E.EMPL_ID = D.DCLZ_EMPL_ID
+        WHERE TO_CHAR(D.DCLZ_WORK_DE, 'IYYY-IW') = TO_CHAR(SYSDATE, 'IYYY-IW')
+          AND E.COMMON_CODE_DEPT = #{deptCode}
+    </select>
+
+    <select id="deptAvgWorkTime" parameterType="string" resultType="integer">
+        SELECT
+            COALESCE(AVG(D.DCLZ_DAIL_WORK_TIME) / 60, 0) AS DEPT_AVG_WORK_TIME
+        FROM EMPL E
+                 JOIN DCLZ D ON E.EMPL_ID = D.DCLZ_EMPL_ID
+        WHERE TO_CHAR(D.DCLZ_WORK_DE, 'IYYY-IW') = TO_CHAR(SYSDATE, 'IYYY-IW')
+          AND E.COMMON_CODE_DEPT = #{deptCode}
+    </select>
+
 </mapper>
 

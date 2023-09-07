@@ -3,8 +3,8 @@
     #dclzNav > ul {display: flex;gap: 48px;}
     #myGrid {width: 100%; height: calc((360 / 1080) * 100vh);}
 </style>
-<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
 <script defer src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
 <header>
     <h1><a href="#">근태 관리</a></h1>
@@ -21,14 +21,55 @@
 </header><br /><br /><br />
 <main>
     <div id="chartsJsWrap">
-        <div class="allDepartment"></div>
-        <div class="avgDepartment"></div>
+        <canvas id="allDepartment"></canvas>
+        <canvas id="avgDepartment"></canvas>
     </div>
     <input type="text" oninput="onQuickFilterChanged()" id="quickFilter" placeholder="검색어를 입력하세요"/>
     <div id="myGrid" class="ag-theme-alpine"></div>
 </main>
 
 <script>
+    const allDepartment = $("#allDepartment");
+    const avgDepartment = $("#avgDepartment");
+    const deptTotalWorkTime = ${deptTotalWorkTime};
+    const deptAvgWorkTime = ${deptAvgWorkTime};
+
+    console.log("deptTotalWorkTime : ", deptTotalWorkTime);
+    console.log("deptAvgWorkTime : ", deptAvgWorkTime);
+
+    const doughnutChart = new Chart(allDepartment, {
+        type: 'doughnut',
+        data : {
+            labels : ['인사', '회계', '영업', '홍보', '총무'],
+            datasets:[{
+                    label : '부서별 전체 근무시간',
+                    data: deptTotalWorkTime,
+                    borderWidth: 1
+            }]
+        }
+    });
+
+    const barChart = new Chart(avgDepartment, {
+        type: 'bar',
+        data : {
+            labels : ['인사', '회계', '영업', '홍보', '총무'],
+            datasets:[{
+                label : '부서별 평균 근무시간',
+                data: deptAvgWorkTime,
+                borderWidth: 1
+            }]
+        },
+        options : {
+            scales : {
+                y : {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // ----------------------------------------------------------
+
     /*예시*/
     const getMedalString = function (param) {
         const str = `${param} `;
