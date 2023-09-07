@@ -20,10 +20,6 @@ public class ScheduleService {
     	return scheduleMapper.getSchedule();
     }
     
-	public ScheduleVO getOneSchedule(int schdulSn) {
-		return scheduleMapper.getOneSchedule(schdulSn);
-	}
-    
     public int inputSchedule(ScheduleVO scheduleVO) {
     	return scheduleMapper.inputSchedule(scheduleVO);
     }

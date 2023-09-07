@@ -5,23 +5,19 @@
 		SELECT * FROM SCHDUL
 	</select>
 	
-	<select id="getOneSchedule" parameterType="int" resultType="scheduleVO">
-		SELECT * FROM SCHDUL WHERE SCHDUL_SN = #{schdulSn}
-	</select>
-	
 	<insert id="inputSchedule" parameterType="scheduleVO">
 		INSERT INTO
 		SCHDUL(SCHDUL_SN, SCHDUL_NM, SCHDUL_BEGIN_DATE, SCHDUL_CLOS_DATE)
-		VALUES(SCHDUL_SN.NEXTVAL, #{schdulNm}, #{schdulBeginDate}, #{schdulClosDate})
+		VALUES(SCHDUL_SN.NEXTVAL, #{SCHDUL_NM}, #{SCHDUL_BEGIN_DATE}, #{SCHDUL_CLOS_DATE})
 	</insert>
 	
 	<update id="modifySchedule" parameterType="scheduleVO">
 		UPDATE SCHDUL
 		SET 
-		SCHDUL_NM = #{schdulNm},
-		SCHDUL_BEGIN_DATE = #{schdulBeginDate},
-		SCHDUL_CLOS_DATE = #{schdulClosDate}
-		WHERE SCHDUL_SN = #{schdulSn}
+		SCHDUL_NM = #{SCHDUL_NM},
+		SCHDUL_BEGIN_DATE = #{SCHDUL_BEGIN_DATE},
+		SCHDUL_CLOS_DATE = #{SCHDUL_CLOS_DATE}'
+		WHERE SCHDUL_SN = #{SCHDUL_SN}
 	</update>
 	
 	<delete id="deleteSchedule" parameterType="int">
