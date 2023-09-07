@@ -86,6 +86,13 @@ public class FacilityController {
         return String.valueOf(count);
     }
 
+    @DeleteMapping("/{fcltyResveSn}")
+    @ResponseBody
+    public String deleteReservedByFcltyResveSn(@PathVariable int fcltyResveSn) {
+        int count = service.deleteReservedByFcltyResveSn(fcltyResveSn);
+        return String.valueOf(count);
+    }
+
 
     @GetMapping("/rest/reserved/{seatNo}")
     @ResponseBody
@@ -123,12 +130,7 @@ public class FacilityController {
         }
     }
 
-    @DeleteMapping("/rest/{fcltyResveSn}")
-    @ResponseBody
-    public String deleteReservedByFcltyResveSn(@PathVariable int fcltyResveSn) {
-        int count = service.deleteReservedByFcltyResveSn(fcltyResveSn);
-        return String.valueOf(count);
-    }
+
 
 
 }

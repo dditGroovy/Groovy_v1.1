@@ -216,7 +216,7 @@
 
     function cancelReservation(fcltyResveSn) {
         $.ajax({
-            url: `/facility/rest/\${fcltyResveSn}`,
+            url: `/facility/\${fcltyResveSn}`,
             type: "delete",
             dataType: 'json',
             success: function (result) {
