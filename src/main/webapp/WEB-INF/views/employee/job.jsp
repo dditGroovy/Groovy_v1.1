@@ -21,7 +21,7 @@
   .list-header {display: flex; justify-content: space-between; align-items: center;}
 </style>
 <a href="#">할 일</a>
-<a href="">업무 일지</a>
+<a href="/job/jobDiary">업무 일지</a>
 <div class="taskBoxWrapper">
   <div class="inTaskBox">
     <h1>들어온 업무 요청</h1>
