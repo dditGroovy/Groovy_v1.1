@@ -49,11 +49,11 @@
         <tr>
             <td>${sntncVO.sntncEtprCode}</td>
             <td>${sntncVO.emplNm}</td>
-            <td>${sntncVO.sntncWritingDate}</td>
+            <td>${sntncVO.sntncWrtingDate}</td>
             <td>${sntncVO.sntncCn}</td>
             <td>${sntncVO.recomendCnt}</td>
-            <td>${sntncVO.sntncWritingEmplId}</td>
-            <c:if test="${sntncVO.sntncWritingEmplId} == ${CustomUser.employeeVO.emplNm}" var="emplId" scope="session">
+            <td>${sntncVO.sntncWrtingEmplId}</td>
+            <c:if test="${sntncVO.sntncWrtingEmplId} == ${CustomUser.employeeVO.emplNm}" var="emplId" scope="session">
             <td>
                 <button type="button" id="modifyBtn">수정</button>
                 <button type="button" id="deleteBtn">삭제</button>

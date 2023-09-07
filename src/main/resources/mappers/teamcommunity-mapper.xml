@@ -27,7 +27,7 @@
         SELECT s.SNTNC_ETPR_CODE,
                s.SNTNC_CN,
                s.SNTNC_WRTING_EMPL_ID,
-               s.SNTNC_WRITNG_DATE,
+               s.SNTNC_WRTING_DATE,
                s.COMMON_CODE_SNTNC_CTGRY,
                e.EMPL_NM
         FROM SNTNC s

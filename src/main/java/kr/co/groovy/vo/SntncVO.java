@@ -13,12 +13,12 @@ import java.sql.Date;
 @ToString
 public class SntncVO {
     private String sntncEtprCode;
-    private String sntncWritingEmplId;
+    private String sntncWrtingEmplId;
     private String sntncSj;
     private String sntncCn;
     private String emplNm;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-    private Date sntncWritingDate;
-    private String commonCodeSntncCategory;
+    private Date sntncWrtingDate;
+    private String commonCodeSntncCtgry;
     private int recomendCnt;
 }

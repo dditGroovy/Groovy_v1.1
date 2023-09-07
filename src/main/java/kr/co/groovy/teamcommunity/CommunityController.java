@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -23,19 +24,18 @@ public class CommunityController {
     public CommunityController(CommunityService service) {this.service = service;}
 
     @GetMapping("")
-    public String teamComminity(Principal principal, Model model){
+    public ModelAndView teamComminity(Principal principal, ModelAndView mav){
         String recomendEmplId = principal.getName();
         List<SntncVO> sntncList = service.findPost(recomendEmplId);
-        model.addAttribute("emplId",recomendEmplId);
-        model.addAttribute("sntncList",sntncList);
-        log.info(sntncList.toString());
-        return "teamcommunity/teamCommunity";
+        mav.addObject("sntncList",sntncList);
+        mav.setViewName("teamcommunity/teamCommunity");
+        return mav;
     }
     @PostMapping("/inputPost")
     public String postWrite(String sntncCn, Principal principal, MultipartFile postFile) throws IOException {
         String sntncWritingEmplId = principal.getName();
         SntncVO vo = new SntncVO();
-        vo.setSntncWritingEmplId(sntncWritingEmplId);
+        vo.setSntncWrtingEmplId(sntncWritingEmplId);
         vo.setSntncCn(sntncCn);
         service.inputPost(vo, postFile);
         return "redirect:/teamCommunity";

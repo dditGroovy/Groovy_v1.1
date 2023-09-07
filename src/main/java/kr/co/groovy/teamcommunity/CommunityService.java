@@ -35,7 +35,7 @@ public class CommunityService {
 
         String sntncEtprCode = "SNTNC-" + postSeq + "-" + nowDate;
         vo.setSntncEtprCode(sntncEtprCode);
-        log.info(vo.getSntncCn(), vo.getSntncWritingEmplId(), vo.getSntncEtprCode());
+        log.info(vo.getSntncCn(), vo.getSntncWrtingEmplId(), vo.getSntncEtprCode());
         mapper.inputPost(vo);
 
         String path = uploadPath + "/teamCommunity";

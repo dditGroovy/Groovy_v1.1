@@ -97,11 +97,19 @@
     </update>
     <select id="loadOrgChart" parameterType="String" resultMap="employeeWithPhoto">
         SELECT UF.UPLOAD_FILE_STRE_NM,
-               E.*
+               E.EMPL_ID,
+               E.EMPL_NM,
+               E.EMPL_TELNO,
+               E.EMPL_EMAIL,
+               E.EMPL_ENCPN,
+               E.EMPL_BRTHDY,
+               E.COMMON_CODE_DEPT,
+               E.COMMON_CODE_CLSF,
+               E.COMMON_CODE_HFFC_STTUS
         FROM UPLOAD_FILE UF
                  JOIN PROFL P ON UF.UPLOAD_FILE_ETPR_CODE = P.PROFL_ETPR_CODE
                  JOIN EMPL E ON P.PROFL_EMPL_ID = E.EMPL_ID
         WHERE E.COMMON_CODE_DEPT = #{depCode}
+        ORDER BY TO_NUMBER(SUBSTR(E.COMMON_CODE_CLSF, 5)), E.EMPL_ENCPN ASC
     </select>
-
 </mapper>
