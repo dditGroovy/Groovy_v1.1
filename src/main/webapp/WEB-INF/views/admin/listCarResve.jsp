@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <style>
     ul {list-style: none; padding-left: 0; }
     .wrap ul {display: flex; gap:10px}
@@ -7,8 +8,8 @@
 <script defer src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
     <div class="wrap">
         <ul>
-            <li><a href="#" class="tab">차량 관리</a></li>
-            <li><a href="#" class="tab">예약 현황</a></li>
+            <li><a href="/generalAffairs/manageVehicle" class="tab">차량 관리</a></li>
+            <li><a href="/generalAffairs/loadVehicle" class="tab">예약 현황</a></li>
         </ul>
     </div> <br />
     <div class="serviceWrap">

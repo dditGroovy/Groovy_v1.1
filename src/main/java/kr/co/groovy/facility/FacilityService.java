@@ -44,7 +44,7 @@ public class FacilityService {
 
     public List<FacilityVO> getRooms(String commonCodeFcltyKind) {
         List<FacilityVO> restRooms = mapper.getRooms(commonCodeFcltyKind);
-        changeCommonCodeToEnum(restRooms);
+        setCommonCodeToFacility(restRooms);
         return restRooms;
     }
 
@@ -63,13 +63,13 @@ public class FacilityService {
 
     public List<FacilityVO> getReservedRoomsByFcltyKind(String commonCodeFcltyKind) {
         List<FacilityVO> reservedRoomsByFcltyKind = mapper.getReservedRoomsByFcltyKind(commonCodeFcltyKind);
-        changeCommonCodeToEnum(reservedRoomsByFcltyKind);
+        setCommonCodeToFacility(reservedRoomsByFcltyKind);
         return reservedRoomsByFcltyKind;
     }
 
     public List<FacilityVO> getReservedRoomByFcltyResveEmplId(Map<String, String> map) {
         List<FacilityVO> reservedRestRoomByFcltyResveEmplId = mapper.getReservedRoomByFcltyResveEmplId(map);
-        changeCommonCodeToEnum(reservedRestRoomByFcltyResveEmplId);
+        setCommonCodeToFacility(reservedRestRoomByFcltyResveEmplId);
         return reservedRestRoomByFcltyResveEmplId;
     }
 
@@ -81,7 +81,7 @@ public class FacilityService {
         return mapper.deleteReservedByFcltyResveSn(fcltyResveSn);
     }
 
-    private static void changeCommonCodeToEnum(List<FacilityVO> list) {
+    private static void setCommonCodeToFacility(List<FacilityVO> list) {
         for (FacilityVO facilityVO : list) {
             facilityVO.setCommonCodeFcltyKind(Facility.valueOf(facilityVO.getCommonCodeFcltyKind()).getLabel());
         }

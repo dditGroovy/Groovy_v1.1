@@ -3,6 +3,7 @@ package kr.co.groovy.admin.generalaffairs;
 import kr.co.groovy.common.CommonService;
 import kr.co.groovy.vo.NoticeVO;
 import kr.co.groovy.vo.UploadFileVO;
+import kr.co.groovy.vo.VehicleVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,9 +59,44 @@ public class GeneralAffairsController {
         return mav;
     }
 
-    @GetMapping("deleteNotice")
+    @GetMapping("/deleteNotice")
     public String deleteNotice(String notiEtprCode) {
         service.deleteNotice(notiEtprCode);
         return "redirect:/admin/manageNotice";
+    }
+
+    @GetMapping("/manageVehicle")
+    public ModelAndView loadReservedAndRegisteredVehicle(ModelAndView mav) {
+        List<VehicleVO> allVehicles = service.getAllVehicles();
+        List<VehicleVO> todayReservedVehicles = service.getTodayReservedVehicles();
+        for (int i = 0; i < todayReservedVehicles.size(); i++) {
+            todayReservedVehicles.get(i).setVhcleResveNo(i + 1);
+        }
+        mav.addObject("allVehicles", allVehicles);
+        mav.addObject("todayReservedVehicles", todayReservedVehicles);
+        mav.setViewName("admin/manageCarResve");
+        return mav;
+    }
+
+    @GetMapping("/inputVehicle")
+    public ModelAndView inputVehicle(ModelAndView mav) {
+        mav.setViewName("admin/insertCar");
+        return mav;
+    }
+
+    @PostMapping("/inputVehicle")
+    public ModelAndView insertVehicle(VehicleVO vehicleVO, ModelAndView mav) {
+        log.info("vehicleVO: " + vehicleVO);
+        int count = service.inputVehicle(vehicleVO);
+        if (count > 0) {
+            mav.setViewName("redirect:/generalAffairs/manageVehicle");
+        }
+        return mav;
+    }
+
+    @GetMapping("/loadVehicle")
+    public ModelAndView loadVehicle(ModelAndView mav) {
+        mav.setViewName("admin/listCarResve");
+        return mav;
     }
 }
