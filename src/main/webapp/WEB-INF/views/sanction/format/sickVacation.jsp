@@ -1,11 +1,12 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-   <!-- <h3>연차신청</h3>-->
+    <h3>병가신청</h3>
     <form action="#">
         <table border="1" style="width: 100%">
             <colgroup>
@@ -67,3 +68,4 @@
     </form>
 </body>
 </html>
+

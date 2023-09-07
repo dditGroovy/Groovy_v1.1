@@ -6,14 +6,14 @@
 
 <div>
     <c:forEach var="bed" items="${bedList}">
-        <button type="button" onclick="setRoomNumber(this);loadReservation(this);"><i></i>
+        <button type="button" onclick="setRoomNumber(this);loadReservedList(this);"><i></i>
             <h3>${bed.commonCodeFcltyKind}</h3></button>
     </c:forEach>
 </div>
 <hr/>
 <div>
     <c:forEach var="sofa" items="${sofaList}">
-        <button type="button" onclick="setRoomNumber(this);loadReservation(this);"><i></i>
+        <button type="button" onclick="setRoomNumber(this);loadReservedList(this);"><i></i>
             <h3>${sofa.commonCodeFcltyKind}</h3></button>
     </c:forEach>
 </div>
@@ -86,8 +86,8 @@
 
     //좌석 번호
     function setRoomNumber(seat) {
-        seatNo = $(seat).find("h3").html();
-        $("#facltyNo").attr("value", seatNo);
+        restNo = $(seat).find("h3").html();
+        $("#facltyNo").attr("value", restNo);
     }
 
     function goReservation() {
@@ -106,9 +106,9 @@
     }
 
     function loadReservedList(seat) {
-        seatNo = $(seat).find("h3").html();
+        roomNo = $(seat).find("h3").html();
         let xhr = new XMLHttpRequest();
-        xhr.open("get", `/facility/rest/reservedRestRoom/\${seatNo}`, true);
+        xhr.open("get", `/facility/rest/reserved/\${roomNo}`, true);
         xhr.setRequestHeader("ContentType", "application/json;charset=utf-8");
         xhr.onreadystatechange = function () {
             if (xhr.status == 200 && xhr.readyState == 4) {
@@ -119,7 +119,7 @@
                 let result = JSON.parse(xhr.responseText); // 어차피 예약된 애들만 옴
                 console.log(result);
                 for (let i = 0; i < result.length; i++) {
-                    const reservedDate = new Date();
+                    const reservedDate = new Date(result[i].fcltyResveBeginTime);
                     let reservedYear = reservedDate.getFullYear();
                     let reservedMonth = reservedDate.getMonth() + 1;
                     let reservedDay = reservedDate.getDate();
@@ -137,18 +137,17 @@
                 }
             }
         }
-        xhr.send(seatNo);
+        xhr.send(roomNo);
     }
 
     function loadMyReserveList(seat) {
-        seatNo = $(seat).find("h3").html();
+        restNo = $(seat).find("h3").html();
         let tableStr = `<table border=1><tr><td>휴게실 번호</td><td>예약시간</td><td>취소</td></tr>`;
         let xhr = new XMLHttpRequest();
         xhr.open("get", "/facility/rest/myReservations", true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let myReservedList = JSON.parse(xhr.responseText);
-                console.log(myReservedList);
                 if (myReservedList.length > 0) {
                     for (let i = 0; i < myReservedList.length; i++) {
                         let beginHour = new Date(myReservedList[i].fcltyResveBeginTime).getHours().toString() + ":00";
@@ -171,5 +170,67 @@
         xhr.send();
     }
 
+    function createReservation() {
+        let $selectResveBeginTime = $("select[name='selectResveBeginTime'] option:selected").val();
+        $selectResveBeginTime = new Date(`\${now} \${$selectResveBeginTime}`);
+        let $selectResveEndTime = $("select[name='selectResveEndTime'] option:selected").text();
+        $selectResveEndTime = new Date(`\${now} \${$selectResveEndTime}`);
+
+        let facilityVO = {
+            fcltyResveBeginTime: $selectResveBeginTime,
+            fcltyResveEndTime: $selectResveEndTime,
+            commonCodeFcltyKind: $("input[name='facltyNo']").val(),
+            commonCodeResveAt: 'RESVE011',
+            fcltyResveRequstMatter: "n"
+        }
+
+        $.ajax({
+            url: "/facility/rest",
+            type: "post",
+            data: JSON.stringify(facilityVO),
+            contentType: "application/json;charset=utf-8",
+            dataType: 'json',
+            success: function (result) {
+                if (result) {
+                    alert("예약이 완료되었습니다. 총무팀에서 차키를 받을 수 있습니다.");
+                }
+                getMyReserveList();
+            },
+            error: function (xhr, status, error) {
+                console.log("code: " + xhr.status);
+                console.log("message: " + xhr.responseText);
+                console.log("error: " + xhr.error);
+                if (xhr.responseText === "vhcleNo is null") {
+                    alert("차량을 선택해주세요.");
+                } else if (xhr.responseText === "beginTime is null") {
+                    alert("대여시간을 선택해주세요.");
+                } else if (xhr.responseText === "endTime is null") {
+                    alert("반납시간을 선택해주세요.");
+                }
+
+                if (xhr.responseText === "same time") {
+                    alert("대여시간과 반납시간을 다르게 선택해주세요.");
+                } else if (xhr.responseText === "end early than begin") {
+                    alert("반납시간이 대여시간보다 이르게 선택되었습니다. 다시 시도해주세요.");
+                }
+            }
+        });
+    }
+
+    function cancelReservation(fcltyResveSn) {
+        $.ajax({
+            url: `/facility/\${fcltyResveSn}`,
+            type: "delete",
+            dataType: 'json',
+            success: function (result) {
+                loadMyReserveList();
+            },
+            error: function (xhr, status, error) {
+                console.log("code: " + xhr.status);
+                console.log("message: " + xhr.responseText);
+                console.log("error: " + xhr.error);
+            }
+        });
+    }
 
 </script>

@@ -51,6 +51,7 @@ public class CustomLoginSuccessHandler extends
 //        }
 
         // 접속 로그 (+암호화 X)
+        /*
         ConnectionLogVO connectionLogVO = new ConnectionLogVO();
         try {
             connectionLogVO.setEmplId(username);
@@ -65,7 +66,7 @@ public class CustomLoginSuccessHandler extends
                     for (int i = 0; i < mac.length; i++) {
                         macAddress += (String.format("%02x", mac[i]) + ":");
                     }
-                    /*
+
                     MessageDigest digest = MessageDigest.getInstance("SHA-256");
                     byte[] encodedHash = digest.digest(macAddress.getBytes());
                     StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
@@ -73,7 +74,7 @@ public class CustomLoginSuccessHandler extends
                     for (byte b : encodedHash) {
                         hexString.append(String.format("%02x", b & 0xFF));
                     }   // hexString.toString()
-                    */
+
 
                     connectionLogVO.setConectLogMacadrs(macAddress);
                     log.info(macAddress);
@@ -85,8 +86,9 @@ public class CustomLoginSuccessHandler extends
 //        } catch (NoSuchAlgorithmException e) {
 //            throw new RuntimeException(e);
         }
-        // 암호화 끝
 
+        // 암호화 끝
+        */
         List<String> roleNames = new ArrayList<String>();
         auth.getAuthorities().forEach(authority -> {
             roleNames.add(authority.getAuthority());

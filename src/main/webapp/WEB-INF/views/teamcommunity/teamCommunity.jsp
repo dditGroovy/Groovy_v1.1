@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="CustomUser"/>
@@ -32,6 +34,7 @@
             <th>포스트 내용</th>
             <th>좋아요</th>
             <th>수정/삭제</th>
+            <th>파일</th>
         </tr>
         <!--<tr>
             <td><input type="text" name="getSntncEtprCode" id="getSntncEtprCode" value="1"></td>
@@ -53,6 +56,21 @@
             <td>${sntncVO.sntncCn}</td>
             <td>${sntncVO.recomendCnt}</td>
             <td>${sntncVO.sntncWrtingEmplId}</td>
+
+            <td>
+                <c:choose>
+                    <c:when test="${sntncVO.uploadFileSn != null && sntncVO.uploadFileSn != 0.0}">
+
+                        <a href="/file/download/teamCommunity?uploadFileSn=${sntncVO.uploadFileSn}">
+                                ${sntncVO.uploadFileOrginlNm}
+                        </a>
+                        <fmt:formatNumber value="${sntncVO.uploadFileSize / 1024.0}" type="number" minFractionDigits="1" maxFractionDigits="1"/> KB
+                    </c:when>
+                    <c:otherwise>
+                        파일없음
+                    </c:otherwise>
+                </c:choose>
+            </td>
             <c:if test="${sntncVO.sntncWrtingEmplId} == ${CustomUser.employeeVO.emplNm}" var="emplId" scope="session">
             <td>
                 <button type="button" id="modifyBtn">수정</button>

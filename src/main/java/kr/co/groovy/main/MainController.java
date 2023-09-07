@@ -38,7 +38,8 @@ public class MainController {
     @PostMapping("/uploadFile")
     public String uploadFile(MultipartFile defaultFile) {
         try {
-            String path = uploadPath + "/test";
+            // 혹시 쓸 거면 경로 꼭 수정하기~
+            String path = uploadPath + "/profile";
             File uploadDir = new File(path);
             if (!uploadDir.exists()) {
                 if (uploadDir.mkdirs()) {

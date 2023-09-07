@@ -5,10 +5,10 @@
         INSERT INTO SNTNC(SNTNC_ETPR_CODE,
                           SNTNC_WRTING_EMPL_ID,
                           SNTNC_CN,
-                          SNTNC_WRITNG_DATE,
+                          SNTNC_WRTING_DATE,
                           COMMON_CODE_SNTNC_CTGRY)
         VALUES (#{sntncEtprCode},
-                #{sntncWritingEmplId},
+                #{sntncWrtingEmplId},
                 #{sntncCn},
                 SYSDATE,
                 'SNTNC010')
@@ -23,17 +23,21 @@
         FROM RECOMEND r
         WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId};
     </select>
-    <select id="findPost" resultType="sntncVO" parameterType="String">
+    <select id="loadPost" resultType="sntncVO" parameterType="String">
         SELECT s.SNTNC_ETPR_CODE,
                s.SNTNC_CN,
                s.SNTNC_WRTING_EMPL_ID,
                s.SNTNC_WRTING_DATE,
                s.COMMON_CODE_SNTNC_CTGRY,
-               e.EMPL_NM
+               e.EMPL_NM,
+               u.UPLOAD_FILE_ORGINL_NM,
+               u.UPLOAD_FILE_SN,
+               u.UPLOAD_FILE_SIZE
         FROM SNTNC s
                  JOIN EMPL e ON s.SNTNC_WRTING_EMPL_ID = e.EMPL_ID
+                 LEFT JOIN UPLOAD_FILE u ON s.SNTNC_ETPR_CODE = u.UPLOAD_FILE_ETPR_CODE
         WHERE s.COMMON_CODE_SNTNC_CTGRY = 'SNTNC010'
-          AND e.COMMON_CODE_DEPT  = (
+          AND e.COMMON_CODE_DEPT = (
             SELECT e1.COMMON_CODE_DEPT
             FROM EMPL e1
             WHERE e1.EMPL_ID = #{emplId}

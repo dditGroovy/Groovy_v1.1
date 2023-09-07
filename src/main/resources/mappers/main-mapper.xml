@@ -10,7 +10,7 @@
                DIET_DISH3,
                DIET_DESSERT
         FROM DIET
-        WHERE DIET_DATE = #{today}
+        WHERE TO_CHAR(DIET_DATE,'yyyy-MM-dd') = #{today}
     </select>
     <select id="loadNotice" resultType="noticeVO">
         SELECT NOTI_ETPR_CODE,
