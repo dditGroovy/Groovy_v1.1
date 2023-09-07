@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SanctionMapper {
 
     SanctionFormatVO loadFormat (String format);
+
+    String getSeq(String formatSanctnKnd);
 }

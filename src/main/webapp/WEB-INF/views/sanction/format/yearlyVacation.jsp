@@ -68,7 +68,7 @@
                 <td class="form-title">내용</td>
                 <td class="vacationContent" style="display: none;"></td>
                 <td colspan="3">
-                    <textarea name="elctrnSanctnCn" id="elctrnSanctnCn" style="width: 99%"></textarea>
+                    <textarea id="sanctionContent" style="width: 99%"></textarea>
                 </td>
             </tr>
         </table>

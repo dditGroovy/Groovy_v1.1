@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.groovy.sanction.SanctionMapper">
-<select id="loadFormat" resultType="sanctionFormatVO">
-    SELECT *
-    FROM SANCTN_FORMAT
-    WHERE COMMON_CODE_SANCTN_FORMAT = #{format}
-</select>
-    <select id="getSeq" parameterType="String">
-        SELECT TO_CHAR(COUNT(*), 'FM0000')
-        FROM ELCTRN_SANCTN
-        WHERE SUBSTR(ELCTRN_SANCTN_ETPR_CODE, 1, INSTR(ELCTRN_SANCTN_ETPR_CODE, '-') - 1) = #{formatType}
+    <select id="loadFormat" resultType="sanctionFormatVO">
+        SELECT *
+        FROM SANCTN_FORMAT
+        WHERE COMMON_CODE_SANCTN_FORMAT = #{format}
+    </select>
+    <select id="getSeq" parameterType="String" resultType="String">
+        SELECT
+                #{formatSanctnKnd} || '-' || TO_CHAR(SYSDATE, 'YYYY') || '-' || LPAD(
+                    (SELECT TO_NUMBER(COUNT(*)) + 1
+                     FROM ELCTRN_SANCTN
+                     WHERE SUBSTR(ELCTRN_SANCTN_ETPR_CODE, 1, INSTR(ELCTRN_SANCTN_ETPR_CODE, '-') - 1) = #{formatSanctnKnd}
+                    ),
+                    4, '0'
+                ) AS elctrnSanctnEtprCode
+        FROM DUAL
     </select>
 </mapper>
 

@@ -7,10 +7,7 @@ import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.SanctionFormatVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -35,13 +32,17 @@ public class SanctionController {
         return "sanction/sanctionBox";
     }
 
-    @GetMapping("/write")
-    public ModelAndView writeSanction(@RequestParam("format") String format, ModelAndView mav) {
+    @GetMapping("/write/{formatSanctnKnd}")
+    public ModelAndView writeSanction(@PathVariable("formatSanctnKnd") String formatSanctnKnd, @RequestParam("format") String format, ModelAndView mav) {
+        String etprCode = service.getSeq(Department.valueOf(formatSanctnKnd).label());
         SanctionFormatVO vo = service.loadFormat(format);
+        log.info(etprCode);
+        log.info(formatSanctnKnd);
+        log.info(vo.getFormatSj());
+        log.info(vo.getCommonCodeSanctnFormat());
         mav.addObject("format", vo);
+        mav.addObject("etprCode", etprCode);
         mav.setViewName("sanction/write");
-        log.info(format);
-        log.info(vo + "");
         return mav;
     }
 
