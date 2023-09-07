@@ -26,7 +26,7 @@
         </div>
         <div class="gat">
             <ul class="depth1">
-                <li class="department nav-list"><a href="#">총무팀 <i class="icon i-arr-bt"></i></a></li>
+                <li class="department nav-list"><a href="#">회계팀 <i class="icon i-arr-bt"></i></a></li>
                 <ul>
                     <li class="line-list"></li>
                 </ul>
@@ -34,7 +34,16 @@
         </div>
         <div class="at">
             <ul class="depth1">
-                <li class="department nav-list"><a href="#">회계팀  <i class="icon i-arr-bt"></i></a></li>
+                <li class="department nav-list"><a href="#">영업팀  <i class="icon i-arr-bt"></i></a></li>
+                <ul>
+                    <li class="nav-list"><a href="#"><i class="icon i-sanction"></i>결재 관리</a></li>
+
+                </ul>
+            </ul>
+        </div>
+        <div class="at">
+            <ul class="depth1">
+                <li class="department nav-list"><a href="#">영업팀  <i class="icon i-arr-bt"></i></a></li>
                 <ul>
                     <li class="nav-list"><a href="#"><i class="icon i-sanction"></i>결재 관리</a></li>
 
