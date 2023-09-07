@@ -12,7 +12,11 @@ public class SanctionService {
         this.mapper = mapper;
     }
 
-    SanctionFormatVO loadFormat(String format){
+    SanctionFormatVO loadFormat(String format) {
         return mapper.loadFormat(format);
+    }
+
+    String getSeq(String formatSanctnKnd) {
+        return mapper.getSeq(formatSanctnKnd);
     }
 }

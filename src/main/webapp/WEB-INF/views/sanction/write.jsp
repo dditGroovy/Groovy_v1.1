@@ -15,6 +15,9 @@
     private String formatCn; // CLOB 타입
     private String formatUseAt;
 </p>
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal" var="CustomUser"/>
+    <p>${CustomUser.employeeVO.notificationVO.dutyRequest}</p>
 <div id="formCard">
     <div class="formHeader">
         <div class="btnWrap">
@@ -46,7 +49,18 @@
 </div>
 
 <script>
+    let before = new Date();
+
+    let year = before.getFullYear();
+    let month = String(before.getMonth() + 1).padStart(2, '0');
+    let day = String(before.getDate()).padStart(2, '0');
+
+    const today = year + '-' + month + '-' + day;
+    console.log("TODAY ", today)
     $(function () {
-        $("#elctrnSanctnEtprCode").html("윤하늘 바보")
+        $("#sanctionNo").html("${etprCode}");
+        $("#writeDate").html(today);
+        $("#writer").html("${CustomUser.employeeVO.emplNm}")
     });
 </script>
+</sec:authorize>
