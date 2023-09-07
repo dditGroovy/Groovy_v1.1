@@ -56,7 +56,7 @@
             <td>${sntncVO.sntncCn}</td>
             <td>${sntncVO.recomendCnt}</td>
             <td>${sntncVO.sntncWrtingEmplId}</td>
-            <td><a href="/common/fileDownload?uploadFileSn=${sntncVO.uploadFileSn}">${sntncVO.uploadFileOrginlNm}</a> <fmt:formatNumber value="${sntncVO.uploadFileSize / 1024.0}"
+            <td><a href="/file/download/teamCommunity?uploadFileSn=${sntncVO.uploadFileSn}">${sntncVO.uploadFileOrginlNm}</a> <fmt:formatNumber value="${sntncVO.uploadFileSize / 1024.0}"
                                                                                                                                       type="number" minFractionDigits="1" maxFractionDigits="1"/> KB</td>
             <c:if test="${sntncVO.sntncWrtingEmplId} == ${CustomUser.employeeVO.emplNm}" var="emplId" scope="session">
             <td>
