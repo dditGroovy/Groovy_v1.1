@@ -10,7 +10,6 @@ import lombok.ToString;
 public class RecomendVO {
     private String sntncEtprCode;
     private String recomendEmplId;
-    private String commonCodeRecomendAt;
     private int recomendSn;
 
 }
