@@ -8,18 +8,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 @Service
-public class SntncService {
-    final SntncMapper mapper;
+public class CommunityService {
+    final CommunityMapper mapper;
     final String uploadPath;
 
-    public SntncService(SntncMapper mapper, String uploadPath) {
+    public CommunityService(CommunityMapper mapper, String uploadPath) {
         this.mapper = mapper;
         this.uploadPath = uploadPath;
     }
@@ -35,7 +35,7 @@ public class SntncService {
 
         String sntncEtprCode = "SNTNC-" + postSeq + "-" + nowDate;
         vo.setSntncEtprCode(sntncEtprCode);
-        log.info(vo.getSntncCn(), vo.getSntncWritingEmplId(), vo.getSntncEtprCode());
+        log.info(vo.getSntncCn(), vo.getSntncWrtingEmplId(), vo.getSntncEtprCode());
         mapper.inputPost(vo);
 
         String path = uploadPath + "/teamCommunity";
@@ -67,5 +67,12 @@ public class SntncService {
         mapper.uploadPostFile(map);
 
 
+    }
+
+    public List<SntncVO> findPost(String emplId){
+        return mapper.findPost(emplId);
+    };
+    public String findRecomend(String sntncEtprCode, String recomendEmplId) {
+        return mapper.findRecomend(sntncEtprCode, recomendEmplId);
     }
 }

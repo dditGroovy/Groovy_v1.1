@@ -1,14 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec"
+           uri="http://www.springframework.org/security/tags" %>
+
 <h2>
     <a href="#">결재 요청</a>
     <a href="#">결재 진행함</a>
     <a href="#">개인 문서함</a>
-</h2> <br /><br />
+</h2> <br/><br/>
 <div id="formCard">
     <div class="formHeader">
         <div class="btnWrap">
-            <button>결재선</button>
-        </div><br />
+            <button id="getLine">결재선</button>
+            <div id="sanctionLine">
+                <%@include file="line/line.jsp" %>
+            </div>
+        </div>
+        <br/>
         <div class="formTitle">
             연차 신청   <!--이것도 각자 끌어오면 좋게씀-->
         </div>
@@ -49,7 +57,8 @@
                 </tr>
                 <tr>
                     <td class="form-title">제목</td>
-                    <td colspan="3"><input type="text" name="elctrnSanctnSj" id="elctrnSanctnSj" style="width: 99%"></td>
+                    <td colspan="3"><input type="text" name="elctrnSanctnSj" id="elctrnSanctnSj" style="width: 99%">
+                    </td>
                 </tr>
                 <tr>
                     <td class="form-title">종류</td>
@@ -80,6 +89,44 @@
                 </tr>
             </table>
         </form>
-    </div> <br /><br />
+    </div>
+    <br/><br/>
     <button type="button">결재 제출</button>
 </div>
+<script>
+    $("#getLine").on("click", function () {
+        // $("#sanctionLine").prop("hidden", false);
+        // 인사,HRT
+        // 회계,AT
+        // 영업,ST
+        // 홍보,PRT
+        // 총무,GAT
+        // 경영자,CEO
+
+        $.ajax({
+            url: '/sanction/loadOrgChart',
+            method: 'GET',
+            contentType: "application/json;charset=utf-8",
+            dataType: 'json',
+            success: function (data) {
+                data.forEach(function (employee) {
+                    var employeeDiv = $('<div>');
+                    employeeDiv.html(
+                        `<input type="text" value= "\${employee.emplId}"/>` +
+                        '이름' + employee.emplNm + '<br>' +
+                        '부서: ' + employee.commonCodeDept + '<br>' +
+                        '직급: ' + employee.commonCodeClsf);
+
+                    if (employee.commonCodeDept === '인사') {
+                        $('#hrt').append(employeeDiv);
+                    } else if (employee.commonCodeDept === '홍보') {
+                        $('#').append(employeeDiv);
+                    }
+                });
+            },
+            error: function (xhr, textStatus, error) {
+                console.log("AJAX 오류:", error);
+            }
+        });
+    })
+</script>
