@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.groovy.facility.FacilityMapper">
+    <insert id="inputRestReservation" parameterType="facilityVO">
+        insert into FCLTY_RESVE
+        values (FCLTY_RESVE_SEQ.nextval, #{fcltyResveBeginTime}, #{fcltyResveEndTime}, 'n', #{fcltyResveEmplId},
+                #{commonCodeResveAt}, #{commonCodeFcltyKind})
+    </insert>
+    <delete id="deleteReservedByFcltyResveSn" parameterType="int">
+        delete from FCLTY_RESVE where FCLTY_RESVE_SN = #{fcltyResveSn}
+    </delete>
 
     <select id="getMeetingRooms" resultType="facilityVO">
         select fc.COMMON_CODE_FCLTY_KIND, fc.FCLTY_PSNCPA, fx.COMMON_CODE_FXRPS_KIND
@@ -36,6 +44,9 @@
         where TRUNC(fr.FCLTY_RESVE_BEGIN_TIME) = TRUNC(sysdate)
           and fr.FCLTY_RESVE_EMPL_ID = #{fcltyResveEmplId}
     </select>
+
+
+
 
 
 </mapper>

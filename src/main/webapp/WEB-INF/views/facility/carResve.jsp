@@ -7,7 +7,7 @@
 
 <hr/>
 <c:forEach var="vehicleVO" items="${vehicles}">
-    <button type="button" onclick="setRoomNumber(this); loadReservation(this);">
+    <button type="button" onclick="setRoomNumber(this); loadReservedList(this);">
         <i></i>
         <div>
             <h3>${vehicleVO.vhcleVhcty}</h3> <!-- 차량 -->
@@ -91,10 +91,11 @@
     }
 
     const selectVhcleResveBeginTime = document.getElementById("selectVhcleResveBeginTime");
-    function loadReservation(vhcle) {
+
+    function loadReservedList(vhcle) {
         vhcleNo = $(vhcle).find(".no").html();
         let xhr = new XMLHttpRequest();
-        xhr.open("get", `/facility/vehicle/reservedVehicles/\${vhcleNo}`, true);
+        xhr.open("get", `/facility/vehicle/reserved/\${vhcleNo}`, true);
         xhr.setRequestHeader("ContentType", "application/json;charset=utf-8");
         xhr.onreadystatechange = function () {
             if (xhr.status == 200 && xhr.readyState == 4) {
@@ -192,7 +193,6 @@
             contentType: "application/json;charset=utf-8",
             dataType: 'json',
             success: function (result) {
-                console.log(result);
                 if (result) {
                     alert("예약이 완료되었습니다. 총무팀에서 차키를 받을 수 있습니다.");
                 }
@@ -224,7 +224,6 @@
             type: "delete",
             dataType: 'json',
             success: function (result) {
-                console.log(result);
                 loadMyReserveList();
             },
             error: function (xhr, status, error) {

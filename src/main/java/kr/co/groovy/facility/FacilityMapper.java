@@ -25,4 +25,8 @@ public interface FacilityMapper {
     public List<FacilityVO> getReservedRestRoomsByFcltyKind(String commonCodeFcltyKind);
 
     public List<FacilityVO> getReservedRestRoomByFcltyResveEmplId(String fcltyResveEmplId);
+
+    public int inputRestReservation(FacilityVO facilityVO);
+
+    public int deleteReservedByFcltyResveSn(int fcltyResveSn);
 }

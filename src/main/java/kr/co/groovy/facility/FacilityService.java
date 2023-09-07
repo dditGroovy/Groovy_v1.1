@@ -32,7 +32,7 @@ public class FacilityService {
         return mapper.getReservedVehicleByEmplId(vhcleResveEmplId);
     }
 
-    public int inputReservation(VehicleVO vehicleVO) {
+    public int inputVehicleReservation(VehicleVO vehicleVO) {
         return mapper.inputVehicleReservation(vehicleVO);
     }
 
@@ -66,9 +66,19 @@ public class FacilityService {
         return reservedRestRoomByFcltyResveEmplId;
     }
 
+    public int inputRestReservation(FacilityVO facilityVO) {
+        return mapper.inputRestReservation(facilityVO);
+    }
+
+    public int deleteReservedByFcltyResveSn(int fcltyResveSn) {
+        return mapper.deleteReservedByFcltyResveSn(fcltyResveSn);
+    }
+
     private static void changeCommonCodeToEnum(List<FacilityVO> list) {
         for (FacilityVO facilityVO : list) {
             facilityVO.setCommonCodeFcltyKind(Facility.valueOf(facilityVO.getCommonCodeFcltyKind()).getLabel());
         }
     }
+
+
 }
