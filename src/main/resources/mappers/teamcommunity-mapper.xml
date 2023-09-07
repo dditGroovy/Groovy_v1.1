@@ -35,9 +35,9 @@
                u.UPLOAD_FILE_SIZE
         FROM SNTNC s
                  JOIN EMPL e ON s.SNTNC_WRTING_EMPL_ID = e.EMPL_ID
-        JOIN UPLOAD_FILE u ON s.SNTNC_ETPR_CODE = u.UPLOAD_FILE_ETPR_CODE
+                 LEFT JOIN UPLOAD_FILE u ON s.SNTNC_ETPR_CODE = u.UPLOAD_FILE_ETPR_CODE
         WHERE s.COMMON_CODE_SNTNC_CTGRY = 'SNTNC010'
-          AND e.COMMON_CODE_DEPT  = (
+          AND e.COMMON_CODE_DEPT = (
             SELECT e1.COMMON_CODE_DEPT
             FROM EMPL e1
             WHERE e1.EMPL_ID = #{emplId}

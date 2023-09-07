@@ -38,33 +38,35 @@ public class CommunityService {
         log.info(vo.getSntncCn(), vo.getSntncWrtingEmplId(), vo.getSntncEtprCode());
         mapper.inputPost(vo);
 
-        String path = uploadPath + "/teamCommunity";
-        log.debug("path: " + path);
-        File uploadDir = new File(path);
-        if (!uploadDir.exists()) {
-            if (uploadDir.mkdirs()) {
-                log.info("폴더 생성 성공");
-            } else {
-                log.info("폴더 생성 실패");
+        if(postFile != null){
+            String path = uploadPath + "/teamCommunity";
+            log.debug("path: " + path);
+            File uploadDir = new File(path);
+            if (!uploadDir.exists()) {
+                if (uploadDir.mkdirs()) {
+                    log.info("폴더 생성 성공");
+                } else {
+                    log.info("폴더 생성 실패");
+                }
             }
+
+            String originalFileName = postFile.getOriginalFilename();
+            String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            String newFileName = UUID.randomUUID() + "." + extension;
+
+            File saveFile = new File(path, newFileName);
+            postFile.transferTo(saveFile);
+
+            long fileSize = postFile.getSize();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("sntncEtprCode", sntncEtprCode);
+            map.put("originalFileName", originalFileName);
+            map.put("newFileName", newFileName);
+            map.put("fileSize", fileSize);
+            log.info(String.valueOf(map));
+
+            mapper.uploadPostFile(map);
         }
-
-        String originalFileName = postFile.getOriginalFilename();
-        String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-        String newFileName = UUID.randomUUID() + "." + extension;
-
-        File saveFile = new File(path, newFileName);
-        postFile.transferTo(saveFile);
-
-        long fileSize = postFile.getSize();
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("sntncEtprCode", sntncEtprCode);
-        map.put("originalFileName", originalFileName);
-        map.put("newFileName", newFileName);
-        map.put("fileSize", fileSize);
-        log.info(String.valueOf(map));
-
-        mapper.uploadPostFile(map);
 
 
     }

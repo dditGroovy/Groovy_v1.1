@@ -56,8 +56,21 @@
             <td>${sntncVO.sntncCn}</td>
             <td>${sntncVO.recomendCnt}</td>
             <td>${sntncVO.sntncWrtingEmplId}</td>
-            <td><a href="/file/download/teamCommunity?uploadFileSn=${sntncVO.uploadFileSn}">${sntncVO.uploadFileOrginlNm}</a> <fmt:formatNumber value="${sntncVO.uploadFileSize / 1024.0}"
-                                                                                                                                      type="number" minFractionDigits="1" maxFractionDigits="1"/> KB</td>
+
+            <td>
+                <c:choose>
+                    <c:when test="${sntncVO.uploadFileSn != null && sntncVO.uploadFileSn != 0.0}">
+
+                        <a href="/file/download/teamCommunity?uploadFileSn=${sntncVO.uploadFileSn}">
+                                ${sntncVO.uploadFileOrginlNm}
+                        </a>
+                        <fmt:formatNumber value="${sntncVO.uploadFileSize / 1024.0}" type="number" minFractionDigits="1" maxFractionDigits="1"/> KB
+                    </c:when>
+                    <c:otherwise>
+                        파일없음
+                    </c:otherwise>
+                </c:choose>
+            </td>
             <c:if test="${sntncVO.sntncWrtingEmplId} == ${CustomUser.employeeVO.emplNm}" var="emplId" scope="session">
             <td>
                 <button type="button" id="modifyBtn">수정</button>
