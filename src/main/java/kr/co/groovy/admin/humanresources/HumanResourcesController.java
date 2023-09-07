@@ -26,4 +26,9 @@ public class HumanResourcesController {
         mav.setViewName("admin/connectionLog");
         return mav;
     }
+
+    @GetMapping("/manageDclz")
+    public String manageDclz() {
+        return "admin/manageDclzAll";
+    }
 }
