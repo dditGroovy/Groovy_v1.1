@@ -1,5 +1,6 @@
 package kr.co.groovy.teamcommunity;
 
+import kr.co.groovy.vo.RecomendVO;
 import kr.co.groovy.vo.SntncVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -75,7 +76,10 @@ public class CommunityService {
     public List<SntncVO> loadPost(String emplId){
         return mapper.loadPost(emplId);
     };
-    public String findRecomend(String sntncEtprCode, String recomendEmplId) {
-        return mapper.findRecomend(sntncEtprCode, recomendEmplId);
-    }
+    /*public List<RecomendVO> loadRecomend(String emplId){return mapper.loadRecomend(emplId);}*/
+    public int loadRecomend(String sntncEtprCode){return mapper.loadRecomend(sntncEtprCode);}
+
+    public int findRecomend(HashMap<String, Object> map) {return mapper.findRecomend(map);}
+
+    public void inputRecomend(RecomendVO vo){mapper.inputRecomend(vo);}
 }
