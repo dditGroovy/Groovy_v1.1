@@ -93,6 +93,7 @@
     <br/><br/>
     <button type="button">결재 제출</button>
 </div>
+
 <script>
     $("#getLine").on("click", function () {
         // $("#sanctionLine").prop("hidden", false);
@@ -103,30 +104,6 @@
         // 총무,GAT
         // 경영자,CEO
 
-        $.ajax({
-            url: '/sanction/loadOrgChart',
-            method: 'GET',
-            contentType: "application/json;charset=utf-8",
-            dataType: 'json',
-            success: function (data) {
-                data.forEach(function (employee) {
-                    var employeeDiv = $('<div>');
-                    employeeDiv.html(
-                        `<input type="text" value= "\${employee.emplId}"/>` +
-                        '이름' + employee.emplNm + '<br>' +
-                        '부서: ' + employee.commonCodeDept + '<br>' +
-                        '직급: ' + employee.commonCodeClsf);
 
-                    if (employee.commonCodeDept === '인사') {
-                        $('#hrt').append(employeeDiv);
-                    } else if (employee.commonCodeDept === '홍보') {
-                        $('#').append(employeeDiv);
-                    }
-                });
-            },
-            error: function (xhr, textStatus, error) {
-                console.log("AJAX 오류:", error);
-            }
-        });
     })
 </script>
