@@ -13,6 +13,6 @@ public interface CommunityMapper {
     int getSeq();
     void uploadPostFile(Map<String, Object> map);
 
-    List<SntncVO> findPost(Map<String, String> map);
+    List<SntncVO> findPost(String emplId);
     String findRecomend(String sntncEtprCode, String recomendEmplId);
 }

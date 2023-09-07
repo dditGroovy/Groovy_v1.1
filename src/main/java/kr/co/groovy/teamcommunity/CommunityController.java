@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 
 @RequestMapping("/teamCommunity")
@@ -24,7 +25,10 @@ public class CommunityController {
     @GetMapping("")
     public String teamComminity(Principal principal, Model model){
         String recomendEmplId = principal.getName();
+        List<SntncVO> sntncList = service.findPost(recomendEmplId);
         model.addAttribute("emplId",recomendEmplId);
+        model.addAttribute("sntncList",sntncList);
+        log.info(sntncList.toString());
         return "teamcommunity/teamCommunity";
     }
     @PostMapping("/inputPost")
@@ -34,7 +38,7 @@ public class CommunityController {
         vo.setSntncWritingEmplId(sntncWritingEmplId);
         vo.setSntncCn(sntncCn);
         service.inputPost(vo, postFile);
-        return "redirect:/teamcommunity";
+        return "redirect:/teamCommunity";
     }
 
 

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -68,6 +69,9 @@ public class CommunityService {
 
     }
 
+    public List<SntncVO> findPost(String emplId){
+        return mapper.findPost(emplId);
+    };
     public String findRecomend(String sntncEtprCode, String recomendEmplId) {
         return mapper.findRecomend(sntncEtprCode, recomendEmplId);
     }
