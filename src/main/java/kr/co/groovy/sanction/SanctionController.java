@@ -4,16 +4,19 @@ import kr.co.groovy.common.CommonService;
 import kr.co.groovy.enums.ClassOfPosition;
 import kr.co.groovy.enums.Department;
 import kr.co.groovy.vo.EmployeeVO;
+import kr.co.groovy.vo.SanctionFormatVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+@Slf4j
 @Controller
 @RequestMapping("/sanction")
 public class SanctionController {
@@ -28,14 +31,20 @@ public class SanctionController {
     }
 
     @GetMapping("/sanctionBox")
-    public String getSanctionBox(){
+    public String getSanctionBox() {
         return "sanction/sanctionBox";
     }
 
     @GetMapping("/write")
-    public String writeSanction(){
-        return "sanction/write";
+    public ModelAndView writeSanction(@RequestParam("format") String format, ModelAndView mav) {
+        SanctionFormatVO vo = service.loadFormat(format);
+        mav.addObject("format", vo);
+        mav.setViewName("sanction/write");
+        log.info(format);
+        log.info(vo + "");
+        return mav;
     }
+
     @GetMapping("/loadOrgChart")
     @ResponseBody
     public List<EmployeeVO> loadOrgChart(ModelAndView mav) {
