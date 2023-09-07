@@ -5,10 +5,10 @@
         INSERT INTO SNTNC(SNTNC_ETPR_CODE,
                           SNTNC_WRTING_EMPL_ID,
                           SNTNC_CN,
-                          SNTNC_WRITNG_DATE,
+                          SNTNC_WRTING_DATE,
                           COMMON_CODE_SNTNC_CTGRY)
         VALUES (#{sntncEtprCode},
-                #{sntncWritingEmplId},
+                #{sntncWrtingEmplId},
                 #{sntncCn},
                 SYSDATE,
                 'SNTNC010')
