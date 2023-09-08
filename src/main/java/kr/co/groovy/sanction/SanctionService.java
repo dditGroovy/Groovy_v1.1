@@ -34,9 +34,16 @@ public class SanctionService {
     int getStatus(String elctrnSanctnDrftEmplId, String commonCodeSanctProgrs) {
         return mapper.getStatus(elctrnSanctnDrftEmplId, commonCodeSanctProgrs);
     }
+    List<SanctionLineVO> loadAwaiting(String progrsCode,  String emplId){
+        List<SanctionLineVO> list = mapper.loadAwaiting(progrsCode,emplId);
+        for (SanctionLineVO vo : list) {
+            vo.setCommonCodeSanctProgrs(SanctionProgress.valueOf(vo.getCommonCodeSanctProgrs()).label());
+        }
+        return list;
+    }
 
-    List<SanctionVO> loadInProgressList(String emplId) {
-        List<SanctionVO> list = mapper.loadInProgressList(emplId);
+    List<SanctionVO> loadRequest(String emplId) {
+        List<SanctionVO> list = mapper.loadRequest(emplId);
         for (SanctionVO vo : list) {
             vo.setElctrnSanctnFormatCode(SanctionFormat.valueOf(vo.getElctrnSanctnFormatCode()).label());
             vo.setCommonCodeSanctProgrs(SanctionProgress.valueOf(vo.getCommonCodeSanctProgrs()).label());

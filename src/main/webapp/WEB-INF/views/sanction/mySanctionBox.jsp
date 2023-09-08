@@ -11,11 +11,11 @@
 </h2> <br/><br/>
 
 <ul id="sanctionStatus">
-    <li><button id="inProgress">기안 문서함</button></li> 사용자가 기안한 모든 문서
-    <li><button id="receive">임시 저장함</button></li> 작성이 완료되지 않은 문서
-    <li><button id="reference">결재 문서함</button></li> 결재자로 지정되어 결재가 완료되거나 예정인 문서
-    <li><button id="upcoming">수신 문서함</button></li> 수신자/수신부서로 지정된 문서
-    <li><button id="">발송 문서함</button></li> 수신처를 지정하여 발송한 문서
+    <li><button id="Request">기안 문서함</button></li> 사용자가 기안한 모든 문서
+    <li><button id="pending">임시 저장함</button></li> 작성이 완료되지 않은 문서
+    <li><button id="r">결재 문서함</button></li> 결재자로 지정되어 결재가 완료되거나 예정인 문서
+    <li><button id="we">수신 문서함</button></li> 수신자/수신부서로 지정된 문서
+    <li><button id="rq">발송 문서함</button></li> 수신처를 지정하여 발송한 문서
 </ul>
 <div class="sanctionList">
 </div>
@@ -23,7 +23,7 @@
         $(function (){
             $.ajax({
                 type: "GET",
-                url: "/sanction/loadInProgress?emplId=${CustomUser.employeeVO.emplId}",
+                url: "/sanction/loadRequest?emplId=${CustomUser.employeeVO.emplId}",
                 success: function (res) {
                     let code = "<table border=1>";
                     code += `<thead><tr><th>문서번호</th>><th>결재양식</th><th>제목</th><th>기안일시</th><th>상태</th></thead><tbody>`;

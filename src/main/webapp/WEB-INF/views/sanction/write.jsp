@@ -66,7 +66,7 @@
         const today = year + '-' + month + '-' + day;
         const title = "${format.formatSj}";
         let content;
-        let file = $('#sanctionFile')[0].files[0]
+        let file = $('#sanctionFile')[0].files[0];
 
         $(function () {
             $("#sanctionNo").html(etprCode);
@@ -107,11 +107,14 @@
                 data: JSON.stringify(jsonData),
                 contentType: "application/json",
                 success: function (data) {
-                    console.log("JSON 데이터 전송 성공");
-                    uploadFile();
+                    console.log("결재 제출 성공");
+                    if (file != null) {
+                        uploadFile();
+
+                    }
                 },
                 error: function (xhr) {
-                    console.log("JSON 데이터 전송 실패");
+                    console.log("결재 제출 실패");
                 }
             });
         });
@@ -129,15 +132,13 @@
                 contentType: false, // 필수
                 processData: false, // 필수
                 success: function (data) {
-                    console.log("파일 업로드 성공");
+                    console.log("결재 파일 업로드 성공");
                 },
                 error: function (xhr) {
-                    console.log("파일 업로드 실패");
+                    console.log("결재 파일 업로드 실패");
                 }
             });
         }
-
-
 
 
         // 파일 드래그 앤 드롭 (쓰려면 파일 처리 기능 추가해야 됨)

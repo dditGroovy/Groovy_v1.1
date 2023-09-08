@@ -27,7 +27,7 @@
           AND COMMON_CODE_SANCT_PROGRS = #{commonCodeSanctProgrs}
     </select>
     <!--기안 문서함(상신) 불러오기-->
-    <select id="loadInProgressList" parameterType="String" resultType="sanctionVO">
+    <select id="loadRequest" parameterType="String" resultType="sanctionVO">
         SELECT ELCTRN_SANCTN_ETPR_CODE,
                ELCTRN_SANCTN_FORMAT_CODE,
                ELCTRN_SANCTN_SJ,
@@ -94,5 +94,24 @@
                 sysdate)
 
     </insert>
+
+    <select id="loadAwaiting" parameterType="String" resultType="sanctionLineVO">
+        SELECT E.ELCTRN_SANCTN_ETPR_CODE,
+               E.ELCTRN_SANCTN_SJ,
+               P.EMPL_NM,
+               E.ELCTRN_SANCTN_RECOM_DATE,
+               L.SANCTN_LINE_ORDR,
+               L.COMMON_CODE_SANCT_PROGRS,
+               L.ELCTRN_SANCTN_FINAL_AT
+        FROM ELCTRN_SANCTN E,
+             SANCTN_LINE L,
+             EMPL P
+        WHERE E.ELCTRN_SANCTN_ETPR_CODE = L.ELCTRN_SANCTN_ETPR_CODE
+          AND E.ELCTRN_SANCTN_DRFT_EMPL_ID = P.EMPL_ID
+          AND L.COMMON_CODE_SANCT_PROGRS = #{progrsCode}
+          AND L.ELCTRN_SANCTNEMPL_ID = #{emplId}
+    </select>
+<!--  loadAwaiting  loadUpcoming loadReference loadAcceptance-->
+
 </mapper>
 

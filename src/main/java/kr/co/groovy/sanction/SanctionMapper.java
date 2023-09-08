@@ -6,8 +6,10 @@ import kr.co.groovy.vo.SanctionLineVO;
 import kr.co.groovy.vo.SanctionVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SanctionMapper {
@@ -18,10 +20,12 @@ public interface SanctionMapper {
 
     int getStatus(@Param("elctrnSanctnDrftEmplId") String elctrnSanctnDrftEmplId, @Param("commonCodeSanctProgrs") String commonCodeSanctProgrs);
 
-    List<SanctionVO> loadInProgressList(@Param("elctrnSanctnDrftEmplId")String emplId);
+    List<SanctionVO> loadRequest(@Param("elctrnSanctnDrftEmplId")String emplId);
 
     void inputSanction(SanctionVO vo);
     void inputLine(SanctionLineVO vo);
     void inputRefrn(ReferenceVO vo);
+
+    List<SanctionLineVO> loadAwaiting(@Param("progrsCode") String progrsCode, @Param("emplId") String emplId);
 
 }

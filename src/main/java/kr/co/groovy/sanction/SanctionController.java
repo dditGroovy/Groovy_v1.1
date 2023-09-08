@@ -7,6 +7,7 @@ import kr.co.groovy.enums.SanctionFormat;
 import kr.co.groovy.enums.SanctionProgress;
 import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.SanctionFormatVO;
+import kr.co.groovy.vo.SanctionLineVO;
 import kr.co.groovy.vo.SanctionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -51,11 +52,16 @@ public class SanctionController {
         service.inputSanction(requestData);
     }
 
-    // 결재요청 - 결재건수 불러오기
-    @GetMapping("/loadInProgress")
+
+    @GetMapping("/loadRequest")
     @ResponseBody
-    public List<SanctionVO> loadInProgressList(String emplId) {
-        return service.loadInProgressList(emplId);
+    public List<SanctionVO> loadRequest(String emplId) {
+        return service.loadRequest(emplId);
+    }
+    @GetMapping("/loadAwaiting")
+    @ResponseBody
+    public List<SanctionLineVO>loadAwaiting(String progrsCode, String emplId){
+        return service.loadAwaiting(progrsCode,emplId);
     }
 
 
