@@ -1,6 +1,7 @@
 package kr.co.groovy.sanction;
 
 import kr.co.groovy.vo.SanctionFormatVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,4 +20,9 @@ public class SanctionService {
     String getSeq(String formatSanctnKnd) {
         return mapper.getSeq(formatSanctnKnd);
     }
+
+    int getStatus(String elctrnSanctnDrftEmplId, String commonCodeSanctProgrs){
+        return mapper.getStatus(elctrnSanctnDrftEmplId, commonCodeSanctProgrs);
+    }
+
 }

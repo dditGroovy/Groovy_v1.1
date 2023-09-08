@@ -8,27 +8,21 @@
     <a href="#">결재 진행함</a>
     <a href="#">개인 문서함</a>
 </h2> <br/><br/>
-<p>
-    private String commonCodeSanctnFormat;
-    private String formatSanctnKnd;
-    private String formatSj;
-    private String formatCn; // CLOB 타입
-    private String formatUseAt;
-</p>
+
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="CustomUser"/>
     <p>${CustomUser.employeeVO.notificationVO.dutyRequest}</p>
 <div id="formCard">
     <div class="formHeader">
         <div class="btnWrap">
-            <button id="getLine">결재선</button>
+            <button id="getLine">결재선 지정</button>
             <div id="sanctionLine">
                 <%@include file="line/line.jsp" %>
             </div>
         </div>
         <br/>
         <div class="formTitle">
-            ${format.formatSj}   <!--이것도 각자 끌어오면 좋게씀-->
+            ${format.formatSj}
         </div>
     </div>
     <div class="approvalWrap">

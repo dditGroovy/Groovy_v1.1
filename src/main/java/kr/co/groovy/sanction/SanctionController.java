@@ -10,9 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
 @Slf4j
 @Controller
 @RequestMapping("/sanction")
@@ -46,6 +45,19 @@ public class SanctionController {
         return mav;
     }
 
+    //
+    @GetMapping("/getStatus")
+    @ResponseBody
+    public String getStatus(@RequestParam("elctrnSanctnDrftEmplId") String elctrnSanctnDrftEmplId,
+                                         @RequestParam("commonCodeSanctProgrs") String commonCodeSanctProgrs) {
+//        Map<String, Object> response = new HashMap<>();
+        //        response.put("count", count);
+        log.info(elctrnSanctnDrftEmplId);
+        log.info(commonCodeSanctProgrs);
+        return String.valueOf(service.getStatus(elctrnSanctnDrftEmplId, commonCodeSanctProgrs));
+    }
+
+    // 결재선 불러오기
     @GetMapping("/loadOrgChart")
     @ResponseBody
     public List<EmployeeVO> loadOrgChart(ModelAndView mav) {

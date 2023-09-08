@@ -17,5 +17,11 @@
                 ) AS elctrnSanctnEtprCode
         FROM DUAL
     </select>
+    <select id="getStatus" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM ELCTRN_SANCTN
+        WHERE ELCTRN_SANCTN_DRFT_EMPL_ID = #{elctrnSanctnDrftEmplId}
+          AND COMMON_CODE_SANCT_PROGRS = #{commonCodeSanctProgrs}
+    </select>
 </mapper>
 
