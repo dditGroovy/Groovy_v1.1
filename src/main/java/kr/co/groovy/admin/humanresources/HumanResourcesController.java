@@ -1,5 +1,6 @@
 package kr.co.groovy.admin.humanresources;
 
+import com.google.gson.Gson;
 import kr.co.groovy.vo.CommuteVO;
 import kr.co.groovy.vo.ConnectionLogVO;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -43,7 +45,11 @@ public class HumanResourcesController {
         }
         model.addAttribute("deptTotalWorkTime", deptTotalWorkTime);
         model.addAttribute("deptAvgWorkTime", deptAvgWorkTime);
-        List<CommuteVO> allDclzList = service.loadAllDclz();
+        List<Map<String, Object>> list = service.loadAllDclz();
+        Gson gson = new Gson();
+        String allDclzList = gson.toJson(list);
+        log.info("allDclzList : {}", allDclzList);
+        model.addAttribute("allDclzList", allDclzList);
         return "admin/manageDclzAll";
     }
 
