@@ -7,7 +7,8 @@
 			 xmlns:websocket="http://www.springframework.org/schema/websocket"
 			 xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd ">
 
 	<annotation-driven/>
 
@@ -45,4 +46,12 @@
 	<!--		<beans:ref bean="customUserHandlerInterceptor" />-->
 	<!--	</mvc:interceptors>-->
 
+	<beans:bean id="alarmtHandler" class="kr.co.groovy.alarm.AlarmHandler" />
+	<websocket:handlers>
+		<websocket:mapping path="/echo-ws" handler="alarmtHandler"/>
+		<websocket:handshake-interceptors>
+			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
+		</websocket:handshake-interceptors>
+		<websocket:sockjs />
+	</websocket:handlers>
 </beans:beans>

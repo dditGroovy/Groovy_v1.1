@@ -14,5 +14,5 @@
         <br>
         <label for="noti-file">파일 첨부</label>
         <input type="file" name="notiFiles" id="noti-file" multiple><br/>
-        <button type="submit" id="submitBtn">등록</button>
+        <button type="button" id="submitBtn">등록</button>
     </form>
