@@ -66,12 +66,13 @@
         const today = year + '-' + month + '-' + day;
         const title = "${format.formatSj}";
         let content;
-        let file = $("#sanctionFile").files;
+        let file = $('#sanctionFile')[0].files[0]
 
         $(function () {
             $("#sanctionNo").html(etprCode);
             $("#writeDate").html(today);
             $("#writer").html(writer)
+
         });
         $(".submitLine").on("click", function () {
             approver = $("#sanctionLine input[type=hidden]").map(function () {
@@ -83,6 +84,7 @@
             referrer = $("#refrnLine input[type=hidden]").map(function () {
                 return $(this).val();
             }).get();
+            console.log(file);
         })
         $("#sanctionSubmit").on("click", function () {
             $("#sanctionContent").text("윤하늘 바보")
@@ -106,7 +108,7 @@
                 contentType: "application/json",
                 success: function (data) {
                     console.log("JSON 데이터 전송 성공");
-                    //uploadFile();
+                    uploadFile();
                 },
                 error: function (xhr) {
                     console.log("JSON 데이터 전송 실패");
@@ -115,11 +117,13 @@
         });
 
         function uploadFile() {
-            const formData = new FormData();
-            formData.append("file", file[0]);
+            let form = $('#sanctionFile')[0].files[0];
+            let formData = new FormData();
+
+            formData.append('file', form);
 
             $.ajax({
-                url: "/sanction/uploadFile",
+                url: `/file/upload/sanction/\${etprCode}`,
                 type: "POST",
                 data: formData,
                 contentType: false, // 필수

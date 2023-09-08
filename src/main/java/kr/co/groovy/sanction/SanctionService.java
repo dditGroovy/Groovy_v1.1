@@ -90,14 +90,5 @@ public class SanctionService {
             referenceVO.setSanctnRefrnEmplId(referrer);
             mapper.inputRefrn(referenceVO);
         }
-
-    }
-
-    void inputLine(SanctionLineVO vo) {
-        mapper.inputLine(vo);
-    }
-
-    void inputRefrn(ReferenceVO vo) {
-        mapper.inputRefrn(vo);
     }
 }
