@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,20 +34,20 @@ public class GeneralAffairsController {
     public ModelAndView manageNotice(ModelAndView mav) {
         List<NoticeVO> list = commonService.loadNoticeListForAdmin();
         mav.addObject("notiList", list);
-        mav.setViewName("admin/manageNotice");
+        mav.setViewName("admin/gat/manageNotice");
         return mav;
 
     }
 
     @GetMapping("/inputNotice")
     public String inputNoticeForm() {
-        return "admin/inputNotice";
+        return "admin/gat/inputNotice";
     }
 
     @PostMapping("/inputNotice")
-    public String inputNotice(NoticeVO vo, MultipartFile[] notiFiles) {
+    @ResponseBody
+    public void inputNotice(NoticeVO vo, MultipartFile[] notiFiles) {
         service.inputNotice(vo, notiFiles);
-        return "redirect:/admin/manageNotice";
     }
 
     @GetMapping("/noticeDetail")
@@ -55,14 +56,14 @@ public class GeneralAffairsController {
         List<UploadFileVO> list = commonService.loadNotiFiles(notiEtprCode);
         mav.addObject("noticeDetail", vo);
         mav.addObject("notiFiles", list);
-        mav.setViewName("admin/adminNoticeDetail");
+        mav.setViewName("admin/gat/adminNoticeDetail");
         return mav;
     }
 
     @GetMapping("/deleteNotice")
     public String deleteNotice(String notiEtprCode) {
         service.deleteNotice(notiEtprCode);
-        return "redirect:/admin/manageNotice";
+        return "redirect:/admin/gat/manageNotice";
     }
 
     @GetMapping("/manageVehicle")
@@ -71,13 +72,13 @@ public class GeneralAffairsController {
         List<VehicleVO> todayReservedVehicles = getTodayReservedVehicles();
         mav.addObject("allVehicles", allVehicles);
         mav.addObject("todayReservedVehicles", todayReservedVehicles);
-        mav.setViewName("admin/manageCarResve");
+        mav.setViewName("admin/gat/manageCarResve");
         return mav;
     }
 
     @GetMapping("/inputVehicle")
     public ModelAndView inputVehicle(ModelAndView mav) {
-        mav.setViewName("admin/insertCar");
+        mav.setViewName("admin/gat/insertCar");
         return mav;
     }
 
@@ -95,7 +96,7 @@ public class GeneralAffairsController {
     public ModelAndView loadVehicle(ModelAndView mav) {
         List<VehicleVO> todayReservedVehicles = getTodayReservedVehicles();
         mav.addObject("todayReservedVehicles", todayReservedVehicles);
-        mav.setViewName("admin/listCarResve");
+        mav.setViewName("admin/gat/listCarResve");
         return mav;
     }
 
