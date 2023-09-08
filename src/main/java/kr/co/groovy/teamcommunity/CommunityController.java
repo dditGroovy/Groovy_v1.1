@@ -61,7 +61,7 @@ public class CommunityController {
         mav.addObject("sntncList", sntncList);
         mav.addObject("recomendPostCnt", recomendPostCnt);
         mav.addObject("recomendedEmpleChk", recomendedEmpleChk);
-        mav.setViewName("teamcommunity/teamCommunity");
+        mav.setViewName("community/teamCommunity");
         return mav;
     }
 
