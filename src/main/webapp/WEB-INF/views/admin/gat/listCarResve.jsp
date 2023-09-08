@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <style>
     ul {
@@ -162,6 +164,21 @@
             {field: "vhcleResveEmplId", headerName: "사번"},
             {field: "chk", headerName: " ", cellRenderer: ClassComp},
         ];
+        <c:forEach var="vehicleVO" items="${todayReservedVehicles}" varStatus="status"> <!-- 12: 공지사항 개수(length) -->
+        <%--        <c:set var="beginTimeStr" value="${vehicleVO.vhcleResveBeginTime}"/>--%>
+        <%--        <fmt:formatDate var="beginTime" value="${beginTimeStr}" pattern="HH:mm"/>--%>
+        <%--        <c:set var="endTimeStr" value="${vehicleVO.vhcleResveEndTime}"/>--%>
+        <%--        <fmt:formatDate var="endTime" value="${endTimeStr}" pattern="HH:mm"/>--%>
+        rowData.push({
+            vhcleResveNo:        ${vehicleVO.vhcleResveNo},
+            vhcleNo:             ${vehicleVO.vhcleNo},
+            vhcleResveBeginTime: ${vehicleVO.vhcleResveBeginTime},
+            vhcleResveEndTime:   ${vehicleVO.vhcleResveEndTime},
+            vhcleResveEmpNm:     ${vehicleVO.vhcleResveEmplNm},
+            vhcleResveEmplId:    ${vehicleVO.vhcleResveEmplId},
+            chk:                 ${vehicleVO.vhcleResveNo},
+        })
+        </c:forEach>
         const gridOptions = {
             columnDefs: columnDefs,
         };
