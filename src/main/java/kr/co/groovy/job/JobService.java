@@ -33,4 +33,8 @@ public class JobService {
     List<JobDiaryVO> getDiaryByInfo(EmployeeVO employeeVO) {
         return mapper.getDiaryByInfo(employeeVO);
     }
+
+    JobDiaryVO getDiaryByDateAndId(JobDiaryVO jobDiaryVO) {
+        return mapper.getDiaryByDateAndId(jobDiaryVO);
+    }
 }

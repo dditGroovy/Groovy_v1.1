@@ -5,7 +5,8 @@
         <result property="jobDiaryReportDate" column="JOB_DIARY_REPORT_DATE" />
         <result property="jobDiarySbj" column="JOB_DIARY_SBJ" />
         <result property="jobDiaryCn" column="JOB_DIARY_CN" />
-        <result property="jobDiaryWrtingEmplId" column="EMPL_NM" />
+        <result property="jobDiaryWrtingEmplId" column="JOB_DIARY_WRTING_EMPL_ID" />
+        <result property="jobDiaryWrtingEmplNm" column="EMPL_NM"></result>
     </resultMap>
 
     <select id="getLeader" parameterType="String" resultType="String">
@@ -42,7 +43,7 @@
     </insert>
 
     <select id="getDiaryByDept" parameterType="String" resultMap="jobDiaryMap">
-        SELECT JOB_DIARY_REPORT_DATE, EMPL_NM, JOB_DIARY_SBJ, JOB_DIARY_CN
+        SELECT JOB_DIARY_REPORT_DATE, EMPL_NM, JOB_DIARY_SBJ, JOB_DIARY_CN, JOB_DIARY_WRTING_EMPL_ID
         FROM JOB_DIARY J, EMPL E
         WHERE J.JOB_DIARY_WRTING_EMPL_ID = E.EMPL_ID
           AND E.COMMON_CODE_DEPT = #{commonCodeDept}
@@ -50,11 +51,19 @@
     </select>
 
     <select id="getDiaryByInfo" parameterType="employeeVO" resultMap="jobDiaryMap">
-        SELECT JOB_DIARY_REPORT_DATE, EMPL_NM, JOB_DIARY_SBJ, JOB_DIARY_CN
+        SELECT JOB_DIARY_REPORT_DATE, EMPL_NM, JOB_DIARY_SBJ, JOB_DIARY_CN, JOB_DIARY_WRTING_EMPL_ID
         FROM JOB_DIARY J, EMPL E
         WHERE J.JOB_DIARY_WRTING_EMPL_ID = E.EMPL_ID
           AND E.COMMON_CODE_DEPT = #{commonCodeDept}
           AND E.EMPL_ID = #{emplId}
         ORDER BY JOB_DIARY_REPORT_DATE
+    </select>
+
+    <select id="getDiaryByDateAndId" parameterType="String" resultMap="jobDiaryMap">
+        SELECT EMPL_NM, JOB_DIARY_SBJ, JOB_DIARY_CN
+        FROM JOB_DIARY J, EMPL E
+        WHERE J.JOB_DIARY_WRTING_EMPL_ID = E.EMPL_ID
+          AND E.EMPL_ID = #{jobDiaryWrtingEmplId}
+          and J.JOB_DIARY_REPORT_DATE = #{jobDiaryReportDate}
     </select>
 </mapper>

@@ -17,4 +17,6 @@ public interface JobMapper {
     List<JobDiaryVO> getDiaryByDept(String commonCodeDept);
 
     List<JobDiaryVO> getDiaryByInfo(EmployeeVO employeeVO);
+
+    JobDiaryVO getDiaryByDateAndId(JobDiaryVO jobDiaryVO);
 }

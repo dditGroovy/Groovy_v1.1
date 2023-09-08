@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script src="/resources/ckeditor/ckeditor.js"></script>
 <button type="button" id="goWrite">업무 일지 작성</button>
-
+${list}
 <c:choose>
     <c:when test="${empty list}">
         <p>데이터가 존재하지 않습니다.</p>
@@ -19,48 +19,17 @@
             <c:forEach var="list" items="${list}" varStatus="stat">
                 <tr>
                     <td>${stat.index + 1}</td>
-                    <td onclick="diaryDetail(this)">${list.jobDiarySbj}</td>
-                    <td>${list.jobDiaryWrtingEmplId}</td>
-                    <td><fmt:formatDate value="${list.jobDiaryReportDate}" pattern="yyyy-MM-dd" /></td>
-                    <td style="display: none">${list.jobDiaryCn}</td>
+                    <td><p onclick="goRead(this)">${list.jobDiarySbj}</p></td>
+                    <td>${list.jobDiaryWrtingEmplNm}</td>
+                    <td><c:out value="${list.jobDiaryReportDate.substring(0, 10)}" /></td>
+                    <td style="display: none">${list.jobDiaryWrtingEmplId}</td>
                 </tr>
             </c:forEach>
         </table>
     </c:otherwise>
 </c:choose>
 
-<div id="detail" style="display: none;">
-    <h2>업무 일지 (상세)</h2>
-    <table border="1">
-        <tr>
-            <td>제목</td>
-            <td id="subject"></td>
-        </tr>
-        <tr>
-            <td>작성자</td>
-            <td id="writer"></td>
-        </tr>
-        <tr>
-            <td>작성 날짜</td>
-            <td id="date"></td>
-        </tr>
-        <tr>
-            <td>내용</td>
-            <td><textarea name="editor" id="editor"></textarea></td>
-        </tr>
-    </table>
-</div>
-
-
-
 <script>
-    CKEDITOR.replace('editor');
-    $("#editor").attr("readOnly",true);
-    window.onload = function () {
-        document.querySelector("#cke_1_top").style.display = "none";
-        document.querySelector("#cke_1_bottom").style.display = "none";
-    }
-
     let goWrite = document.querySelector("#goWrite");
     goWrite.addEventListener("click", function () {
         window.location.href = "/job/write";
@@ -72,17 +41,10 @@
         alert(error);
     }
 
-    function diaryDetail(listItem) {
-        let subject = listItem.textContent;
-        let writer = listItem.nextElementSibling.textContent;
-        let date = listItem.nextElementSibling.nextElementSibling.textContent;
-        let content = listItem.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML;
-
-        document.querySelector("#subject").textContent = subject;
-        document.querySelector("#writer").textContent = writer;
-        document.querySelector("#date").textContent = date;
-        CKEDITOR.instances.editor.setData(content);
-
-        document.querySelector("#detail").style.display = "block";
+    function goRead(readBtn) {
+        let date = readBtn.closest("td").nextElementSibling.nextElementSibling.textContent;
+        let id = readBtn.closest("td").nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+        window.location.href = "/job/read?date=" + date + "&id=" + id;
     }
+
 </script>
