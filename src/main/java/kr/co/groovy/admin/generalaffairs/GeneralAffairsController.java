@@ -68,10 +68,7 @@ public class GeneralAffairsController {
     @GetMapping("/manageVehicle")
     public ModelAndView loadReservedAndRegisteredVehicle(ModelAndView mav) {
         List<VehicleVO> allVehicles = service.getAllVehicles();
-        List<VehicleVO> todayReservedVehicles = service.getTodayReservedVehicles();
-        for (int i = 0; i < todayReservedVehicles.size(); i++) {
-            todayReservedVehicles.get(i).setVhcleResveNo(i + 1);
-        }
+        List<VehicleVO> todayReservedVehicles = getTodayReservedVehicles();
         mav.addObject("allVehicles", allVehicles);
         mav.addObject("todayReservedVehicles", todayReservedVehicles);
         mav.setViewName("admin/manageCarResve");
@@ -96,7 +93,17 @@ public class GeneralAffairsController {
 
     @GetMapping("/loadVehicle")
     public ModelAndView loadVehicle(ModelAndView mav) {
+        List<VehicleVO> todayReservedVehicles = getTodayReservedVehicles();
+        mav.addObject("todayReservedVehicles", todayReservedVehicles);
         mav.setViewName("admin/listCarResve");
         return mav;
+    }
+
+    private List<VehicleVO> getTodayReservedVehicles() {
+        List<VehicleVO> todayReservedVehicles = service.getTodayReservedVehicles();
+        for (int i = 0; i < todayReservedVehicles.size(); i++) {
+            todayReservedVehicles.get(i).setVhcleResveNo(i + 1);
+        }
+        return todayReservedVehicles;
     }
 }
