@@ -22,4 +22,5 @@ public interface CommunityMapper {
     int findRecomend(HashMap<String, Object> map);
 
     void inputRecomend(RecomendVO vo);
+    void deleteRecomend(RecomendVO vo);
 }

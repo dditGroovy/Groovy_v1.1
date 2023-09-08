@@ -81,5 +81,6 @@ public class CommunityService {
 
     public int findRecomend(HashMap<String, Object> map) {return mapper.findRecomend(map);}
 
-    public void inputRecomend(RecomendVO vo){mapper.inputRecomend(vo);}
+    public void inputRecomend(RecomendVO vo){ mapper.inputRecomend(vo);}
+    public void deleteRecomend(RecomendVO vo){ mapper.deleteRecomend(vo);}
 }

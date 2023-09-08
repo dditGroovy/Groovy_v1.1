@@ -65,7 +65,12 @@
     </select>
     <insert id="inputRecomend" parameterType="recomendVO">
         INSERT INTO RECOMEND (SNTNC_ETPR_CODE, RECOMEND_EMPL_ID, RECOMEND_SN)
-        VALUES ('SNTNC-85-20230907', '202308016', RECOMEND_SEQ.NEXTVAL)
+        VALUES (#{sntncEtprCode}, #{recomendEmplId}, RECOMEND_SEQ.NEXTVAL)
     </insert>
+    <delete id="deleteRecomend" parameterType="recomendVO">
+        DELETE
+        FROM RECOMEND
+        WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId}
+    </delete>
 
 </mapper>

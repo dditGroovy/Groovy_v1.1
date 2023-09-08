@@ -1,12 +1,14 @@
 package kr.co.groovy.teamcommunity;
 
 import kr.co.groovy.common.CommonService;
+import kr.co.groovy.vo.RecomendVO;
 import kr.co.groovy.vo.SntncVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -76,8 +78,20 @@ public class CommunityController {
     }
 
     /* 좋아요 구현 */
+    @ResponseBody
     @PostMapping("/inputRecomend")
-    public String inputRecomend(){
-        return "s";
+    public int inputRecomend(RecomendVO vo){
+        service.inputRecomend(vo);
+        String sntncEtprCode = vo.getSntncEtprCode();
+        int recomendCnt = service.loadRecomend(sntncEtprCode);
+        return recomendCnt;
+    }
+    @ResponseBody
+    @PostMapping("/deleteRecomend")
+    public int deleteRecomend(RecomendVO vo){
+        service.deleteRecomend(vo);
+        String sntncEtprCode = vo.getSntncEtprCode();
+        int recomendCnt = service.loadRecomend(sntncEtprCode);
+        return recomendCnt;
     }
 }
