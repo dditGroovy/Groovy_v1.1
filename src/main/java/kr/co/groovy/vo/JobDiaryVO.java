@@ -9,7 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class JobVO {
+public class JobDiaryVO {
     private Date jobDiaryReportDate;
     private String jobDiaryWrtingEmplId;
     private String jobDiaryRecptnEmplId;

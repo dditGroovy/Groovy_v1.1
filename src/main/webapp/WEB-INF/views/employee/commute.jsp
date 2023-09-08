@@ -144,6 +144,7 @@
                     refreshCommute();
                     getMaxWeeklyWorkTime();
                     getWeeklyLeaveTime();
+                    clearInterval(intervalId);
                 },
                 error: function (xhr) {
                     console.log(xhr.status);
@@ -151,6 +152,7 @@
             });
         });
 
+        let intervalId = null;
         function refreshCommute() {
             $.ajax({
                 type: 'get',
@@ -164,7 +166,7 @@
                         attend.innerText = attendTime;
                         updateWorkTime();
                         if (rslt.dclzLvffcTm == "2000-01-01 00:00:00") { //출근만 찍혀 있을 때
-                            setInterval(updateWorkTime, 10000); //실시간 업데이트
+                            intervalId = setInterval(updateWorkTime, 10000); //실시간 업데이트
                         } else { //출퇴근 다 찍혀있을 때
                             leaveDate = parseDate(rslt.dclzLvffcTm);
                             let leaveTime = formatTime(leaveDate);

@@ -1,5 +1,6 @@
 package kr.co.groovy.admin.humanresources;
 
+import kr.co.groovy.vo.CommuteVO;
 import kr.co.groovy.vo.ConnectionLogVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class HumanResourcesService {
+
     final
     HumanResourcesMapper mapper;
 
@@ -21,4 +23,21 @@ public class HumanResourcesService {
         log.info(today);
         return mapper.loadConnectionLog(today);
     }
+
+    List<CommuteVO> loadAllDclz() {
+        return mapper.loadAllDclz();
+    }
+
+    List<String> loadDeptList() {
+        return mapper.loadDeptList();
+    }
+
+    int deptTotalWorkTime(String deptCode) {
+        return mapper.deptTotalWorkTime(deptCode);
+    }
+
+    int deptAvgWorkTime(String deptCode) {
+        return mapper.deptAvgWorkTime(deptCode);
+    }
+
 }

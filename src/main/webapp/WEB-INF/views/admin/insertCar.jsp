@@ -6,8 +6,8 @@
 </style>
     <div class="wrap">
         <ul>
-            <li><a href="#" class="tab">차량 관리</a></li>
-            <li><a href="#" class="tab">예약 현황</a></li>
+            <li><a href="/generalAffairs/manageVehicle" class="tab">차량 관리</a></li>
+            <li><a href="/generalAffairs/loadVehicle" class="tab">예약 현황</a></li>
         </ul>
     </div>
     <div class="cardWrap">
@@ -15,7 +15,7 @@
             <h2>차량 등록</h2>
         </div>
         <div class="card">
-            <form action="#">
+            <form action="/generalAffairs/inputVehicle" method="post">
                 <table border="1" style="width: 100%">
                     <tr>
                         <th>차량 번호</th>
@@ -33,12 +33,12 @@
                         <th>하이패스 부착 여부</th>
                         <td style="display: flex; gap: 24px;">
                             <div>
-                                <input type="radio" name="commonCodeHipassAsnAt1" id="hipass010" value="hipass010" checked>
-                                <label for="hipass010">부착</label>
+                                <input type="radio" name="commonCodeHipassAsnAt" id="HIPASS010" value="HIPASS010" checked>
+                                <label for="HIPASS010">부착</label>
                             </div>
                             <div>
-                                <input type="radio" name="commonCodeHipassAsnAt2" id="hipass011" value="hipass011">
-                                <label for="hipass011">미부착</label>
+                                <input type="radio" name="commonCodeHipassAsnAt" id="HIPASS011" value="HIPASS011">
+                                <label for="HIPASS011">미부착</label>
                             </div>
                         </td>
                     </tr>
