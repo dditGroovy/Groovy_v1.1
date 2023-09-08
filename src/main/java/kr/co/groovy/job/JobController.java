@@ -1,12 +1,15 @@
 package kr.co.groovy.job;
 
-import kr.co.groovy.vo.JobVO;
+import kr.co.groovy.enums.ClassOfPosition;
+import kr.co.groovy.vo.EmployeeVO;
+import kr.co.groovy.vo.JobDiaryVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/job")
@@ -17,24 +20,45 @@ public class JobController {
         this.service = service;
     }
 
-    @GetMapping("/jobDiary")
-    public String jobDiary() {
-        //불러오기...
-        return "employee/jobDiary";
-    }
-
     @GetMapping("/write")
     public String jobDiaryWrite() {
         return "employee/jobDiaryWrite";
     }
 
-    @PostMapping("/insertJob")
-    public String insertJob(@ModelAttribute JobVO jobVO, Principal principal, Model model) {
+    @PostMapping("/insertDiary")
+    public String insertDiary(@ModelAttribute JobDiaryVO jobDiaryVO, Principal principal, Model model) {
         String emplId = principal.getName();
-        jobVO.setJobDiaryWrtingEmplId(emplId);
-        String recptnEmplId = service.getLeader(emplId);
-        jobVO.setJobDiaryRecptnEmplId(recptnEmplId);
+        String ss = principal.toString();
+        System.out.println("ss = " + ss);
+        jobDiaryVO.setJobDiaryWrtingEmplId(emplId);
 
-        return "job/jobDiary";
+        try {
+            String recptnEmplId = service.getLeader(emplId);
+            jobDiaryVO.setJobDiaryRecptnEmplId(recptnEmplId);
+            service.insertDiary(jobDiaryVO);
+            return "redirect:/job/jobDiary";
+        } catch (Exception e) {
+            return "redirect:/job/jobDiary";
+        }
+    }
+
+    @GetMapping("/jobDiary")
+    public String jobDiary(EmployeeVO employeeVO, Principal principal, Model model) {
+        List<JobDiaryVO> list = new ArrayList<>();
+        String emplId = principal.getName();
+        employeeVO = service.getInfoById(emplId);
+        employeeVO.setEmplId(emplId);
+        try {
+            if (employeeVO.getCommonCodeClsf().equals(ClassOfPosition.CLSF012.name())) {
+                //팀장일 경우, 본인 팀의 모든 팀원의 업무 일지 조회
+                list= service.getDiaryByDept(employeeVO.getCommonCodeDept());
+            } else { //팀장이 아닐 경우, 본인의 업무 일지만 조회
+                list= service.getDiaryByInfo(employeeVO);
+            }
+        } catch (Exception e) {
+
+        }
+        model.addAttribute("list", list);
+        return "employee/jobDiary";
     }
 }
