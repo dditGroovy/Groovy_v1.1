@@ -64,11 +64,11 @@
             </td>
         </tr>-->
         <c:forEach var="sntncVO" items="${sntncList}">
-        <tr>
+        <tr data-idx="${sntncVO.sntncEtprCode}" class="post">
             <td class="sntncEtprCode">${sntncVO.sntncEtprCode}</td>
             <td>${sntncVO.emplNm}</td>
             <td>${sntncVO.sntncWrtingDate}</td>
-            <td>${sntncVO.sntncCn}</td>
+            <td class="sntncCn">${sntncVO.sntncCn}</td>
             <td>${sntncVO.recomendCnt}</td>
             <td>${sntncVO.sntncWrtingEmplId}</td>
             <td>
@@ -85,10 +85,14 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-            <td>
-                <button type="button" id="modifyBtn">수정</button>
-                <button type="button" id="deleteBtn">삭제</button>
-            </td>
+
+                <td>
+                    <c:if test="${CustomUser.employeeVO.emplId == sntncVO.sntncWrtingEmplId}">
+                    <button type="button" class="modifyBtn">수정</button>
+                    <button type="button" class="deleteBtn">삭제</button>
+                    </c:if>
+                </td>
+
             <td>
                 <c:forEach var="recomendedChk" items="${recomendedEmpleChk}">
                     <c:if test="${recomendedChk.key == sntncVO.sntncEtprCode}">
@@ -163,25 +167,6 @@
         </tr>
     </table>
     <button>댓글 등록하기</button>
-</form>
-<br /><hr />
-<h2>좋아요 누르깅</h2>
-<form action="#" method="get">
-    <table>
-        <tr>
-            <th>글 전사적 코드</th>
-            <td><input type="text" name="recomendSntncEtprCode" id="recomendSntncEtprCode"></td>
-        </tr>
-        <tr>
-            <th>추천 사원 아이디</th>
-            <td><input type="text" name="recomendEmplId" id="recomendEmplId"></td>
-        </tr>
-        <tr>
-            <th>추천 사원 여부 구분</th>
-            <td><input type="text" name="commonCodeRecomendAt" id="commonCodeRecomendAt" value="RECOMEND011"></td>
-        </tr>
-    </table>
-    <button type="button">좋아요 누르기</button>
 </form>
 <br /><hr />
 
@@ -345,9 +330,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        const post = document.querySelectorAll(".post");
         const recomendBtn = document.querySelectorAll(".recomendBtn");
         const unRecomendBtn = document.querySelectorAll(".unRecomendBtn");
-        const likeBtn = document.querySelectorAll(".recomend-icon-btn");
+        const modifyBtn = document.querySelectorAll(".modifyBtn");
         const addVoteBtn = document.querySelector("#addVote");
         const postInput = document.querySelector("#postContent");
         const fileInput = document.querySelector("#postFile");
@@ -371,68 +357,122 @@
         let selectedFile = undefined;
         let num = 2;
 
-        /*  좋아요 */
-        unRecomendBtn.forEach((item)=>{
-
+        /*  포스트에서 기능 */
+        post.forEach((item) => {
             item.addEventListener("click",function(e){
                 e.preventDefault();
+                console.log(e.target);
+                const target = e.target;
                 const recomendEmplId = "${CustomUser.employeeVO.emplId}";
                 const sntncEtprCode =  `\${item.getAttribute("data-idx")}`;
-                console.log(recomendEmplId, sntncEtprCode);
-                const recomendVo = {
+                const sntncCnbox = item.querySelector(".sntncCn");
+                let recomendVo = {
                     "recomendEmplId":recomendEmplId,
                     "sntncEtprCode":sntncEtprCode
                 }
-                $.ajax({
-                    url: "/teamCommunity/inputRecomend",
-                    type: "POST",
-                    data: recomendVo,
-                    dataType: "text",
-                    success: function(data) {
-                        const like = item.nextElementSibling;
-                        like.innerText = data;
-                        if(item.classList.contains("unRecomendBtn")){
-                            item.classList.remove("unRecomendBtn");
-                            item.classList.add("recomendBtn");
-                        }
-                    },
-                    error: function(request, status, error){
-                        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-                    }
-                })
-            })
-        })
-        /*  좋아요 취소 */
-        recomendBtn.forEach((item)=>{
-
-            item.addEventListener("click",function(e){
-                e.preventDefault();
-                const recomendEmplId = "${CustomUser.employeeVO.emplId}";
-                const sntncEtprCode =  `\${item.getAttribute("data-idx")}`;
-                console.log(recomendEmplId, sntncEtprCode);
-                const recomendVo = {
-                    "recomendEmplId":recomendEmplId,
+                let sntncVO = {
+                    "sntncWrtingEmplId":recomendEmplId,
                     "sntncEtprCode":sntncEtprCode
                 }
-                $.ajax({
-                    url: "/teamCommunity/deleteRecomend",
-                    type: "POST",
-                    data: recomendVo,
-                    dataType: "text",
-                    success: function(data) {
-                        const like = item.nextElementSibling;
-                        like.innerText = data;
-                        if(item.classList.contains("recomendBtn")){
-                            item.classList.remove("recomendBtn");
-                            item.classList.add("unRecomendBtn");
+                /*  좋아요 */
+                if(target.classList.contains("unRecomendBtn")){
+                    const btn = item.querySelector(".unRecomendBtn");
+                    $.ajax({
+                        url: "/teamCommunity/inputRecomend",
+                        type: "POST",
+                        data: recomendVo,
+                        dataType: "text",
+                        success: function(data) {
+                            const like = item.querySelector(".recomentCnt");
+                            like.innerText = data;
+                            if(btn.classList.contains("unRecomendBtn")){
+                                btn.classList.remove("unRecomendBtn");
+                                btn.classList.add("recomendBtn");
+                            }
+                        },
+                        error: function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                         }
-                    },
-                    error: function(request, status, error){
-                        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-                    }
-                })
+                    })
+                    return;
+                }
+                /*  좋아요 취소 */
+                if(target.classList.contains("recomendBtn")){
+                    const btn = item.querySelector(".recomendBtn");
+                    $.ajax({
+                        url: "/teamCommunity/deleteRecomend",
+                        type: "POST",
+                        data: recomendVo,
+                        dataType: "text",
+                        success: function(data) {
+                            const like = item.querySelector(".recomentCnt");
+                            like.innerText = data;
+                            if(btn.classList.contains("recomendBtn")){
+                                btn.classList.remove("recomendBtn");
+                                btn.classList.add("unRecomendBtn");
+                            }
+                        },
+                        error: function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        }
+                    })
+                    return;
+                }
+                /*  포스트 수정  */
+                if(target.classList.contains("modifyBtn")){
+
+                    const content = sntncCnbox.innerText;
+                    const textArea = document.createElement("textarea");
+                    textArea.classList = "modifySntncCn";
+                    textArea.value = content;
+
+                    const saveBtn = document.createElement("button");
+                    saveBtn.classList = "saveMoidfyBtn";
+                    saveBtn.innerText = "수정";
+
+                    sntncCnbox.innerHTML = "";
+                    sntncCnbox.appendChild(textArea);
+                    sntncCnbox.appendChild(saveBtn);
+                }
+                if(target.classList.contains("saveMoidfyBtn")){
+                    const modisntncCn = document.querySelector(".modifySntncCn").value;
+                    sntncVO.sntncCn = modisntncCn;
+                    $.ajax({
+                        url: "/teamCommunity/modifyPost",
+                        type: "PUT",
+                        data: JSON.stringify(sntncVO),
+                        contentType: "application/json",
+                        dataType: "text",
+                        success: function(data) {
+                            item.querySelector(".modifySntncCn").remove();
+                            sntncCnbox.innerText = sntncVO.sntncCn;
+                            target.remove();
+                        },
+                        error: function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        }
+                    })
+                }
+                /*  포스트 삭제  */
+                if(target.classList.contains("deleteBtn")){
+                    $.ajax({
+                        url: "/teamCommunity/deletePost",
+                        type: "Delete",
+                        data: JSON.stringify(sntncVO),
+                        contentType: "application/json",
+                        dataType: "text",
+                        success: function(data) {
+                            item.remove();
+                        },
+                        error: function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        }
+                    })
+                }
             })
         })
+
+
         addVoteBtn.addEventListener("click", () => {
             document.querySelector("#modal-insert-vote").style.display = "block";
         })

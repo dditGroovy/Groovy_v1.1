@@ -14,7 +14,8 @@ public interface CommunityMapper {
 
     int getSeq();
     void uploadPostFile(Map<String, Object> map);
-
+    int modifyPost(Map<String, Object> map);
+    void deletePost(Map<String, Object> map);
     List<SntncVO> loadPost(String emplId);
     /*List<RecomendVO> loadRecomend(String emplId);*/
 
