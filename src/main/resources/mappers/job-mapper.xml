@@ -64,6 +64,6 @@
         FROM JOB_DIARY J, EMPL E
         WHERE J.JOB_DIARY_WRTING_EMPL_ID = E.EMPL_ID
           AND E.EMPL_ID = #{jobDiaryWrtingEmplId}
-          and J.JOB_DIARY_REPORT_DATE = #{jobDiaryReportDate}
+          and J.JOB_DIARY_REPORT_DATE = TO_DATE(#{jobDiaryReportDate}, 'YYYY-MM-DD')
     </select>
 </mapper>
