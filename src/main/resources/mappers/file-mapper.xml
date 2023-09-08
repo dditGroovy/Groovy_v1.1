@@ -11,4 +11,19 @@
         FROM UPLOAD_FILE
         WHERE UPLOAD_FILE_SN = #{uploadFileSn}
     </select>
+    <insert id="uploadFile" parameterType="uploadFileVO">
+        INSERT INTO UPLOAD_FILE( UPLOAD_FILE_SN
+                               , UPLOAD_FILE_ETPR_CODE
+                               , UPLOAD_FILE_ORGINL_NM
+                               , UPLOAD_FILE_STRE_NM
+                               , UPLOAD_FILE_SIZE,
+                                 UPLOAD_FILE_RGSDE)
+        VALUES (UPLOAD_FILE_SEQ.nextval,
+                #{etprCode},
+                #{originalFileName},
+                #{newFileName},
+                #{fileSize},
+                sysdate)
+
+    </insert>
 </mapper>

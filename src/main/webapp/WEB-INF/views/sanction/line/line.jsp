@@ -86,7 +86,7 @@
             <div class="contentWrap"> <ul class="lineList"></ul></div>
         </div>
     </div>
-    <button>결재선 적용</button>
+    <button type="button" class="submitLine">결재선 적용</button>
     <button>닫기</button>
 </div>
 

@@ -3,12 +3,15 @@ package kr.co.groovy.utils;
 import kr.co.groovy.vo.UploadFileVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -58,6 +61,41 @@ public class FileUtil {
         } catch (IOException e) {
             log.info("파일 다운로드 실패");
         }
+    }
+
+    @PostMapping("/upload/{dir}/{etprCode}")
+    public void fileUpload(@PathVariable("dir") String dir, @PathVariable("etprCode") String etprCode, MultipartFile file) throws Exception {
+        try {
+            String path = uploadPath + "/" + dir;
+            File uploadDir = new File(path);
+            if (!uploadDir.exists()) {
+                if (uploadDir.mkdirs()) {
+                    log.info("폴더 생성 성공");
+                } else {
+                    log.info("폴더 생성 실패");
+                }
+            }
+            String originalFileName = file.getOriginalFilename();
+            String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            String newFileName = UUID.randomUUID() + "." + extension;
+
+            File saveFile = new File(path, newFileName);
+            file.transferTo(saveFile);
+
+            long fileSize = file.getSize();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("etprCode", etprCode);
+            map.put("originalFileName", originalFileName);
+            map.put("newFileName", newFileName);
+            map.put("fileSize", fileSize);
+            service.uploadFile(map);
+            log.info("파일 등록 성공");
+
+        } catch (Exception e) {
+            log.info("파일 등록 실패");
+        }
+
+
     }
 
 }

@@ -18,11 +18,6 @@
         SELECT SNTNC_SEQ.NEXTVAL FROM DUAL
     </select>
 
-    <select id="findRecomend" parameterType="String" resultType="String">
-        SELECT COMMON_CODE_RECOMEND_AT
-        FROM RECOMEND r
-        WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId};
-    </select>
     <select id="loadPost" resultType="sntncVO" parameterType="String">
         SELECT s.SNTNC_ETPR_CODE,
                s.SNTNC_CN,
@@ -58,6 +53,19 @@
                 #{fileSize},
                 SYSDATE)
     </insert>
-
+    <select id="loadRecomend" resultType="int" parameterType="String">
+        SELECT COUNT(SNTNC_ETPR_CODE)
+        FROM RECOMEND
+        WHERE SNTNC_ETPR_CODE = #{sntncEtprCode}
+    </select>
+    <select id="findRecomend" resultType="int" parameterType="map">
+        SELECT COUNT(SNTNC_ETPR_CODE)
+        FROM RECOMEND
+        WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId}
+    </select>
+    <insert id="inputRecomend" parameterType="recomendVO">
+        INSERT INTO RECOMEND (SNTNC_ETPR_CODE, RECOMEND_EMPL_ID, RECOMEND_SN)
+        VALUES ('SNTNC-85-20230907', '202308016', RECOMEND_SEQ.NEXTVAL)
+    </insert>
 
 </mapper>

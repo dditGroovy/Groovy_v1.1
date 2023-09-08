@@ -1,7 +1,10 @@
 package kr.co.groovy.job;
 
-import kr.co.groovy.vo.JobVO;
+import kr.co.groovy.vo.EmployeeVO;
+import kr.co.groovy.vo.JobDiaryVO;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class JobService {
@@ -15,7 +18,19 @@ public class JobService {
         return mapper.getLeader(emplId);
     }
 
-    int insertDiary(JobVO jobVO) {
-        return mapper.insertDiary(jobVO);
+    int insertDiary(JobDiaryVO jobDiaryVO) {
+        return mapper.insertDiary(jobDiaryVO);
+    }
+
+    EmployeeVO getInfoById(String emplId) {
+        return mapper.getInfoById(emplId);
+    }
+
+    List<JobDiaryVO> getDiaryByDept(String commonCodeDept) {
+        return mapper.getDiaryByDept(commonCodeDept);
+    }
+
+    List<JobDiaryVO> getDiaryByInfo(EmployeeVO employeeVO) {
+        return mapper.getDiaryByInfo(employeeVO);
     }
 }

@@ -18,6 +18,6 @@ public class VehicleVO {
     private Date vhcleResveBeginTime;
     private Date vhcleResveEndTime;
     private String vhcleResveEmplId;
-    private String vhcleResveEmpNm;
+    private String vhcleResveEmplNm;
     private String commonCodeResveAt;
 }

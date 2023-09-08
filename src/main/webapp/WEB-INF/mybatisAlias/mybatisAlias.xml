@@ -22,7 +22,7 @@
         <typeAlias type="kr.co.groovy.vo.FacilityVO" alias="facilityVO"/>
         <typeAlias type="kr.co.groovy.vo.ConnectionLogVO" alias="connectionLogVO"/>
         <typeAlias type="kr.co.groovy.vo.VacationVO" alias="vacationVO"/>
-        <typeAlias type="kr.co.groovy.vo.JobVO" alias="jobVO"/>
+        <typeAlias type="kr.co.groovy.vo.JobDiaryVO" alias="jobDiaryVO"/>
         <typeAlias type="kr.co.groovy.vo.SanctionFormatVO" alias="sanctionFormatVO"/>
         <typeAlias type="kr.co.groovy.vo.SanctionLineVO" alias="sanctionLineVO"/>
         <typeAlias type="kr.co.groovy.vo.SanctionVO" alias="sanctionVO"/>

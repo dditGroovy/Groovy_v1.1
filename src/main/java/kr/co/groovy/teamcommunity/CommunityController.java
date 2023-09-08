@@ -2,24 +2,19 @@ package kr.co.groovy.teamcommunity;
 
 import kr.co.groovy.common.CommonService;
 import kr.co.groovy.vo.SntncVO;
-import kr.co.groovy.vo.UploadFileVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RequestMapping("/teamCommunity")
@@ -33,6 +28,8 @@ public class CommunityController {
     final
     String uploadPath;
 
+    static String emplId;
+
     public CommunityController(CommunityService service, CommonService commonService, String uploadPath) {
         this.service = service;
         this.commonService = commonService;
@@ -41,22 +38,46 @@ public class CommunityController {
 
     @GetMapping("")
     public ModelAndView teamComminity(Principal principal, ModelAndView mav) {
-        String recomendEmplId = principal.getName();
-        List<SntncVO> sntncList = service.loadPost(recomendEmplId);
+        emplId = principal.getName();
+        /*String recomendEmplId = principal.getName();*/
+        List<SntncVO> sntncList = service.loadPost(emplId);
+        Map<String, Integer> recomendPostCnt = new HashMap<>();
+        Map<String, Integer> recomendedEmpleChk = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
+
+        for (SntncVO post : sntncList) {
+            String sntncEtprCode = post.getSntncEtprCode();
+
+            int recomendCnt = service.loadRecomend(sntncEtprCode);
+            recomendPostCnt.put(sntncEtprCode, recomendCnt);
+
+            map.put("sntncEtprCode", sntncEtprCode);
+            map.put("recomendEmplId", emplId);
+
+            int recomendedChk = service.findRecomend(map);
+            recomendedEmpleChk.put(sntncEtprCode, recomendedChk);
+
+        }
         mav.addObject("sntncList", sntncList);
-        mav.setViewName("teamcommunity/teamCommunity");
+        mav.addObject("recomendPostCnt", recomendPostCnt);
+        mav.addObject("recomendedEmpleChk", recomendedEmpleChk);
+        mav.setViewName("community/teamCommunity");
         return mav;
     }
 
     @PostMapping("/inputPost")
-    public String postWrite(String sntncCn, Principal principal, MultipartFile postFile) throws IOException {
-        String sntncWritingEmplId = principal.getName();
+    public String postWrite(String sntncCn, MultipartFile postFile) throws IOException {
+        /*String sntncWritingEmplId = principal.getName();*/
         SntncVO vo = new SntncVO();
-        vo.setSntncWrtingEmplId(sntncWritingEmplId);
+        vo.setSntncWrtingEmplId(emplId);
         vo.setSntncCn(sntncCn);
         service.inputPost(vo, postFile);
         return "redirect:/teamCommunity";
     }
 
-
+    /* 좋아요 구현 */
+    @PostMapping("/inputRecomend")
+    public String inputRecomend(){
+        return "s";
+    }
 }

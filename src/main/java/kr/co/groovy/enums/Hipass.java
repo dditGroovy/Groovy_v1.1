@@ -11,4 +11,13 @@ public enum Hipass {
     public String getLabel() {
         return label;
     }
+
+    public static String getValueByLabel(String label) {
+        for (Hipass hipass : values()) {
+            if (hipass.getLabel().equals(label)) {
+                return hipass.name();
+            }
+        }
+        return null;
+    }
 }
