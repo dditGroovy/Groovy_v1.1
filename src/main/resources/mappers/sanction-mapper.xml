@@ -39,5 +39,45 @@
         WHERE ELCTRN_SANCTN_DRFT_EMPL_ID = #{elctrnSanctnDrftEmplId}
           AND COMMON_CODE_SANCT_PROGRS = 'SANCTN014'
     </select>
+
+
+
+    <!--결재 insert-->
+    <insert id="inputSanction" parameterType="sanctionVO">
+        INSERT INTO ELCTRN_SANCTN( ELCTRN_SANCTN_ETPR_CODE
+                                 , ELCTRN_SANCTN_FORMAT_CODE
+                                 , ELCTRN_SANCTN_SJ
+                                 , ELCTRN_SANCTN_DC
+                                 , ELCTRN_SANCTN_DRFT_EMPL_ID
+                                 , ELCTRN_SANCTN_RECOM_DATE
+                                 , COMMON_CODE_SANCT_PROGRS)
+        VALUES (   #{elctrnSanctnEtprCode},
+                   #{elctrnSanctnFormatCode},
+                   #{elctrnSanctnSj},
+                   #{elctrnSanctnDc},
+                   #{elctrnSanctnDrftEmplId},
+                   SYSDATE,
+                   #{commonCodeSanctProgrs}
+               )
+    </insert>
+    <insert id="inputLine" parameterType="sanctionLineVO">
+        INSERT INTO SANCTN_LINE( ELCTRN_SANCTN_ETPR_CODE
+                               , ELCTRN_SANCTNEMPL_ID
+                               , SANCTN_LINE_ORDR
+                               , COMMON_CODE_SANCT_PROGRS
+                               , ELCTRN_SANCTN_FINAL_AT)
+        VALUES (   #{elctrnSanctnEtprCode},
+                   #{elctrnSanctnemplId},
+                   #{sanctnLineOrdr},
+                   #{commonCodeSanctProgrs},
+                   #{elctrnSanctnFinalAt}
+               )
+    </insert>
+    <insert id="inputRefrn" parameterType="referenceVO">
+        INSERT INTO SANCTN_REFRN( SANCTN_REFRN_EMPL_ID
+                                , ELCTRN_SANCTN_ETPR_CODE)
+        VALUES (#{sanctnRefrnEmplId},
+                #{elctrnSanctnEtprCode})
+    </insert>
 </mapper>
 

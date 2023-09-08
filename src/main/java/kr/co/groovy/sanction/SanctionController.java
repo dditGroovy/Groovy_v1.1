@@ -33,25 +33,29 @@ public class SanctionController {
     public String getSanctionBox() {
         return "sanction/sanctionBox";
     }
+
     @GetMapping("/inProgress")
     public String getInProgress() {
         return "sanction/inProgressBox";
     }
+
     @GetMapping("/mySanction")
     public String getMySanction() {
         return "sanction/mySanctionBox";
+    }
+
+    // insert - 전자결재
+    @PostMapping("/inputSanction")
+    @ResponseBody
+    public void inputSanction(@RequestBody Map<String, Object> requestData) {
+        service.inputSanction(requestData);
     }
 
     // 결재요청 - 결재건수 불러오기
     @GetMapping("/loadInProgress")
     @ResponseBody
     public List<SanctionVO> loadInProgressList(String emplId) {
-        List<SanctionVO> list = service.loadInProgressList(emplId);
-        for (SanctionVO vo : list) {
-            vo.setElctrnSanctnFormatCode(SanctionFormat.valueOf(vo.getElctrnSanctnFormatCode()).label());
-            vo.setCommonCodeSanctProgrs(SanctionProgress.valueOf(vo.getCommonCodeSanctProgrs()).label());
-        }
-        return list;
+        return service.loadInProgressList(emplId);
     }
 
 
@@ -70,7 +74,7 @@ public class SanctionController {
     @GetMapping("/getStatus")
     @ResponseBody
     public String getStatus(@RequestParam("elctrnSanctnDrftEmplId") String elctrnSanctnDrftEmplId,
-                                         @RequestParam("commonCodeSanctProgrs") String commonCodeSanctProgrs) {
+                            @RequestParam("commonCodeSanctProgrs") String commonCodeSanctProgrs) {
         return String.valueOf(service.getStatus(elctrnSanctnDrftEmplId, commonCodeSanctProgrs));
     }
 

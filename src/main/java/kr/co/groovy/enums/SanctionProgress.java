@@ -7,7 +7,9 @@ public enum SanctionProgress {
     SANCTN011("반려"),
     SANCTN012("보류"),
     SANCTN013("회수"),
-    SANCTN014("상신");
+    SANCTN014("상신"),
+    SANCTN015("대기"),
+    SANCTN016("예정");
 
     private final String label;
 

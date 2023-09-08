@@ -23,7 +23,7 @@
         <div class="formHeader">
             <div class="btnWrap">
                 <button id="getLine">결재선 지정</button>
-                <div id="sanctionLine">
+                <div id="approvalLine">
                     <%@include file="line/line.jsp" %>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                 ${format.formatCn}
         </div>
         <br/><br/>
-        <button type="button">결재 제출</button>
+        <button type="button" id="sanctionSubmit">결재 제출</button>
     </div>
 
     <script>
@@ -54,17 +54,86 @@
         let year = before.getFullYear();
         let month = String(before.getMonth() + 1).padStart(2, '0');
         let day = String(before.getDate()).padStart(2, '0');
+
+
+        let approver;
+        let receiver;
+        let referrer;
+
+        const etprCode = "${etprCode}";
+        const formatCode = "${format.commonCodeSanctnFormat}";
+        const writer = "${CustomUser.employeeVO.emplId}"
         const today = year + '-' + month + '-' + day;
+        const title = "${format.formatSj}";
+        let content;
+        let file = $("#sanctionFile").files;
 
         $(function () {
-            $("#sanctionNo").html("${etprCode}");
+            $("#sanctionNo").html(etprCode);
             $("#writeDate").html(today);
-            $("#writer").html("${CustomUser.employeeVO.emplNm}")
+            $("#writer").html(writer)
         });
         $(".submitLine").on("click", function () {
-            console.log("윤하늘 바보")
-
+            approver = $("#sanctionLine input[type=hidden]").map(function () {
+                return $(this).val();
+            }).get();
+            receiver = $("#receiveLine input[type=hidden]").map(function () {
+                return $(this).val();
+            }).get();
+            referrer = $("#refrnLine input[type=hidden]").map(function () {
+                return $(this).val();
+            }).get();
         })
+        $("#sanctionSubmit").on("click", function () {
+            $("#sanctionContent").text("윤하늘 바보")
+            content = $(".formContent").html();
+            const jsonData = {
+                approver: approver,
+                receiver: receiver,
+                referrer: referrer,
+                etprCode: etprCode,
+                formatCode: formatCode,
+                writer: writer,
+                today: today,
+                title: title,
+                content: content,
+            };
+
+            $.ajax({
+                url: "/sanction/inputSanction",
+                type: "POST",
+                data: JSON.stringify(jsonData),
+                contentType: "application/json",
+                success: function (data) {
+                    console.log("JSON 데이터 전송 성공");
+                    //uploadFile();
+                },
+                error: function (xhr) {
+                    console.log("JSON 데이터 전송 실패");
+                }
+            });
+        });
+
+        function uploadFile() {
+            const formData = new FormData();
+            formData.append("file", file[0]);
+
+            $.ajax({
+                url: "/sanction/uploadFile",
+                type: "POST",
+                data: formData,
+                contentType: false, // 필수
+                processData: false, // 필수
+                success: function (data) {
+                    console.log("파일 업로드 성공");
+                },
+                error: function (xhr) {
+                    console.log("파일 업로드 실패");
+                }
+            });
+        }
+
+
 
 
         // 파일 드래그 앤 드롭 (쓰려면 파일 처리 기능 추가해야 됨)
