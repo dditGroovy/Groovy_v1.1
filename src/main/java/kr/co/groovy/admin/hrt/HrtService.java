@@ -1,4 +1,4 @@
-package kr.co.groovy.admin.humanresources;
+package kr.co.groovy.admin.hrt;
 
 import kr.co.groovy.vo.CommuteVO;
 import kr.co.groovy.vo.ConnectionLogVO;
@@ -13,11 +13,11 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class HumanResourcesService {
+public class HrtService {
 
-    final HumanResourcesMapper mapper;
+    final HrtMapper mapper;
 
-    public HumanResourcesService(HumanResourcesMapper mapper) {
+    public HrtService(HrtMapper mapper) {
         this.mapper = mapper;
     }
 

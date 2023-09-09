@@ -6,8 +6,8 @@
 </style>
     <div class="wrap">
         <ul>
-            <li><a href="/generalAffairs/manageVehicle" class="tab">차량 관리</a></li>
-            <li><a href="/generalAffairs/loadVehicle" class="tab">예약 현황</a></li>
+            <li><a href="/gat/manageVehicle" class="tab">차량 관리</a></li>
+            <li><a href="/gat/loadVehicle" class="tab">예약 현황</a></li>
         </ul>
     </div>
     <div class="cardWrap">
@@ -15,7 +15,7 @@
             <h2>차량 등록</h2>
         </div>
         <div class="card">
-            <form action="/generalAffairs/inputVehicle" method="post">
+            <form action="/gat/inputVehicle" method="post">
                 <table border="1" style="width: 100%">
                     <tr>
                         <th>차량 번호</th>

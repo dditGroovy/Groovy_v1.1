@@ -19,8 +19,8 @@
 </style>
 <div class="wrap">
     <ul>
-        <li><a href="/generalAffairs/manageVehicle" class="tab">차량 관리</a></li>
-        <li><a href="/generalAffairs/loadVehicle" class="tab">예약 현황</a></li>
+        <li><a href="/gat/manageVehicle" class="tab">차량 관리</a></li>
+        <li><a href="/gat/loadVehicle" class="tab">예약 현황</a></li>
     </ul>
 </div>
 <br/>

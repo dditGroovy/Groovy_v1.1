@@ -14,8 +14,8 @@
         <put-attribute name="aside" value="/WEB-INF/views/tilesManage/manageAside.jsp"/>
         <put-attribute name="body" value=""/>
     </definition>
-    <definition name="admin/*/*" extends="tiles-layout-manage">
-        <put-attribute name="body" value="/WEB-INF/views/admin/{1}/{2}.jsp"/>
+    <definition name="admin/*/*/*" extends="tiles-layout-manage">
+        <put-attribute name="body" value="/WEB-INF/views/admin/{1}/{2}/{3}.jsp"/>
     </definition>
 
     <definition name="*/*" extends="tiles-layout">

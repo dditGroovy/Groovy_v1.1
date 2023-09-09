@@ -44,8 +44,8 @@
 </style>
 <div class="wrap">
     <ul>
-        <li><a href="/generalAffairs/manageVehicle" class="tab">차량 관리</a></li>
-        <li><a href="/generalAffairs/loadVehicle" class="tab">예약 현황</a></li>
+        <li><a href="/gat/manageVehicle" class="tab">차량 관리</a></li>
+        <li><a href="/gat/loadVehicle" class="tab">예약 현황</a></li>
     </ul>
 </div>
 <div class="cardWrap">
@@ -55,7 +55,7 @@
             <c:set var="reservedList" value="${todayReservedVehicles}"/>
             <c:set var="listSize" value="${fn:length(reservedList)}"/>
             <p><a href="#" class="totalResve">${listSize}</a>건</p>
-            <a href="/generalAffairs/loadVehicle">더보기</a>
+            <a href="/gat/loadVehicle">더보기</a>
         </div>
         <div class="content">
             <table border=1 style="width: 100%">
@@ -99,7 +99,7 @@
                 <p><span>${listSize}</span>대</p>
             </div>
             <div class="btnWrap">
-                <button><a href="/generalAffairs/inputVehicle">차량 등록 +</a></button>
+                <button><a href="/gat/inputVehicle">차량 등록 +</a></button>
             </div>
         </div>
         <div class="content">

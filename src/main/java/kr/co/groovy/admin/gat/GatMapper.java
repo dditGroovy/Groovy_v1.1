@@ -1,4 +1,4 @@
-package kr.co.groovy.admin.generalaffairs;
+package kr.co.groovy.admin.gat;
 
 import kr.co.groovy.vo.NoticeVO;
 import kr.co.groovy.vo.VehicleVO;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-public interface GeneralAffairsMapper {
+public interface GatMapper {
 
     void inputNotice(NoticeVO vo);
 
