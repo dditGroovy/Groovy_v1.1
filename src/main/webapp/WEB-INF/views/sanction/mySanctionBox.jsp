@@ -11,11 +11,14 @@
 </h2> <br/><br/>
 
 <ul id="sanctionStatus">
-    <li><button id="Request">기안 문서함</button></li> 사용자가 기안한 모든 문서
-    <li><button id="pending">임시 저장함</button></li> 작성이 완료되지 않은 문서
-    <li><button id="r">결재 문서함</button></li> 결재자로 지정되어 결재가 완료되거나 예정인 문서
-    <li><button id="we">수신 문서함</button></li> 수신자/수신부서로 지정된 문서
-    <li><button id="rq">발송 문서함</button></li> 수신처를 지정하여 발송한 문서
+    <li><button id="Request">기안 문서함(사용자가 기안한 모든 문서)</button></li>
+    <li><button id="pending">임시 저장함(작성이 완료되지 않은 문서)</button></li>
+    <li><button id="r">결재 문서함(결재자로 지정되어 결재가 완료되거나 예정인 문서)</button></li>
+    <hr>
+    고민중
+    <li><button id="we">수신 문서함(수신자/수신부서로 지정된 문서)</button></li>
+    <li><button id="rq">발송 문서함(수신처를 지정하여 발송한 문서)</button></li>
+    <hr>
 </ul>
 <div class="sanctionList">
 </div>

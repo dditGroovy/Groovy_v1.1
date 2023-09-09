@@ -1,4 +1,4 @@
-package kr.co.groovy.admin.generalaffairs;
+package kr.co.groovy.admin.gat;
 
 import kr.co.groovy.enums.Hipass;
 import kr.co.groovy.vo.NoticeVO;
@@ -16,13 +16,13 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class GeneralAffairsService {
+public class GatService {
     final
-    GeneralAffairsMapper mapper;
+    GatMapper mapper;
     final
     String uploadPath;
 
-    public GeneralAffairsService(GeneralAffairsMapper mapper, String uploadPath) {
+    public GatService(GatMapper mapper, String uploadPath) {
         this.mapper = mapper;
         this.uploadPath = uploadPath;
     }

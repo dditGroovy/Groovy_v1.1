@@ -1,4 +1,4 @@
-package kr.co.groovy.admin.generalaffairs;
+package kr.co.groovy.admin.gat;
 
 import kr.co.groovy.common.CommonService;
 import kr.co.groovy.vo.NoticeVO;
@@ -17,15 +17,15 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/generalAffairs")
-public class GeneralAffairsController {
+@RequestMapping("/gat")
+public class GatController {
     final
-    GeneralAffairsService service;
+    GatService service;
 
     final
     CommonService commonService;
 
-    public GeneralAffairsController(GeneralAffairsService service, CommonService commonService) {
+    public GatController(GatService service, CommonService commonService) {
         this.service = service;
         this.commonService = commonService;
     }
@@ -34,7 +34,7 @@ public class GeneralAffairsController {
     public ModelAndView manageNotice(ModelAndView mav) {
         List<NoticeVO> list = commonService.loadNoticeListForAdmin();
         mav.addObject("notiList", list);
-        mav.setViewName("admin/gat/manageNotice");
+        mav.setViewName("admin/gat/notice/manage");
         return mav;
 
     }

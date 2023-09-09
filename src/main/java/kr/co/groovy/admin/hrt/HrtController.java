@@ -1,7 +1,6 @@
-package kr.co.groovy.admin.humanresources;
+package kr.co.groovy.admin.hrt;
 
 import com.google.gson.Gson;
-import kr.co.groovy.vo.CommuteVO;
 import kr.co.groovy.vo.ConnectionLogVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -15,12 +14,12 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("/humanResources")
-public class HumanResourcesController {
+@RequestMapping("/hrt")
+public class HrtController {
     final
-    HumanResourcesService service;
+    HrtService service;
 
-    public HumanResourcesController(HumanResourcesService service) {
+    public HrtController(HrtService service) {
         this.service = service;
     }
 
@@ -28,7 +27,7 @@ public class HumanResourcesController {
     ModelAndView loadConnectionLog(ModelAndView mav, String today) {
         List<ConnectionLogVO> list = service.loadConnectionLog(today);
         mav.addObject("logList", list);
-        mav.setViewName("admin/connectionLog");
+        mav.setViewName("admin/hrt/connectionLog");
         return mav;
     }
 

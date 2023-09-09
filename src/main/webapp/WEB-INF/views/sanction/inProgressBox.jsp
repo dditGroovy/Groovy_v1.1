@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sec"
-           uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="CustomUser"/>
     <h2>
@@ -12,24 +11,30 @@
 
     <ul id="sanctionStatus">
         <li>
-            <button id="loadAwaiting">결재 대기 문서</button>
+            <button id="">기안 문서함?(내가 기안하여 아직 최종 승인되지 않은 문서)</button>
+        </li> <li>
+            <button id="loadAwaiting">결재 대기 문서(결재할 문서)</button>
         </li>
-        결재할 문서
+        <li>
+            <button id="upcoming">결재 예정 문서(앞으로 결재할 문서)</button>
+        </li>
+        <hr>
+
+        고민 중
         <li>
             <button id="receive">결재 수신 문서</button>
         </li>
         <li>
             <button id="reference">결재 참조/열람 문서</button>
         </li>
-        <li>
-            <button id="upcoming">결재 예정 문서</button>
-        </li>
-        앞으로 결재할 문서
+        <hr>
     </ul>
+
     <div class="sanctionList">
     </div>
     <script>
         $(function () {
+            $("#loadAwaiting").click();
 
         })
 
@@ -40,7 +45,7 @@
                 type: 'GET',
                 success: function (res) {
                     let code = "<table border=1>";
-                    code += `<thead><tr><th>문서번호</th>><th>결재양식</th><th>제목</th><th>기안일시</th><th>상태</th></thead><tbody>`;
+                    code += `<thead><tr><th>문서번호</th>><th>제목</th><th>기안자</th><th>기안일시</th><th>상태</th></thead><tbody>`;
                     if (res.length === 0) {
                         code += "<td colspan='8'>진행 대기 문서가 없습니다</td>";
                     } else {
@@ -66,7 +71,7 @@
                 type: 'GET',
                 success: function (res) {
                     let code = "<table border=1>";
-                    code += `<thead><tr><th>문서번호</th>><th>결재양식</th><th>제목</th><th>기안일시</th><th>상태</th></thead><tbody>`;
+                    code += `<thead><tr><th>문서번호</th>><th>제목</th><th>기안자</th><th>기안일시</th><th>상태</th></thead><tbody>`;
                     if (res.length === 0) {
                         code += "<td colspan='8'>진행 대기 문서가 없습니다</td>";
                     } else {
