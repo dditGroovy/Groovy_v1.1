@@ -13,7 +13,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(socketTextHandler(), "/chat/rooms/*")
-                .addInterceptors(hand)
+                .addInterceptors(handshakeInterceptor())
+                .setAllowedOrigins("*");
     }
 
     @Bean
@@ -23,6 +24,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Bean
     public HandshakeInterceptor handshakeInterceptor() {
-        return
+        return new ChattingHandshakeInterceptor();
     }
 }

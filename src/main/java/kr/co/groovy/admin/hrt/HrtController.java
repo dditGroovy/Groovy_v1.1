@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,48 +58,15 @@ public class HrtController {
         return "admin/hrt/attendance/all";
     }
 
-    @GetMapping("/manageDclz/HRT")
-    public String manageDclzHRT(Model model) {
-        List<Map<String, Object>> list = service.loadDeptDclz("DEPT010");
+    @GetMapping("/manageDclz/{deptCode}")
+    public String manageDclzDept(Model model, @PathVariable String deptCode) {
+        log.info("deptCode : {}", deptCode);
+        List<Map<String, Object>> list = service.loadDeptDclz(deptCode);
+        log.info("list : {}", list);
         Gson gson = new Gson();
         String deptDclzList = gson.toJson(list);
         model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/attendance/hrt";
+        return "admin/hrt/attendance/dept";
     }
 
-    @GetMapping("/manageDclz/AT")
-    public String manageDclzAT(Model model) {
-        List<Map<String, Object>> list = service.loadDeptDclz("DEPT011");
-        Gson gson = new Gson();
-        String deptDclzList = gson.toJson(list);
-        model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/attendance/at";
-    }
-
-    @GetMapping("/manageDclz/ST")
-    public String manageDclzST(Model model) {
-        List<Map<String, Object>> list = service.loadDeptDclz("DEPT012");
-        Gson gson = new Gson();
-        String deptDclzList = gson.toJson(list);
-        model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/attendance/st";
-    }
-
-    @GetMapping("/manageDclz/PRT")
-    public String manageDclzPRT(Model model) {
-        List<Map<String, Object>> list = service.loadDeptDclz("DEPT013");
-        Gson gson = new Gson();
-        String deptDclzList = gson.toJson(list);
-        model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/attendance/prt";
-    }
-
-    @GetMapping("/manageDclz/GAT")
-    public String manageDclzGAT(Model model) {
-        List<Map<String, Object>> list = service.loadDeptDclz("DEPT014");
-        Gson gson = new Gson();
-        String deptDclzList = gson.toJson(list);
-        model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/attendance/gat";
-    }
 }

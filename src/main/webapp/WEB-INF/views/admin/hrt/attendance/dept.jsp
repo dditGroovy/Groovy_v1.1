@@ -10,12 +10,12 @@
     <h1><a href="#">근태 관리</a></h1>
     <nav id="dclzNav">
         <ul>
-            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz">전체</a></li>
-            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/HRT">인사</a></li>
-            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/GAT">총무</a></li>
-            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/AT">회계</a></li>
-            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/ST">영업</a></li>
-            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/PRT">홍보</a></li>
+            <li><a href="${pageContext.request.contextPath}/hrt/manageDclz">전체</a></li>
+            <li><a href="${pageContext.request.contextPath}/hrt/manageDclz/DEPT010">인사</a></li>
+            <li><a href="${pageContext.request.contextPath}/hrt/manageDclz/DEPT011">총무</a></li>
+            <li><a href="${pageContext.request.contextPath}/hrt/manageDclz/DEPT012">회계</a></li>
+            <li><a href="${pageContext.request.contextPath}/hrt/manageDclz/DEPT013">영업</a></li>
+            <li><a href="${pageContext.request.contextPath}/hrt/manageDclz/DEPT014">홍보</a></li>
         </ul>
     </nav>
 </header><br /><br /><br />
