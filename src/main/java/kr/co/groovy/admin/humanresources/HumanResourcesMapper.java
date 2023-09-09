@@ -11,11 +11,13 @@ import java.util.Map;
 public interface HumanResourcesMapper {
     List<ConnectionLogVO> loadConnectionLog(String date);
 
+    List<String> loadDeptList();
+
     List<CommuteVO> loadAllDclz();
 
-    int deptTotalWorkTime(String deptCode);
+    List<CommuteVO> loadDeptDclz(String deptCode);
 
-    List<String> loadDeptList();
+    int deptTotalWorkTime(String deptCode);
 
     int deptAvgWorkTime(String deptCode);
 }

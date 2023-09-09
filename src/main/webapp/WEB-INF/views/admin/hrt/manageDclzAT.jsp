@@ -10,64 +10,22 @@
     <h1><a href="#">근태 관리</a></h1>
     <nav id="dclzNav">
         <ul>
-            <li><a href="${pageContext.request.contextPath}/employee/manageDclzAll">전체</a></li>
-            <li><a href="#">인사팀</a></li>
-            <li><a href="#">총무팀</a></li>
-            <li><a href="#">회계팅</a></li>
-            <li><a href="#">영업팀</a></li>
-            <li><a href="#">홍보팀</a></li>
+            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz">전체</a></li>
+            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/HRT">인사</a></li>
+            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/GAT">총무</a></li>
+            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/AT">회계</a></li>
+            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/ST">영업</a></li>
+            <li><a href="${pageContext.request.contextPath}/humanResources/manageDclz/PRT">홍보</a></li>
         </ul>
     </nav>
 </header><br /><br /><br />
 <main>
-    <div id="chartsJsWrap">
-        <canvas id="allDepartment"></canvas>
-        <canvas id="avgDepartment"></canvas>
-    </div>
     <input type="text" oninput="onQuickFilterChanged()" id="quickFilter" placeholder="검색어를 입력하세요"/>
     <div id="myGrid" class="ag-theme-alpine"></div>
 </main>
 
 <script>
-    const allDepartment = $("#allDepartment");
-    const avgDepartment = $("#avgDepartment");
-    const deptTotalWorkTime = ${deptTotalWorkTime};
-    const deptAvgWorkTime = ${deptAvgWorkTime};
-    const allDclzList = ${allDclzList};
-
-    console.log("deptTotalWorkTime : ", deptTotalWorkTime);
-    console.log("deptAvgWorkTime : ", deptAvgWorkTime);
-
-    const doughnutChart = new Chart(allDepartment, {
-        type: 'doughnut',
-        data : {
-            labels : ['인사', '회계', '영업', '홍보', '총무'],
-            datasets:[{
-                    label : '부서별 전체 근무시간',
-                    data: deptTotalWorkTime,
-                    borderWidth: 1
-            }]
-        }
-    });
-
-    const barChart = new Chart(avgDepartment, {
-        type: 'bar',
-        data : {
-            labels : ['인사', '회계', '영업', '홍보', '총무'],
-            datasets:[{
-                label : '부서별 평균 근무시간',
-                data: deptAvgWorkTime,
-                borderWidth: 1
-            }]
-        },
-        options : {
-            scales : {
-                y : {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+    const deptDclzList = ${deptDclzList};
 
     const getMedalString = function (param) {
         const str = `${param} `;
@@ -84,7 +42,6 @@
                 return getMedalString(params.value);
             }},
         { field: "emplNm",  headerName:"이름"},
-        { field: "deptNm", headerName:"부서", filter: "agMultiColumnFilter"},
         { field: "clsfNm", headerName:"직급"},
         { field: "defaulWorkDate", headerName:"소정근무일수"},
         { field: "realWikWorkDate", headerName:"실제근무일수"},
@@ -95,7 +52,7 @@
         { field: "avgWorkTime", headerName:"평균 근무시간"},
     ];
 
-    const rowData = allDclzList;
+    const rowData = deptDclzList;
 
     const gridOptions = {
         columnDefs: columnDefs,
