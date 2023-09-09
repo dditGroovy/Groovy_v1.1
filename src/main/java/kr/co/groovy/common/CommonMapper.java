@@ -1,5 +1,6 @@
 package kr.co.groovy.common;
 
+import kr.co.groovy.vo.AlarmVO;
 import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.NoticeVO;
 import kr.co.groovy.vo.UploadFileVO;
@@ -23,4 +24,6 @@ public interface CommonMapper {
     void modifyNoticeView(String notiEtprCode);
 
     List<EmployeeVO> loadOrgChart (String depCode);
+
+    void insertAlarm(AlarmVO alarmVO);
 }

@@ -1,4 +1,4 @@
-package kr.co.groovy.admin.hrt;
+package kr.co.groovy.admin.humanresources;
 
 import kr.co.groovy.vo.CommuteVO;
 import kr.co.groovy.vo.ConnectionLogVO;
@@ -13,75 +13,85 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class HrtService {
+public class HumanResourcesService {
 
-    final
-    HrtMapper mapper;
+    final HumanResourcesMapper mapper;
 
-    public HrtService(HrtMapper mapper) {
+    public HumanResourcesService(HumanResourcesMapper mapper) {
         this.mapper = mapper;
     }
 
-    List<ConnectionLogVO> loadConnectionLog(String today){
+    List<ConnectionLogVO> loadConnectionLog(String today) {
         today = String.valueOf(LocalDate.now());
-        log.info(today);
         return mapper.loadConnectionLog(today);
     }
 
     List<Map<String, Object>> loadAllDclz() {
         List<CommuteVO> list = mapper.loadAllDclz();
-        List<Map<String, Object>> mapList = new ArrayList<>();
-        for(CommuteVO vo : list) {
-            vo.setDefaulWorkDate(5);
-            vo.setDefaulWorkTime("40:00");
-            int defaulWorkTime = 40 * 60;
-            int realWikWorkDate = vo.getRealWikWorkDate();
-            int dclzWikWorkTime = vo.getDclzWikWorkTime();
-            if(realWikWorkDate != 0 && dclzWikWorkTime != 0) {
-                vo.setTotalWorkTime(convertTime(dclzWikWorkTime));
-                if (dclzWikWorkTime > defaulWorkTime) {
-                    int overWorkTime = dclzWikWorkTime - defaulWorkTime;
-                    vo.setOverWorkTime(convertTime(overWorkTime));
-                    vo.setRealWorkTime("40:00");
-                } else {
-                    vo.setOverWorkTime("0");
-                    vo.setRealWorkTime(convertTime(dclzWikWorkTime));
-                }
-                int avgWorkTime = dclzWikWorkTime / realWikWorkDate;
-                vo.setAvgWorkTime(convertTime(avgWorkTime));
-            } else {
-                vo.setRealWorkTime("0");
-                vo.setAvgWorkTime("0");
-                vo.setOverWorkTime("0");
-                vo.setTotalWorkTime("0");
-            }
+        return mapList(list);
+    }
+
+    List<Map<String, Object>> loadDeptDclz(String deptCode) {
+        List<CommuteVO> list = mapper.loadDeptDclz(deptCode);
+        return mapList(list);
+    }
+
+    List<Map<String, Object>> mapList(List<CommuteVO> list) {
+        List<Map<String, Object>> maps = new ArrayList<>();
+        for (CommuteVO vo : list) {
+            calculateAndSetWorkInfo(vo);
             Map<String, Object> map = convertToMap(vo);
-            mapList.add(map);
+            maps.add(map);
         }
-        return mapList;
+        return maps;
+    }
+
+    void calculateAndSetWorkInfo(CommuteVO vo) {
+        vo.setDefaulWorkDate(5);
+        vo.setDefaulWorkTime("40:00");
+        int defaulWorkTime = 40 * 60;
+        int realWikWorkDate = vo.getRealWikWorkDate();
+        int dclzWikWorkTime = vo.getDclzWikWorkTime();
+        if (realWikWorkDate != 0 && dclzWikWorkTime != 0) {
+            vo.setTotalWorkTime(convertTime(dclzWikWorkTime));
+            if (dclzWikWorkTime > defaulWorkTime) {
+                int overWorkTime = dclzWikWorkTime - defaulWorkTime;
+                vo.setOverWorkTime(convertTime(overWorkTime));
+                vo.setRealWorkTime("40:00");
+            } else {
+                vo.setOverWorkTime("00:00");
+                vo.setRealWorkTime(convertTime(dclzWikWorkTime));
+            }
+            int avgWorkTime = dclzWikWorkTime / realWikWorkDate;
+            vo.setAvgWorkTime(convertTime(avgWorkTime));
+        } else {
+            vo.setRealWorkTime("00:00");
+            vo.setAvgWorkTime("00:00");
+            vo.setOverWorkTime("00:00");
+            vo.setTotalWorkTime("00:00");
+        }
     }
 
     Map<String, Object> convertToMap(CommuteVO vo) {
-       Map<String, Object> map = new HashMap<>();
-       map.put("emplId", vo.getDclzEmplId());
-       map.put("emplNm", vo.getEmplNm());
-       map.put("deptNm", vo.getDeptNm());
-       map.put("clsfNm", vo.getClsfNm());
-       map.put("defaulWorkDate", vo.getDefaulWorkDate());
-       map.put("realWikWorkDate", vo.getRealWikWorkDate());
-       map.put("defaulWorkTime", vo.getDefaulWorkTime());
-       map.put("realWorkTime", vo.getRealWorkTime());
-       map.put("overWorkTime", vo.getOverWorkTime());
-       map.put("totalWorkTime", vo.getTotalWorkTime());
-       map.put("avgWorkTime", vo.getAvgWorkTime());
-       return map;
+        Map<String, Object> map = new HashMap<>();
+        map.put("emplId", vo.getDclzEmplId());
+        map.put("emplNm", vo.getEmplNm());
+        map.put("deptNm", vo.getDeptNm());
+        map.put("clsfNm", vo.getClsfNm());
+        map.put("defaulWorkDate", vo.getDefaulWorkDate());
+        map.put("realWikWorkDate", vo.getRealWikWorkDate());
+        map.put("defaulWorkTime", vo.getDefaulWorkTime());
+        map.put("realWorkTime", vo.getRealWorkTime());
+        map.put("overWorkTime", vo.getOverWorkTime());
+        map.put("totalWorkTime", vo.getTotalWorkTime());
+        map.put("avgWorkTime", vo.getAvgWorkTime());
+        return map;
     }
 
     String convertTime(int time) {
         String hours = String.format("%02d", (time / 60));
         String minutes = String.format("%02d", (time % 60));
-        String converted = hours + ":" + minutes;
-        return converted;
+        return hours + ":" + minutes;
     }
 
     List<String> loadDeptList() {
@@ -95,5 +105,4 @@ public class HrtService {
     int deptAvgWorkTime(String deptCode) {
         return mapper.deptAvgWorkTime(deptCode);
     }
-
 }

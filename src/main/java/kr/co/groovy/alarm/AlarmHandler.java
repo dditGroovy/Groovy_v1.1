@@ -44,24 +44,26 @@ public class AlarmHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String msg = message.getPayload(); //javascript 넘어온 message
-
-        if(msg != null) {
+        log.info("msg: {}", msg);
+        if (msg!=null) {
             String[] msgs = msg.split(",");
-            if(msgs != null && msgs.length ==3) { //메시지가 왔을 때 조건 설정 부분
 
-//                WebSocketSession receiversession = userSessionMap.get() //접속 중일 때 알람 보낸다..!
+            if (msgs!=null && msgs.length == 2) {
+                String category = msgs[0];
+                String url = msgs[1];
+                if (category.equals("noti")) {
+                    for (WebSocketSession webSocketSession : sessions) {
+                        if (webSocketSession.isOpen()) {
+                            webSocketSession.sendMessage(new TextMessage
+                                                        ("<a href=\" "+ url +"\">"+
+                                                        "<h1>[전체공지]</h1>" +
+                                                        "<p>관리자로부터 전체 공지사항이 등록되었습니다.</p>" +
+                                                        "</a>"));
+                        }
+                    }
 
-                  //보내는 조건 설정
-//                if(receiversession !=null) {
-//                    TextMessage txtmsg = new TextMessage(mid+"님이" + receiver + "님의" + btitle + comment);
-//                    receiversession.sendMessage(txtmsg);//작성자에게 알려줍니다
-//                }else {
-//                    TextMessage txtmsg = new TextMessage(mid+"님이" + receiver + "님의" + btitle + comment);
-//                    session.sendMessage(txtmsg);//보내지는지 체크하기
-//                }
-
+                }
             }
-
         }
     }
 

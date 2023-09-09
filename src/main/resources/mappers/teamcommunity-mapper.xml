@@ -13,7 +13,16 @@
                 SYSDATE,
                 'SNTNC010')
     </insert>
-
+    <update id="modifyPost" parameterType="map">
+        UPDATE SNTNC
+        SET SNTNC_CN = #{sntncCn}
+        WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND SNTNC_WRTING_EMPL_ID =  #{sntncWrtingEmplId}
+    </update>
+    <delete id="deletePost" parameterType="map">
+        DELETE
+        FROM SNTNC
+        WHERE SNTNC_ETPR_CODE =#{sntncEtprCode} AND SNTNC_WRTING_EMPL_ID = #{sntncWrtingEmplId}
+    </delete>
     <select id="getSeq" resultType="int">
         SELECT SNTNC_SEQ.NEXTVAL FROM DUAL
     </select>
@@ -53,6 +62,7 @@
                 #{fileSize},
                 SYSDATE)
     </insert>
+
     <select id="loadRecomend" resultType="int" parameterType="String">
         SELECT COUNT(SNTNC_ETPR_CODE)
         FROM RECOMEND
@@ -65,7 +75,13 @@
     </select>
     <insert id="inputRecomend" parameterType="recomendVO">
         INSERT INTO RECOMEND (SNTNC_ETPR_CODE, RECOMEND_EMPL_ID, RECOMEND_SN)
-        VALUES ('SNTNC-85-20230907', '202308016', RECOMEND_SEQ.NEXTVAL)
+        VALUES (#{sntncEtprCode}, #{recomendEmplId}, RECOMEND_SEQ.NEXTVAL)
     </insert>
+    <delete id="deleteRecomend" parameterType="recomendVO">
+        DELETE
+        FROM RECOMEND
+        WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId}
+    </delete>
+
 
 </mapper>

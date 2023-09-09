@@ -1,9 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-
+<style>
+    .recomend-icon-btn {
+        width: calc((48 / 1920)*100vw);
+        height: calc((48 / 1920)*100vw);
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+    }
+    .recomendBtn {
+        background: url("/resources/images/icon/heart-on.svg") 100% center / cover;
+    }
+    .unRecomendBtn {
+        background: url("/resources/images/icon/heart-off.svg") 100% center / cover;
+    }
+</style>
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="CustomUser"/>
 <h1>팀 커뮤니티</h1>
@@ -36,8 +49,7 @@
             <th>수정/삭제</th>
             <th>파일</th>
             <th>수정/삭제</th>
-            <th>좋아요 수</th>
-            <th>좋아요</th>
+            <th>좋아요/좋아요수</th>
         </tr>
         <!--<tr>
             <td><input type="text" name="getSntncEtprCode" id="getSntncEtprCode" value="1"></td>
@@ -52,11 +64,11 @@
             </td>
         </tr>-->
         <c:forEach var="sntncVO" items="${sntncList}">
-        <tr>
+        <tr data-idx="${sntncVO.sntncEtprCode}" class="post">
             <td class="sntncEtprCode">${sntncVO.sntncEtprCode}</td>
             <td>${sntncVO.emplNm}</td>
             <td>${sntncVO.sntncWrtingDate}</td>
-            <td>${sntncVO.sntncCn}</td>
+            <td class="sntncCn">${sntncVO.sntncCn}</td>
             <td>${sntncVO.recomendCnt}</td>
             <td>${sntncVO.sntncWrtingEmplId}</td>
             <td>
@@ -73,50 +85,30 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-            <td>
-                <button type="button" id="modifyBtn">수정</button>
-                <button type="button" id="deleteBtn">삭제</button>
-            </td>
-            <td>
-                <c:forEach var="recomendCnt" items="${recomendPostCnt}">
-                    <c:if test="${recomendCnt.key == sntncVO.sntncEtprCode}">
-                        ${recomendCnt.value}
+
+                <td>
+                    <c:if test="${CustomUser.employeeVO.emplId == sntncVO.sntncWrtingEmplId}">
+                    <button type="button" class="modifyBtn">수정</button>
+                    <button type="button" class="deleteBtn">삭제</button>
                     </c:if>
-                </c:forEach>
-            </td>
+                </td>
+
             <td>
                 <c:forEach var="recomendedChk" items="${recomendedEmpleChk}">
                     <c:if test="${recomendedChk.key == sntncVO.sntncEtprCode}">
                         <c:choose>
                             <c:when test="${recomendedChk.value == 0}">
-                                <button class="recomend-icon-btn" id="recomendBtn">
-                                    <svg class="i-recomend-off" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 3.25C8.50297 3.24938 9.49133 3.49039 10.3814 3.95265C10.9851 4.26618 11.5316 4.67522 12.0006 5.16209C13.1366 3.98407 14.7328 3.25 16.5 3.25C19.9517 3.25 22.75 6.04829 22.75 9.5C22.75 12.5381 20.9668 15.3433 18.8454 17.4856C16.7168 19.6353 14.1191 21.2492 12.2365 21.8747C12.083 21.9258 11.917 21.9258 11.7635 21.8747C9.88092 21.2492 7.28321 19.6353 5.15457 17.4856C3.03322 15.3433 1.25 12.5381 1.25 9.5C1.25 6.04846 4.048 3.25029 7.49947 3.25M9.6901 5.28384C9.01373 4.93258 8.26268 4.74946 7.50053 4.75L7.5 4.75C4.87671 4.75 2.75 6.87672 2.75 9.5C2.75 11.9619 4.21678 14.4067 6.22043 16.4302C8.12163 18.3501 10.391 19.7727 12 20.3681C13.609 19.7727 15.8784 18.3501 17.7796 16.4302C19.7832 14.4067 21.25 11.9619 21.25 9.5C21.25 6.87672 19.1233 4.75 16.5 4.75C14.8942 4.75 13.4738 5.54631 12.6133 6.76871C12.4727 6.9684 12.2437 7.08715 11.9995 7.087C11.7553 7.08685 11.5265 6.96781 11.3862 6.76794C10.9482 6.14417 10.3665 5.6351 9.6901 5.28384Z" fill="black"/>
-                                    </svg>
-                                </button>
+                                <button class="recomend-icon-btn unRecomendBtn" data-idx="${sntncVO.sntncEtprCode}"></button>
                             </c:when>
                             <c:otherwise>
-                                <button class="recomend-icon-btn" id="unRecomendBtn">
-
-                                    <svg class="i-recomend-on" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <g clip-path="url(#clip0_151_2046)">
-                                            <mask id="mask0_151_2046" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="3" width="22" height="20">
-                                                <path d="M8.02437 5C5.34083 5 3.16528 7.17555 3.16528 9.85909C3.16528 14.7182 8.90784 19.1355 12 20.163C15.0921 19.1355 20.8347 14.7182 20.8347 9.85909C20.8347 7.17555 18.6591 5 15.9756 5C14.3323 5 12.879 5.81589 12 7.06467C11.5519 6.42645 10.9567 5.9056 10.2646 5.5462C9.57261 5.1868 8.80416 4.99945 8.02437 5Z" fill="white" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </mask>
-                                            <g mask="url(#mask0_151_2046)">
-                                                <path d="M0 0H24V24H0V0Z" fill="#FF9898"/>
-                                            </g>
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_151_2046">
-                                                <rect width="24" height="24" fill="white"/>
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                </button>
+                                <button class="recomend-icon-btn recomendBtn" data-idx="${sntncVO.sntncEtprCode}"></button>
                             </c:otherwise>
                         </c:choose>
-
+                    </c:if>
+                </c:forEach>
+                <c:forEach var="recomendCnt" items="${recomendPostCnt}">
+                    <c:if test="${recomendCnt.key == sntncVO.sntncEtprCode}">
+                        <span class="recomentCnt">${recomendCnt.value}</span>
                     </c:if>
                 </c:forEach>
             </td>
@@ -175,25 +167,6 @@
         </tr>
     </table>
     <button>댓글 등록하기</button>
-</form>
-<br /><hr />
-<h2>좋아요 누르깅</h2>
-<form action="#" method="get">
-    <table>
-        <tr>
-            <th>글 전사적 코드</th>
-            <td><input type="text" name="recomendSntncEtprCode" id="recomendSntncEtprCode"></td>
-        </tr>
-        <tr>
-            <th>추천 사원 아이디</th>
-            <td><input type="text" name="recomendEmplId" id="recomendEmplId"></td>
-        </tr>
-        <tr>
-            <th>추천 사원 여부 구분</th>
-            <td><input type="text" name="commonCodeRecomendAt" id="commonCodeRecomendAt" value="RECOMEND011"></td>
-        </tr>
-    </table>
-    <button type="button">좋아요 누르기</button>
 </form>
 <br /><hr />
 
@@ -354,10 +327,13 @@
 </div>
 </sec:authorize>
 <br /><hr />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const recomendBtn = document.querySelector("#recomendBtn");
-        const unRecomendBtn = document.querySelector("#unRecomendBtn");
+        const post = document.querySelectorAll(".post");
+        const recomendBtn = document.querySelectorAll(".recomendBtn");
+        const unRecomendBtn = document.querySelectorAll(".unRecomendBtn");
+        const modifyBtn = document.querySelectorAll(".modifyBtn");
         const addVoteBtn = document.querySelector("#addVote");
         const postInput = document.querySelector("#postContent");
         const fileInput = document.querySelector("#postFile");
@@ -381,7 +357,120 @@
         let selectedFile = undefined;
         let num = 2;
 
-        /*  좋아요 */
+        /*  포스트에서 기능 */
+        post.forEach((item) => {
+            item.addEventListener("click",function(e){
+                e.preventDefault();
+                console.log(e.target);
+                const target = e.target;
+                const recomendEmplId = "${CustomUser.employeeVO.emplId}";
+                const sntncEtprCode =  `\${item.getAttribute("data-idx")}`;
+                const sntncCnbox = item.querySelector(".sntncCn");
+                let recomendVo = {
+                    "recomendEmplId":recomendEmplId,
+                    "sntncEtprCode":sntncEtprCode
+                }
+                let sntncVO = {
+                    "sntncWrtingEmplId":recomendEmplId,
+                    "sntncEtprCode":sntncEtprCode
+                }
+                /*  좋아요 */
+                if(target.classList.contains("unRecomendBtn")){
+                    const btn = item.querySelector(".unRecomendBtn");
+                    $.ajax({
+                        url: "/teamCommunity/inputRecomend",
+                        type: "POST",
+                        data: recomendVo,
+                        dataType: "text",
+                        success: function(data) {
+                            const like = item.querySelector(".recomentCnt");
+                            like.innerText = data;
+                            if(btn.classList.contains("unRecomendBtn")){
+                                btn.classList.remove("unRecomendBtn");
+                                btn.classList.add("recomendBtn");
+                            }
+                        },
+                        error: function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        }
+                    })
+                    return;
+                }
+                /*  좋아요 취소 */
+                if(target.classList.contains("recomendBtn")){
+                    const btn = item.querySelector(".recomendBtn");
+                    $.ajax({
+                        url: "/teamCommunity/deleteRecomend",
+                        type: "POST",
+                        data: recomendVo,
+                        dataType: "text",
+                        success: function(data) {
+                            const like = item.querySelector(".recomentCnt");
+                            like.innerText = data;
+                            if(btn.classList.contains("recomendBtn")){
+                                btn.classList.remove("recomendBtn");
+                                btn.classList.add("unRecomendBtn");
+                            }
+                        },
+                        error: function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        }
+                    })
+                    return;
+                }
+                /*  포스트 수정  */
+                if(target.classList.contains("modifyBtn")){
+
+                    const content = sntncCnbox.innerText;
+                    const textArea = document.createElement("textarea");
+                    textArea.classList = "modifySntncCn";
+                    textArea.value = content;
+
+                    const saveBtn = document.createElement("button");
+                    saveBtn.classList = "saveMoidfyBtn";
+                    saveBtn.innerText = "수정";
+
+                    sntncCnbox.innerHTML = "";
+                    sntncCnbox.appendChild(textArea);
+                    sntncCnbox.appendChild(saveBtn);
+                }
+                if(target.classList.contains("saveMoidfyBtn")){
+                    const modisntncCn = document.querySelector(".modifySntncCn").value;
+                    sntncVO.sntncCn = modisntncCn;
+                    $.ajax({
+                        url: "/teamCommunity/modifyPost",
+                        type: "PUT",
+                        data: JSON.stringify(sntncVO),
+                        contentType: "application/json",
+                        dataType: "text",
+                        success: function(data) {
+                            item.querySelector(".modifySntncCn").remove();
+                            sntncCnbox.innerText = sntncVO.sntncCn;
+                            target.remove();
+                        },
+                        error: function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        }
+                    })
+                }
+                /*  포스트 삭제  */
+                if(target.classList.contains("deleteBtn")){
+                    $.ajax({
+                        url: "/teamCommunity/deletePost",
+                        type: "Delete",
+                        data: JSON.stringify(sntncVO),
+                        contentType: "application/json",
+                        dataType: "text",
+                        success: function(data) {
+                            item.remove();
+                        },
+                        error: function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        }
+                    })
+                }
+            })
+        })
 
 
         addVoteBtn.addEventListener("click", () => {

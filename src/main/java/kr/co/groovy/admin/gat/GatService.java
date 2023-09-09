@@ -27,7 +27,7 @@ public class GatService {
         this.uploadPath = uploadPath;
     }
 
-    public void inputNotice(NoticeVO vo, MultipartFile[] notiFiles) {
+    public String inputNotice(NoticeVO vo, MultipartFile[] notiFiles) {
         int notiSeq = mapper.getNotiSeq();
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
         Date currentDate = new java.util.Date();
@@ -65,10 +65,10 @@ public class GatService {
                 mapper.uploadNoticeFile(map);
                 log.info("공지 파일 등록 성공");
             }
-
         } catch (Exception e) {
             log.info("공지 파일 등록 실패");
         }
+        return notiEtprCode; //알림 url
     }
 
     public void deleteNotice(String notiEtprCode) {

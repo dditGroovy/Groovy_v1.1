@@ -10,11 +10,13 @@ import java.util.List;
 public interface HrtMapper {
     List<ConnectionLogVO> loadConnectionLog(String date);
 
+    List<String> loadDeptList();
+
     List<CommuteVO> loadAllDclz();
 
-    int deptTotalWorkTime(String deptCode);
+    List<CommuteVO> loadDeptDclz(String deptCode);
 
-    List<String> loadDeptList();
+    int deptTotalWorkTime(String deptCode);
 
     int deptAvgWorkTime(String deptCode);
 }

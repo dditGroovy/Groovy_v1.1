@@ -46,8 +46,8 @@ public class GatController {
 
     @PostMapping("/inputNotice")
     @ResponseBody
-    public void inputNotice(NoticeVO vo, MultipartFile[] notiFiles) {
-        service.inputNotice(vo, notiFiles);
+    public String inputNotice(NoticeVO vo, MultipartFile[] notiFiles) {
+        return service.inputNotice(vo, notiFiles);
     }
 
     @GetMapping("/noticeDetail")

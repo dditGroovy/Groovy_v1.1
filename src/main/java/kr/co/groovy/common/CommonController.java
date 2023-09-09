@@ -1,17 +1,15 @@
 package kr.co.groovy.common;
 
+import kr.co.groovy.employee.EmployeeService;
 import kr.co.groovy.enums.ClassOfPosition;
 import kr.co.groovy.enums.Department;
+import kr.co.groovy.vo.AlarmVO;
 import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.NoticeVO;
 import kr.co.groovy.vo.UploadFileVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,11 +30,14 @@ public class CommonController {
     CommonService service;
     final
     String uploadPath;
+    final
+    EmployeeService employeeService;
 
 
-    public CommonController(CommonService service, String uploadPath) {
+    public CommonController(CommonService service, String uploadPath, EmployeeService employeeService) {
         this.service = service;
         this.uploadPath = uploadPath;
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/loadNoticeList")
@@ -124,6 +125,14 @@ public class CommonController {
         }
     }
 
-
+    @PostMapping("/insertAlarm")
+    @ResponseBody
+    public void insertAlarm(AlarmVO alarmVO) {
+        List<EmployeeVO> emplList = employeeService.loadEmpList();
+        for (EmployeeVO employeeVO : emplList) {
+            alarmVO.setNtcnEmplId(employeeVO.getEmplId());
+            service.insertAlarm(alarmVO);
+        }
+    }
 }
 
