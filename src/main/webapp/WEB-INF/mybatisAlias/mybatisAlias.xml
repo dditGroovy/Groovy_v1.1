@@ -28,5 +28,6 @@
         <typeAlias type="kr.co.groovy.vo.SanctionVO" alias="sanctionVO"/>
         <typeAlias type="kr.co.groovy.vo.ReferenceVO" alias="referenceVO"/>
         <typeAlias type="kr.co.groovy.vo.RecomendVO" alias="recomendVO"/>
+        <typeAlias type="kr.co.groovy.vo.AlarmVO" alias="alarmVO"/>
     </typeAliases>
 </configuration>

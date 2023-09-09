@@ -10,9 +10,9 @@
         </ul>
     </div>
 
-<div id="AlarmDiv">
+<div id="AlarmDiv" style="border: 1px solid black">
     <h1>Alarm Test</h1>
-    <div id="alarm" role="alarm"></div>
+    <div id="alarm" role="alarm" style="border: 1px solid black"></div>
 </div>
 
 <script>
@@ -39,7 +39,11 @@
         }
 
         sock.onclose = function () {
-            console.log("ciose");
+            console.log("close");
+        }
+
+        sock.onerror = function (err) {
+            console.log("ERROR: ", err);
         }
     }
 </script>
