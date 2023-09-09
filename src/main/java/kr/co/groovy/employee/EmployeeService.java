@@ -48,7 +48,7 @@ public class EmployeeService {
     public void initPassword(String emplId, String emplPassword) {
         String encodePw = encoder.encode(emplPassword);
         mapper.initPassword(emplId, encodePw);
-
+/*
         try {
             InetAddress ip = InetAddress.getLocalHost();
             if (ip != null) {
@@ -60,7 +60,7 @@ public class EmployeeService {
                     for (int i = 0; i < mac.length; i++) {
                         macAddress += (String.format("%02x", mac[i]) + ":");
                     }
-                    /* 암호화
+
                     byte[] encodedHash = digest.digest(macAddress.getBytes());
                     StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
 
@@ -68,7 +68,7 @@ public class EmployeeService {
                         hexString.append(String.format("%02x", b & 0xFF));
                     }
                     String emplMacadrs = hexString.toString();
-                    */
+
                     mapper.initMacAddr(macAddress, emplId);
                 }
             }
@@ -76,7 +76,7 @@ public class EmployeeService {
             log.debug(e.getMessage());
 //        } catch (NoSuchAlgorithmException e) {
 //            throw new RuntimeException(e);
-        }
+        }*/
     }
 
     public int countEmp() {

@@ -5,7 +5,10 @@ import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.JobDiaryVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -25,11 +28,20 @@ public class JobController {
         return "employee/jobDiaryWrite";
     }
 
+    @GetMapping("/read")
+    public String jobDiaryRead(String date, String id, JobDiaryVO jobDiaryVO, Model model) {
+        jobDiaryVO.setJobDiaryReportDate(date);
+        jobDiaryVO.setJobDiaryWrtingEmplId(id);
+        jobDiaryVO = service.getDiaryByDateAndId(jobDiaryVO);
+        jobDiaryVO.setJobDiaryReportDate(date);
+        System.out.println("date = " + date);
+        model.addAttribute("vo", jobDiaryVO);
+        return "employee/jobDiaryRead";
+    }
+
     @PostMapping("/insertDiary")
     public String insertDiary(@ModelAttribute JobDiaryVO jobDiaryVO, Principal principal, Model model) {
         String emplId = principal.getName();
-        String ss = principal.toString();
-        System.out.println("ss = " + ss);
         jobDiaryVO.setJobDiaryWrtingEmplId(emplId);
 
         try {

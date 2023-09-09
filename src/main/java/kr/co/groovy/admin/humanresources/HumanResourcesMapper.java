@@ -5,16 +5,19 @@ import kr.co.groovy.vo.ConnectionLogVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface HumanResourcesMapper {
     List<ConnectionLogVO> loadConnectionLog(String date);
 
+    List<String> loadDeptList();
+
     List<CommuteVO> loadAllDclz();
 
-    int deptTotalWorkTime(String deptCode);
+    List<CommuteVO> loadDeptDclz(String deptCode);
 
-    List<String> loadDeptList();
+    int deptTotalWorkTime(String deptCode);
 
     int deptAvgWorkTime(String deptCode);
 }

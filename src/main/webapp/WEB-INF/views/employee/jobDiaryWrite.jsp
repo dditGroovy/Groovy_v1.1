@@ -4,7 +4,7 @@
   <table>
     <tr>
       <td>제목</td>
-      <td><input type="text" name="jobDiarySbj" placeholder="제목을 입력해주세요." /></td>
+      <td><input type="text" name="jobDiarySbj" placeholder="제목을 입력해주세요." required/></td>
     </tr>
     <tr>
       <td>등록일</td>
@@ -12,12 +12,14 @@
       </td>
     </tr>
   </table>
-  <textarea id="editor" name="jobDiaryCn"></textarea>
+  <textarea id="editor" name="jobDiaryCn" required></textarea>
   <button type="button" id="goDiary">목록으로</button>
   <button type="submit">등록하기</button>
 </form>
 <script>
-  CKEDITOR.replace("editor");
+  var editor = CKEDITOR.replace("editor", {
+          extraPlugins: 'notification'
+        });
 
   let date = new Date();
   let year = date.getFullYear();
@@ -33,13 +35,8 @@
     window.location.href = "/job/jobDiary";
   });
 
-  //유효성 검사
-  document.querySelector("form").addEventListener("submit", function (e) {
-    let titleInput = document.querySelector("input[name='jobDiarySbj']");
-    let contentTextarea = CKEDITOR.instances.text; // CKEditor의 내용 가져오기
-    if (titleInput.value.trim() === "" || !contentTextarea.getData().trim()) {
-      e.preventDefault();
-      alert("제목과 내용을 모두 입력해주세요.");
-    }
-  });
+  editor.on( 'required', function( evt ) {
+    editor.showNotification( 'This field is required.', 'warning' );
+    evt.cancel();
+  } );
 </script>

@@ -36,7 +36,7 @@ public class EmployeeController {
 
     @GetMapping("/manageEmp")
     public String manageEmp() {
-        return "admin/manageEmployee";
+        return "admin/hrt/manageEmployee";
     }
 
     @GetMapping("/initPassword")

@@ -3,16 +3,19 @@ package kr.co.groovy.sanction;
 import kr.co.groovy.common.CommonService;
 import kr.co.groovy.enums.ClassOfPosition;
 import kr.co.groovy.enums.Department;
+import kr.co.groovy.enums.SanctionFormat;
+import kr.co.groovy.enums.SanctionProgress;
 import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.SanctionFormatVO;
+import kr.co.groovy.vo.SanctionLineVO;
+import kr.co.groovy.vo.SanctionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
 @Slf4j
 @Controller
 @RequestMapping("/sanction")
@@ -32,26 +35,61 @@ public class SanctionController {
         return "sanction/sanctionBox";
     }
 
+    @GetMapping("/inProgress")
+    public String getInProgress() {
+        return "sanction/inProgressBox";
+    }
+
+    @GetMapping("/mySanction")
+    public String getMySanction() {
+        return "sanction/mySanctionBox";
+    }
+
+    // insert - 전자결재
+    @PostMapping("/inputSanction")
+    @ResponseBody
+    public void inputSanction(@RequestBody Map<String, Object> requestData) {
+        service.inputSanction(requestData);
+    }
+
+
+    @GetMapping("/loadRequest")
+    @ResponseBody
+    public List<SanctionVO> loadRequest(String emplId) {
+        return service.loadRequest(emplId);
+    }
+    @GetMapping("/loadAwaiting")
+    @ResponseBody
+    public List<SanctionLineVO>loadAwaiting(String progrsCode, String emplId){
+        return service.loadAwaiting(progrsCode,emplId);
+    }
+
+
+    // 양식 불러오기
     @GetMapping("/write/{formatSanctnKnd}")
     public ModelAndView writeSanction(@PathVariable("formatSanctnKnd") String formatSanctnKnd, @RequestParam("format") String format, ModelAndView mav) {
         String etprCode = service.getSeq(Department.valueOf(formatSanctnKnd).label());
         SanctionFormatVO vo = service.loadFormat(format);
-        log.info(etprCode);
-        log.info(formatSanctnKnd);
-        log.info(vo.getFormatSj());
-        log.info(vo.getCommonCodeSanctnFormat());
         mav.addObject("format", vo);
         mav.addObject("etprCode", etprCode);
         mav.setViewName("sanction/write");
         return mav;
     }
 
+    // 결재요청 - 결재건수 불러오기
+    @GetMapping("/getStatus")
+    @ResponseBody
+    public String getStatus(@RequestParam("elctrnSanctnDrftEmplId") String elctrnSanctnDrftEmplId,
+                            @RequestParam("commonCodeSanctProgrs") String commonCodeSanctProgrs) {
+        return String.valueOf(service.getStatus(elctrnSanctnDrftEmplId, commonCodeSanctProgrs));
+    }
+
+    // 결재선 불러오기
     @GetMapping("/loadOrgChart")
     @ResponseBody
     public List<EmployeeVO> loadOrgChart(ModelAndView mav) {
         List<String> departmentCodes = Arrays.asList("DEPT010", "DEPT011", "DEPT012", "DEPT013", "DEPT014", "DEPT015");
         List<EmployeeVO> allEmployees = new ArrayList<>();
-
         for (String deptCode : departmentCodes) {
             List<EmployeeVO> deptEmployees = commonService.loadOrgChart(deptCode);
             for (EmployeeVO vo : deptEmployees) {

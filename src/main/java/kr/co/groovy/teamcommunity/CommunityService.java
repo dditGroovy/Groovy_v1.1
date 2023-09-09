@@ -9,10 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -76,10 +73,12 @@ public class CommunityService {
     public List<SntncVO> loadPost(String emplId){
         return mapper.loadPost(emplId);
     };
+    public int modifyPost(Map<String, Object> map){return mapper.modifyPost(map);};
+    public void deletePost(Map<String, Object> map){mapper.deletePost(map);}
     /*public List<RecomendVO> loadRecomend(String emplId){return mapper.loadRecomend(emplId);}*/
     public int loadRecomend(String sntncEtprCode){return mapper.loadRecomend(sntncEtprCode);}
-
     public int findRecomend(HashMap<String, Object> map) {return mapper.findRecomend(map);}
 
-    public void inputRecomend(RecomendVO vo){mapper.inputRecomend(vo);}
+    public void inputRecomend(RecomendVO vo){ mapper.inputRecomend(vo);}
+    public void deleteRecomend(RecomendVO vo){ mapper.deleteRecomend(vo);}
 }

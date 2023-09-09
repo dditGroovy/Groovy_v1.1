@@ -23,6 +23,7 @@
                  full outer join VHCLE_RESVE vr on v.VHCLE_NO = vr.VHCLE_NO
         where TRUNC(vr.VHCLE_RESVE_BEGIN_TIME) = TRUNC(sysdate)
           and v.VHCLE_NO = #{vhcleNo}
+        order by VHCLE_RESVE_NO desc
     </select>
     <select id="getReservedVehicleByEmplId" resultType="vehicleVO" parameterType="String">
         select *

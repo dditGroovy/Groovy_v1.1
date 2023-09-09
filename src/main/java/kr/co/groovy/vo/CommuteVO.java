@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
-
 @Getter
 @Setter
 @ToString
@@ -18,8 +15,15 @@ public class CommuteVO {
     private int dclzDailWorkTime;
     private int dclzWikWorkTime;
     private String commonCodeLaborSttus;
-    private String EmplNm;
-    private String DeptNm;
-    private String ClsfNm;
-    private int realWikWorkCnt;
+    private String emplNm;
+    private String deptNm;
+    private String clsfNm;
+    private int defaulWorkDate;
+    private int realWikWorkDate;
+    private String defaulWorkTime;
+    private String realWorkTime;
+    private String overWorkTime;
+    private String totalWorkTime;
+    private String avgWorkTime;
+
 }

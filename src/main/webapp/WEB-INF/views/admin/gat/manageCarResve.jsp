@@ -70,17 +70,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="todayReservedVehicle" items="${todayReservedVehicles}">
+                <c:forEach var="vehicleVO" items="${todayReservedVehicles}">
                     <tr>
-                        <td>${todayReservedVehicle.vhcleResveNo}</td>
-                        <td>${todayReservedVehicle.vhcleNo}</td>
-                        <c:set var="beginTimeStr" value="${todayReservedVehicle.vhcleResveBeginTime}"/>
+                        <td>${vehicleVO.vhcleResveNo}</td>
+                        <td>${vehicleVO.vhcleNo}</td>
+                        <c:set var="beginTimeStr" value="${vehicleVO.vhcleResveBeginTime}"/>
                         <fmt:formatDate value="${beginTimeStr}" pattern="HH:mm" var="beginTime"/>
                         <td>${beginTime}</td>
-                        <c:set var="endTimeStr" value="${todayReservedVehicle.vhcleResveEndTime}"/>
+                        <c:set var="endTimeStr" value="${vehicleVO.vhcleResveEndTime}"/>
                         <fmt:formatDate value="${endTimeStr}" pattern="HH:mm" var="endTime"/>
                         <td>${endTime}</td>
-                        <td>${todayReservedVehicle.vhcleResveEmplNm}(${todayReservedVehicle.vhcleResveEmplId})</td>
+                        <td>${vehicleVO.vhcleResveEmplNm}(${vehicleVO.vhcleResveEmplId})</td>
                         <td>
                             <button>반납 확인</button>
                         </td>

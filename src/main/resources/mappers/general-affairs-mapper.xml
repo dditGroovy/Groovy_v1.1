@@ -69,7 +69,7 @@
         from vhcle v
                  full outer join vhcle_resve vr on v.vhcle_no = vr.vhcle_no
         where trunc(vr.vhcle_resve_begin_time) = trunc(sysdate)
-        order by vr.vhcle_resve_no desc
+        order by vr.vhcle_resve_begin_time
     </select>
 
     <select id="getAllVehicles" resultType="vehicleVO">
