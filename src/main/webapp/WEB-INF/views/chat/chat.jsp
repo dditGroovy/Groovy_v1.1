@@ -54,6 +54,7 @@
 </div>
 
 <script>
+    var sock = new Sock
     // empListForChat 목록을 dept_name 값으로 그룹화
     var groupedEmployees = {};
 

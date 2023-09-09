@@ -2,13 +2,18 @@ package kr.co.groovy.chat;
 
 import kr.co.groovy.employee.EmployeeService;
 import kr.co.groovy.vo.ChatRoomVO;
+import kr.co.groovy.vo.ChatVO;
 import kr.co.groovy.vo.EmployeeVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +30,13 @@ public class ChatController {
     public ChatController(ChatService chatService, EmployeeService employeeService) {
         this.chatService = chatService;
         this.employeeService = employeeService;
+    }
+
+    @MessageMapping("/hello/{chttRoomNo}")
+    @SendTo("/subscribe/chat/{chttRoomNo}")
+    public ChatVO broadcasting(ChatVO chatVO) {
+        chatVO.setChttInputDate(new Date());
+        return chatVO;
     }
 
     @GetMapping("")
