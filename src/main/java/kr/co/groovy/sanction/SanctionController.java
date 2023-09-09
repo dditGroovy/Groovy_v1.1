@@ -30,21 +30,15 @@ public class SanctionController {
         this.commonService = commonService;
     }
 
-    @GetMapping("/sanctionBox")
+    @GetMapping("/box")
     public String getSanctionBox() {
-        return "sanction/sanctionBox";
+        return "sanction/box";
     }
 
-    @GetMapping("/inProgress")
+    @GetMapping("/document")
     public String getInProgress() {
-        return "sanction/inProgressBox";
+        return "sanction/document";
     }
-
-    @GetMapping("/mySanction")
-    public String getMySanction() {
-        return "sanction/mySanctionBox";
-    }
-
     // insert - 전자결재
     @PostMapping("/inputSanction")
     @ResponseBody

@@ -4,30 +4,13 @@
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="CustomUser"/>
     <h2>
-        <a href="#">결재 요청</a>
-        <a href="${pageContext.request.contextPath}/sanction/inProgress">결재 진행함</a>
-        <a href="${pageContext.request.contextPath}/sanction/mySanction">개인 문서함</a>
+        <a href="${pageContext.request.contextPath}/sanction/box">결재 요청</a>
+        <a href="${pageContext.request.contextPath}/sanction/document">결재 문서함</a>
     </h2> <br/><br/>
 
     <ul id="sanctionStatus">
-        <li>
-            <button id="">기안 문서함?(내가 기안하여 아직 최종 승인되지 않은 문서)</button>
-        </li> <li>
-            <button id="loadAwaiting">결재 대기 문서(결재할 문서)</button>
-        </li>
-        <li>
-            <button id="upcoming">결재 예정 문서(앞으로 결재할 문서)</button>
-        </li>
-        <hr>
-
-        고민 중
-        <li>
-            <button id="receive">결재 수신 문서</button>
-        </li>
-        <li>
-            <button id="reference">결재 참조/열람 문서</button>
-        </li>
-        <hr>
+        <li><button id="myDocument">기안 문서</button></li>
+        <li><button id="loadAwaiting">결재 문서</button></li>
     </ul>
 
     <div class="sanctionList">
@@ -36,6 +19,32 @@
         $(function () {
             $("#loadAwaiting").click();
 
+        })
+
+
+        $("#myDocument").on("click", function () {
+            $.ajax({
+                type: "GET",
+                url: "/sanction/loadRequest?emplId=${CustomUser.employeeVO.emplId}",
+                success: function (res) {
+                    let code = "<table border=1>";
+                    code += `<thead><tr><th>문서번호</th>><th>결재양식</th><th>제목</th><th>기안일시</th><th>상태</th></thead><tbody>`;
+                    if (res.length === 0) {
+                        code += "<td colspan='8'>진행 대기 문서가 없습니다</td>";
+                    } else {
+                        for (let i = 0; i < res.length; i++) {
+                            code += `<td>\${res[i].elctrnSanctnEtprCode}</td>`;
+                            code += `<td>\${res[i].elctrnSanctnFormatCode}</td>`;
+                            code += `<td>\${res[i].elctrnSanctnSj}</td>`;
+                            code += `<td>\${res[i].elctrnSanctnRecomDate}</td>`;
+                            code += `<td>\${res[i].commonCodeSanctProgrs}</td>`;
+                            code += "</tr>";
+                        }
+                    }
+                    code += "</tbody></table>";
+                    $(".sanctionList").html(code);
+                }
+            });
         })
 
         // 결재 대기 문서

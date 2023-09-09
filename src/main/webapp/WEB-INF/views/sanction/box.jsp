@@ -5,9 +5,8 @@
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="CustomUser"/>
     <h2>
-        <a href="#">결재 요청</a>
-        <a href="${pageContext.request.contextPath}/sanction/inProgress">결재 진행함</a>
-        <a href="${pageContext.request.contextPath}/sanction/mySanction">개인 문서함</a>
+        <a href="${pageContext.request.contextPath}/sanction/box">결재 요청</a>
+        <a href="${pageContext.request.contextPath}/sanction/document">결재 문서</a>
     </h2> <br/><br/>
 
     <ul id="sanctionStatus">

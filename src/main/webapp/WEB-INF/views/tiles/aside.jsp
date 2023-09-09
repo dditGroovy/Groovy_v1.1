@@ -35,7 +35,7 @@
         <li class="nav-list"><a href="${pageContext.request.contextPath}/employee/commute"><i class="icon i-job"></i>출 · 퇴근</a></li>
         <li class="nav-list"><a href="${pageContext.request.contextPath}/employee/vacation"><i class="icon i-vacation"></i>휴가 · 급여</a></li>
         <li class="nav-list"><a href="${pageContext.request.contextPath}/employee/job"><i class="icon i-todo"></i>내 할 일</a></li>
-        <li class="nav-list"><a href="${pageContext.request.contextPath}/sanction/sanctionBox"><i class="icon i-sanction"></i>결재함</a></li>
+        <li class="nav-list"><a href="${pageContext.request.contextPath}/sanction/box"><i class="icon i-sanction"></i>결재함</a></li>
       </ul>
     </div>
     <div class="team">

@@ -41,7 +41,7 @@ public class GatController {
 
     @GetMapping("/inputNotice")
     public String inputNoticeForm() {
-        return "admin/gat/inputNotice";
+        return "admin/gat/notice/register";
     }
 
     @PostMapping("/inputNotice")
