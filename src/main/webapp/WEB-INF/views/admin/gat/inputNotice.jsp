@@ -1,3 +1,4 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <form action="#" method="post"
       enctype="multipart/form-data" id="uploadForm">
@@ -18,6 +19,15 @@
     <button type="button" id="submitBtn">등록</button>
 </form>
 <script>
+    let content = $("#noti-content");
+
+    //보내는 사원 아이디, 알림내용, 알림 날짜, 공통코드알림종류 코드
+    <sec:authorize access="isAuthenticated()">
+        <sec:authentication property="principal" var="CustomUser"/>
+        let emplId = `${CustomUser.employeeVO.emplId}`;
+        let emplNm = `${CustomUser.employeeVO.emplNm}`;
+    </sec:authorize>
+
     $("#submitBtn").on("click", function () {
         var form = $('#uploadForm')[0];
         var formData = new FormData(form);
@@ -26,10 +36,30 @@
             url: "/generalAffairs/inputNotice",
             type: 'POST',
             data: formData,
+            dataType: 'text',
             contentType: false,
             processData: false,
-            success: function (data) {
-                location.href = "/generalAffairs/manageNotice";
+            success: function (notiEtprCode) {
+                let url = '/common/noticeDetail?notiEtprCode=' + notiEtprCode;
+                let alarmVO = {
+                    "ntcnCn": content.val(),
+                    "commonCodeNtcnKind": 'NTCN013'
+                }
+                $.ajax({
+                    type: 'post',
+                    url: '/common/insertAlarm',
+                    data: alarmVO,
+                    success: function(rslt) {
+                        if (socket) {
+                            let msg = "noti,"+url;
+                            socket.send(msg);
+                        }
+                        location.href = "/generalAffairs/manageNotice";
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.status);
+                    }
+                })
             },
             error: function (xhr) {
                 console.log(xhr.status)

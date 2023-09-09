@@ -1,6 +1,7 @@
 package kr.co.groovy.common;
 
 import kr.co.groovy.enums.NoticeKind;
+import kr.co.groovy.vo.AlarmVO;
 import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.NoticeVO;
 import kr.co.groovy.vo.UploadFileVO;
@@ -56,4 +57,7 @@ public class CommonService {
         return mapper.loadOrgChart(depCode);
     }
 
+    public void insertAlarm(AlarmVO alarmVO) {
+        mapper.insertAlarm(alarmVO);
+    }
 }
