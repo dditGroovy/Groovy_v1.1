@@ -1,4 +1,4 @@
-package kr.co.groovy.admin.humanresources;
+package kr.co.groovy.admin.hrt;
 
 import com.google.gson.Gson;
 import kr.co.groovy.vo.ConnectionLogVO;
@@ -15,11 +15,11 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("/humanResources")
-public class HumanResourcesController {
-    final HumanResourcesService service;
+@RequestMapping("/hrt")
+public class HrtController {
+    final HrtService service;
 
-    public HumanResourcesController(HumanResourcesService service) {
+    public HrtController(HrtService service) {
         this.service = service;
     }
 
@@ -28,7 +28,7 @@ public class HumanResourcesController {
     ModelAndView loadConnectionLog(ModelAndView mav, String today) {
         List<ConnectionLogVO> list = service.loadConnectionLog(today);
         mav.addObject("logList", list);
-        mav.setViewName("admin/connectionLog");
+        mav.setViewName("admin/hrt/employee/connectionLog");
         return mav;
     }
 
@@ -54,7 +54,7 @@ public class HumanResourcesController {
         model.addAttribute("deptAvgWorkTime", deptAvgWorkTime);
         model.addAttribute("allDclzList", allDclzList);
 
-        return "admin/hrt/manageDclzAll";
+        return "admin/hrt/attendance/all";
     }
 
     @GetMapping("/manageDclz/HRT")
@@ -63,7 +63,7 @@ public class HumanResourcesController {
         Gson gson = new Gson();
         String deptDclzList = gson.toJson(list);
         model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/manageDclzHRT";
+        return "admin/hrt/attendance/hrt";
     }
 
     @GetMapping("/manageDclz/AT")
@@ -72,7 +72,7 @@ public class HumanResourcesController {
         Gson gson = new Gson();
         String deptDclzList = gson.toJson(list);
         model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/manageDclzAT";
+        return "admin/hrt/attendance/at";
     }
 
     @GetMapping("/manageDclz/ST")
@@ -81,7 +81,7 @@ public class HumanResourcesController {
         Gson gson = new Gson();
         String deptDclzList = gson.toJson(list);
         model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/manageDclzST";
+        return "admin/hrt/attendance/st";
     }
 
     @GetMapping("/manageDclz/PRT")
@@ -90,7 +90,7 @@ public class HumanResourcesController {
         Gson gson = new Gson();
         String deptDclzList = gson.toJson(list);
         model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/manageDclzPRT";
+        return "admin/hrt/attendance/prt";
     }
 
     @GetMapping("/manageDclz/GAT")
@@ -99,6 +99,6 @@ public class HumanResourcesController {
         Gson gson = new Gson();
         String deptDclzList = gson.toJson(list);
         model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/manageDclzGAT";
+        return "admin/hrt/attendance/gat";
     }
 }

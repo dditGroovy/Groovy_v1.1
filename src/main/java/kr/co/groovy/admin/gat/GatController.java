@@ -56,14 +56,14 @@ public class GatController {
         List<UploadFileVO> list = commonService.loadNotiFiles(notiEtprCode);
         mav.addObject("noticeDetail", vo);
         mav.addObject("notiFiles", list);
-        mav.setViewName("admin/gat/adminNoticeDetail");
+        mav.setViewName("admin/gat/notice/detail");
         return mav;
     }
 
     @GetMapping("/deleteNotice")
     public String deleteNotice(String notiEtprCode) {
         service.deleteNotice(notiEtprCode);
-        return "redirect:/admin/gat/manageNotice";
+        return "redirect:/admin/gat/notice/manage";
     }
 
     @GetMapping("/manageVehicle")
@@ -72,13 +72,13 @@ public class GatController {
         List<VehicleVO> todayReservedVehicles = getTodayReservedVehicles();
         mav.addObject("allVehicles", allVehicles);
         mav.addObject("todayReservedVehicles", todayReservedVehicles);
-        mav.setViewName("admin/gat/manageCarResve");
+        mav.setViewName("admin/gat/car/manage");
         return mav;
     }
 
     @GetMapping("/inputVehicle")
     public ModelAndView inputVehicle(ModelAndView mav) {
-        mav.setViewName("admin/gat/insertCar");
+        mav.setViewName("admin/gat/car/register");
         return mav;
     }
 
@@ -87,7 +87,7 @@ public class GatController {
         log.info("vehicleVO: " + vehicleVO);
         int count = service.inputVehicle(vehicleVO);
         if (count > 0) {
-            mav.setViewName("redirect:/generalAffairs/manageVehicle");
+            mav.setViewName("redirect:/gat/manageVehicle");
         }
         return mav;
     }
@@ -96,7 +96,7 @@ public class GatController {
     public ModelAndView loadVehicle(ModelAndView mav) {
         List<VehicleVO> todayReservedVehicles = getTodayReservedVehicles();
         mav.addObject("todayReservedVehicles", todayReservedVehicles);
-        mav.setViewName("admin/gat/listCarResve");
+        mav.setViewName("admin/gat/car/list");
         return mav;
     }
 
