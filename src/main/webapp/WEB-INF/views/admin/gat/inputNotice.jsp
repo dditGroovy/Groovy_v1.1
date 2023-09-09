@@ -21,13 +21,6 @@
 <script>
     let content = $("#noti-content");
 
-    //보내는 사원 아이디, 알림내용, 알림 날짜, 공통코드알림종류 코드
-    <sec:authorize access="isAuthenticated()">
-        <sec:authentication property="principal" var="CustomUser"/>
-        let emplId = `${CustomUser.employeeVO.emplId}`;
-        let emplNm = `${CustomUser.employeeVO.emplNm}`;
-    </sec:authorize>
-
     $("#submitBtn").on("click", function () {
         var form = $('#uploadForm')[0];
         var formData = new FormData(form);
