@@ -23,5 +23,7 @@ public interface CommunityMapper {
     void inputRecomend(RecomendVO vo);
     void deleteRecomend(RecomendVO vo);
     /*  댓글  */
-    void inputAnswer(AnswerVO vo);
+    void inputAnswer(Map<String, Object> map);
+    int loadAnswerCnt(String sntncEtprCode);
+    List<AnswerVO> loadAnswer(String sntncEtprCode);
 }

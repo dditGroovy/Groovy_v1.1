@@ -85,5 +85,7 @@ public class CommunityService {
     public void deleteRecomend(RecomendVO vo){ mapper.deleteRecomend(vo);}
     public List<EmployeeVO> loadEmpl(String emplId){return mapper.loadEmpl(emplId);}
     /*  댓글  */
-    public void inputAnswer(AnswerVO vo){mapper.inputAnswer(vo);}
+    public void inputAnswer(Map<String, Object> map){mapper.inputAnswer(map);}
+    public int loadAnswerCnt(String sntncEtprCode){return mapper.loadAnswerCnt(sntncEtprCode);}
+    public List<AnswerVO> loadAnswer(String sntncEtprCode){return mapper.loadAnswer(sntncEtprCode);}
 }

@@ -96,7 +96,7 @@
         FROM RECOMEND
         WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId}
     </delete>
-    <insert id="inputAnswer" parameterType="answerVO">
+    <insert id="inputAnswer" parameterType="map">
         INSERT INTO ANSWER( ANSWER_NO,
                             SNTNC_ETPR_CODE,
                             ANSWER_WRTING_EMPL_ID,
@@ -108,7 +108,24 @@
                 #{answerCn},
                 SYSDATE)
     </insert>
-
+    <select id="loadAnswerCnt" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM ANSWER A
+        WHERE A.SNTNC_ETPR_CODE = #{sntncEtprCode}
+    </select>
+    <select id="loadAnswer" resultType="answerVO" parameterType="String">
+        SELECT
+            A.ANSWER_NO,
+            A.ANSWER_CN,
+            A.ANSWER_DATE,
+            A.ANSWER_WRTING_EMPL_ID,
+            UF.UPLOAD_FILE_STRE_NM
+        FROM ANSWER A
+                 JOIN PROFL P ON A.ANSWER_WRTING_EMPL_ID = P.PROFL_EMPL_ID
+                 JOIN UPLOAD_FILE UF ON UF.UPLOAD_FILE_ETPR_CODE = P.PROFL_ETPR_CODE
+        WHERE A.SNTNC_ETPR_CODE = #{sntncEtprCode}
+        ORDER BY A.ANSWER_NO
+    </select>
 
 
 </mapper>

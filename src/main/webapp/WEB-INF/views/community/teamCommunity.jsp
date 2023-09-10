@@ -50,6 +50,7 @@
             <th>파일</th>
             <th>수정/삭제</th>
             <th>좋아요/좋아요수</th>
+            <th>댓글/댓글수</th>
         </tr>
         <!--<tr>
             <td><input type="text" name="getSntncEtprCode" id="getSntncEtprCode" value="1"></td>
@@ -64,13 +65,14 @@
             </td>
         </tr>-->
         <c:forEach var="sntncVO" items="${sntncList}">
-        <tr data-idx="${sntncVO.sntncEtprCode}" class="post">
+
+            <tr data-idx="${sntncVO.sntncEtprCode}" class="post">
             <td class="sntncEtprCode">${sntncVO.sntncEtprCode}</td>
             <td>
                 <c:forEach var="employee" items="${employeeList}">
                     <c:if test="${employee.emplId == sntncVO.sntncWrtingEmplId}">
-                        `<img src="/uploads/profile/\${employee.proflPhotoFileStreNm}" width="50px;"/>
-                        ${employee.emplNm}`
+                        <img src="/uploads/profile/${employee.proflPhotoFileStreNm}" width="50px;"/>
+                        ${employee.emplNm}
                     </c:if>
                 </c:forEach>
             </td>
@@ -119,63 +121,26 @@
                     </c:if>
                 </c:forEach>
             </td>
+            <td>
+                <c:forEach var="answerPostCnt" items="${answerPostCnt}">
+                    <c:if test="${answerPostCnt.key == sntncVO.sntncEtprCode}">
+                        <span class="answerCnt">${answerPostCnt.value}</span>
+                    </c:if>
+                </c:forEach>
+                <img src="/uploads/profile/${CustomUser.employeeVO.proflPhotoFileStreNm}" alt="profileImage"/>
+                <textarea class="answerCn"></textarea>
+                <button class="inputAnswer">댓글 등록</button>
+                <button class="loadAnswer">댓글 보기</button>
+            </td>
+            <td class="answerBox"></td>
         </tr>
         </c:forEach>
     </table>
-    <hr /><br />
-    <h2>포스트에 등록한 댓글 불러오기</h2>
-    <table border="1" style="width: 80%;">
-        <thead>
-        <tr>
-            <td>글 번호</td>
-            <td>댓글 번호</td>
-            <td>댓글 내용</td>
-            <td>댓글남긴 날짜</td>
-            <td>댓글남긴 사원</td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>Lorem ipsum dolor sit amet consectetur. In malesuada sed vitae pharetra id. Cras cong</td>
-            <td>2023/08/27</td>
-            <td>이혜진</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>Lorem ipsum dolor sit amet consectetur. In malesuada sed vitae pharetra id. Cras cong</td>
-            <td>2023/08/27</td>
-            <td>이혜진</td>
-        </tr>
-        </tbody>
-    </table>
 </form>
 <hr /><br />
-<h2>댓글 등록하기</h2>
-<form action="#" method="post">
-    <table>
-        <tr>
-            <th>글 전사적코드</th>
-            <td><input type="text" name="answerSntncEtprCode" id="answerSntncEtprCode"></td>
-        </tr>
-        <tr>
-            <th>댓글 작성 사원 아이디</th>
-            <td><input type="text" name="answerWrtingEmplId" id="answerWrtingEmplId"></td>
-        </tr>
-        <tr>
-            <th>댓글 내용</th>
-            <td><textarea name="answerCn" id="answerCn" cols="50" rows="10"></textarea></td>
-        </tr>
-        <tr>
-            <th>댓글 날짜</th>
-            <td><input type="text" name="answerDate" id="answerDate"></td>
-        </tr>
-    </table>
-    <button>댓글 등록하기</button>
-</form>
-<br /><hr />
+    <hr /><br />
+    <h2>포스트에 등록한 댓글 불러오기</h2>
+
 
 <h2>투표 추가하기 <= 누르면 추가하기 모달 밑에 추가</h2>
 <button type="button" id="addVote">투표 추가하기</button>
@@ -476,10 +441,63 @@
                         }
                     })
                 }
+                /*  댓글 등록   */
+                if(target.classList.contains("inputAnswer")){
+                    const answerCnt = item.querySelector(".answerCnt")
+                    const answerContent = item.querySelector(".answerCn");
+                    const answerValue = answerContent.value;
+                    const answerVO = {
+                        "sntncEtprCode" : sntncEtprCode,
+                        "answerCn" : answerValue,
+                    }
+                    if(answerValue !== ""){
+                        $.ajax({
+                            url: "/teamCommunity/inputAnswer",
+                            type: "POST",
+                            data: JSON.stringify(answerVO),
+                            contentType: "application/json",
+                            dataType: "text",
+                            success: function(data) {
+                                answerCnt.innerText = data;
+                                answerContent.value = "";
+                                loadAnswerFn(sntncEtprCode,item);
+                            },
+                            error: function(request, status, error){
+                                console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                            }
+                        })
+                    }
+                }
+                /*  댓글 불러오기 */
+                if(target.classList.contains("loadAnswer")){
+                    loadAnswerFn(sntncEtprCode,item);
+
+                }
             })
         })
 
+        function loadAnswerFn(sntncEtprCode,item){
+            $.ajax({
+                url: "/teamCommunity/loadAnswer",
+                type: "POST",
+                data: { sntncEtprCode: sntncEtprCode },
+                success: function(data) {
+                    let code = "";
+                    data.forEach(item => {
+                        code += `<td>
+                                            <img src="/uploads/profile/"\${item.answerWrtingEmplId}" /> <br />
+                                            \${item.answerCn}<br />
+                                            \${item.answerDate}
+                                         </td><br/>`
+                    })
+                    item.querySelector(".answerBox").innerHTML = code;
 
+                },
+                error: function(request, status, error){
+                    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            })
+        }
         addVoteBtn.addEventListener("click", () => {
             document.querySelector("#modal-insert-vote").style.display = "block";
         })
