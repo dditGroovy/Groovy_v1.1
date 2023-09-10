@@ -12,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/employee")
+@RequestMapping("/vacation")
 public class VacationController {
 
     private final VacationService vacationService;
@@ -25,12 +25,14 @@ public class VacationController {
     public String vacation(Model model, Principal principal) {
         String emplId = principal.getName();
         VacationVO vacationVO = vacationService.loadVacationCnt(emplId);
-        int usedVacationCnt = vacationVO.getYrycUseCo();
-        int nowVacationCnt = vacationVO.getYrycNowCo();
-        int totalVacationCnt = usedVacationCnt + nowVacationCnt;
-        model.addAttribute("usedVacationCnt", usedVacationCnt);
-        model.addAttribute("nowVacationCnt", nowVacationCnt);
-        model.addAttribute("totalVacationCnt", totalVacationCnt);
+        if (vacationVO != null) {
+            int usedVacationCnt = vacationVO.getYrycUseCo();
+            int nowVacationCnt = vacationVO.getYrycNowCo();
+            int totalVacationCnt = usedVacationCnt + nowVacationCnt;
+            model.addAttribute("usedVacationCnt", usedVacationCnt);
+            model.addAttribute("nowVacationCnt", nowVacationCnt);
+            model.addAttribute("totalVacationCnt", totalVacationCnt);
+        }
         return "employee/myVacation";
     }
 
@@ -38,8 +40,13 @@ public class VacationController {
     public String salary() {
         return "employee/mySalary";
     }
+    @GetMapping("/request")
+    public String requestVacation() {
+        return "employee/vacation/request";
+    }
 
-    @GetMapping("/vacation/record")
+
+    @GetMapping("/record")
     public String vacationRecord(Model model, Principal principal) {
         String emplId = principal.getName();
         List<VacationVO> vacationRecord = vacationService.loadVacationRecord(emplId);

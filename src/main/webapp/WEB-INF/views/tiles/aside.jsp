@@ -16,7 +16,7 @@
       </div>
       <div class="user-service">
         <ul class="font-11 font-reg">
-          <li><i class="icon i-mail"></i><span>메일</span><a href="#" id="linkMail">8</a></li>
+          <li><i class="icon i-mail"></i><span>메일</span><a href="${pageContext.request.contextPath}/email/allMails" id="linkMail">8</a></li>
           <li><a href="${pageContext.request.contextPath}/employee/myInfo" id="settingMyinfo">내 정보 관리</a></li>
         </ul>
       </div>
@@ -33,7 +33,7 @@
       <ul>
         <li class="nav-list"><a href="${pageContext.request.contextPath}/main/home" class="active"><i class="icon i-home"></i>홈</a></li>
         <li class="nav-list"><a href="${pageContext.request.contextPath}/employee/commute"><i class="icon i-job"></i>출 · 퇴근</a></li>
-        <li class="nav-list"><a href="${pageContext.request.contextPath}/employee/vacation"><i class="icon i-vacation"></i>휴가 · 급여</a></li>
+        <li class="nav-list"><a href="${pageContext.request.contextPath}/vacation/vacation"><i class="icon i-vacation"></i>휴가 · 급여</a></li>
         <li class="nav-list"><a href="${pageContext.request.contextPath}/employee/job"><i class="icon i-todo"></i>내 할 일</a></li>
         <li class="nav-list"><a href="${pageContext.request.contextPath}/sanction/box"><i class="icon i-sanction"></i>결재함</a></li>
       </ul>
@@ -41,7 +41,7 @@
     <div class="team">
       <span class="nav-cate">팀</span>
       <ul>
-        <li class="nav-list"><a href="${pageContext.request.contextPath}/gat/scheduleMain"><i class="icon i-org"></i>캘린더</a></li>
+        <li class="nav-list"><a href="${pageContext.request.contextPath}/schedule/scheduleMain"><i class="icon i-org"></i>캘린더</a></li>
         <li class="nav-list"><a href="${pageContext.request.contextPath}/teamCommunity"><i class="icon i-community"></i>팀 커뮤니티</a></li>
       </ul>
     </div>

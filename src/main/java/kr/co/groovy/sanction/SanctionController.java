@@ -1,7 +1,5 @@
 package kr.co.groovy.sanction;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import kr.co.groovy.common.CommonService;
 import kr.co.groovy.enums.ClassOfPosition;
 import kr.co.groovy.enums.Department;
@@ -12,13 +10,11 @@ import kr.co.groovy.vo.SanctionFormatVO;
 import kr.co.groovy.vo.SanctionLineVO;
 import kr.co.groovy.vo.SanctionVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,55 +28,58 @@ public class SanctionController {
     SanctionService service;
     final
     CommonService commonService;
-    final
-    BeanInvoker invoker;
-    final WebApplicationContext context;
+
 
     public SanctionController(SanctionService service, CommonService commonService, BeanInvoker invoker, WebApplicationContext context) {
         this.service = service;
         this.commonService = commonService;
-        this.invoker = invoker;
-        this.context = context;
     }
 
-    @PostMapping("/startApproval")
-    public String startApproval(@RequestParam("approvalType") String approvalType,
-                                @RequestParam("beanName") String beanName,
-                                @RequestParam("methodName") String methodName,
-                                @RequestParam Map<String, Object> parameters) {
-        try {
-            /*
-            // 데이터베이스에서 JSON 데이터를 읽어옴
-            String json = "";
+    @GetMapping("/template")
+    public String getTemplate() {
+        return "sanction/template/write";
 
-            ParamMap paramMap = ParamMap.fromJson(json);
-            String approvalType = paramMap.getString("approvalType");
-            String parametersJson = paramMap.getString("parameters");
+    }
 
-            // parametersJson을 다시 Map<String, Object> 형태로 파싱
-            Map<String, Object> parameters = new Gson().fromJson(parametersJson, new TypeToken<Map<String, Object>>() {
-            }.getType());
+    @PostMapping("/approve")
+    @ResponseBody
+    public Map<String, Object> approve(@RequestBody Map<String, Object> request, ModelAndView mav) {
+        return service.approve(request);
+    }
 
-            // 결재 서비스 클래스 이름과 메서드명 추출
-            String[] approvalTypeInfo = approvalType.split("\\.");
-            String serviceClassName = approvalTypeInfo[0];
-            String methodName = approvalTypeInfo[1];
 
-            // 서비스 클래스 리플렉션으로 로드
-            Class<?> serviceType = Class.forName("com.example.approval.service." + serviceClassName);
-            Object serviceInstance = context.getBean(serviceType);
+    @GetMapping("/loadSanction")
+    public Map<?, ?> loadSanction(@RequestParam String sanctionNo) {
+        // no를 통해 데이터베이스에서 결재 정보를 리플랙션으로 클래스 정보를 받아와서 자동으로 vo의 필드값과 매칭하여 파람맵으로 만들어 맵형태의
+        // 객체로 반환하여 jsp로 보낸다. ${}를 통해 jsp에서 결재 정보를 출력한다.
+        ParamMap map = ParamMap.init();
+        return map;
+    }
 
-            // 메서드를 동적으로 호출
-            Method method = serviceType.getDeclaredMethod(methodName, Map.class);
-            method.invoke(serviceInstance, parameters);
+    @GetMapping("/approve/{SANCTN015}")
+    public void approve(Map<String, Object> parameters, @PathVariable String SANCTN015) {
+        // 결재 승인 로직 추가
+        // 파라미터에서 결재자 정보 추출 및 승인 처리
+        String approver = (String) parameters.get("approver");
 
-            */
-            return "";
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 예외 처리 로직 추가
-            return "";
+        // 최종 승인 시 추가 로직
+        if (isFinalApproval(parameters)) {
         }
+    }
+
+    @GetMapping("/reject/{SANCTN014}")
+    public void reject(Map<String, Object> parameters, @PathVariable String SANCTN014) {
+        // 결재 반려/거설 로직 추가
+        // 파라미터에서 결재자 정보 추출 및 반려 처리
+        String approver = (String) parameters.get("approver");
+
+        // 순서 확인 로직 추가
+        if (isFinalApproval(parameters)) {
+        }
+    }
+
+    private boolean isFinalApproval(Map<String, Object> parameters) {
+        return false;
     }
 
 
@@ -122,9 +121,10 @@ public class SanctionController {
         SanctionFormatVO vo = service.loadFormat(format);
         mav.addObject("format", vo);
         mav.addObject("etprCode", etprCode);
-        mav.setViewName("sanction/write");
+        mav.setViewName("sanction/template/write");
         return mav;
     }
+
 
     // 결재요청 - 결재건수 불러오기
     @GetMapping("/getStatus")
