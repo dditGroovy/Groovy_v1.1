@@ -485,7 +485,7 @@
                     let code = "";
                     data.forEach(item => {
                         code += `<td>
-                                            <img src="/uploads/profile/\${item.answerWrtingEmplId}" style="width: 50px; height: 50px;"/> <br />
+                                            <img src="/uploads/profile/\${item.proflPhotoFileStreNm}" style="width: 50px; height: 50px;"/> <br />
                                             \${item.answerCn}<br />
                                             \${item.answerDate}
                                          </td><br/>`
