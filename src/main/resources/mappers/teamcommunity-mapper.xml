@@ -119,7 +119,7 @@
             A.ANSWER_CN,
             A.ANSWER_DATE,
             A.ANSWER_WRTING_EMPL_ID,
-            UF.UPLOAD_FILE_STRE_NM
+            UF.UPLOAD_FILE_STRE_NM AS proflPhotoFileStreNm
         FROM ANSWER A
                  JOIN PROFL P ON A.ANSWER_WRTING_EMPL_ID = P.PROFL_EMPL_ID
                  JOIN UPLOAD_FILE UF ON UF.UPLOAD_FILE_ETPR_CODE = P.PROFL_ETPR_CODE

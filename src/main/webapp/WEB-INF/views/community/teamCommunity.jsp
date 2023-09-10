@@ -127,7 +127,7 @@
                         <span class="answerCnt">${answerPostCnt.value}</span>
                     </c:if>
                 </c:forEach>
-                <img src="/uploads/profile/${CustomUser.employeeVO.proflPhotoFileStreNm}" alt="profileImage"/>
+                <img src="/uploads/profile/${CustomUser.employeeVO.proflPhotoFileStreNm}" alt="profileImage" style="width: 50px; height: 50px;"/>
                 <textarea class="answerCn"></textarea>
                 <button class="inputAnswer">댓글 등록</button>
                 <button class="loadAnswer">댓글 보기</button>
