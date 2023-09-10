@@ -69,8 +69,8 @@
             <td>
                 <c:forEach var="employee" items="${employeeList}">
                     <c:if test="${employee.emplId == sntncVO.sntncWrtingEmplId}">
-                        <img src="/uploads/profile/\${employee.proflPhotoFileStreNm}" width="50px;"/>
-                        ${employee.emplNm}
+                        `<img src="/uploads/profile/\${employee.proflPhotoFileStreNm}" width="50px;"/>
+                        ${employee.emplNm}`
                     </c:if>
                 </c:forEach>
             </td>
