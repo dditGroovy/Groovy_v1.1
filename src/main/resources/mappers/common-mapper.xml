@@ -31,19 +31,4 @@
         WHERE E.COMMON_CODE_DEPT = #{depCode}
         ORDER BY TO_NUMBER(SUBSTR(E.COMMON_CODE_CLSF, 5)), E.EMPL_ENCPN ASC
     </select>
-
-    <insert id="insertAlarm" parameterType="alarmVO">
-        INSERT INTO NTCN (
-                          NTCN_SN,
-                          NTCN_EMPL_ID,
-                          NTCN_CN,
-                          NTCN_DATE,
-                          COMMON_CODE_NTCN_KIND)
-        VALUES (
-                NOTI_SEQ.NEXTVAL,
-                #{ntcnEmplId},
-                #{ntcnCn},
-                sysdate,
-                #{commonCodeNtcnKind})
-    </insert>
 </mapper>

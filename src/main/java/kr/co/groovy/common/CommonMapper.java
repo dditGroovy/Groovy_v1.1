@@ -11,9 +11,5 @@ import java.util.Map;
 
 @Mapper
 public interface CommonMapper {
-
-
     List<EmployeeVO> loadOrgChart (String depCode);
-
-    void insertAlarm(AlarmVO alarmVO);
 }

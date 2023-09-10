@@ -28,16 +28,10 @@ import java.util.Map;
 public class CommonController {
     final
     CommonService service;
-    final
-    EmployeeService employeeService;
-
 
     public CommonController(CommonService service, String uploadPath, EmployeeService employeeService) {
         this.service = service;
-        this.employeeService = employeeService;
     }
-
-
 
     @GetMapping("/loadOrgChart")
     public ModelAndView loadOrgChart(ModelAndView mav, String depCode) {
@@ -58,16 +52,6 @@ public class CommonController {
     @GetMapping("/club")
     public String club() {
         return "common/club";
-    }
-
-    @PostMapping("/insertAlarm")
-    @ResponseBody
-    public void insertAlarm(AlarmVO alarmVO) {
-        List<EmployeeVO> emplList = employeeService.loadEmpList();
-        for (EmployeeVO employeeVO : emplList) {
-            alarmVO.setNtcnEmplId(employeeVO.getEmplId());
-            service.insertAlarm(alarmVO);
-        }
     }
 }
 

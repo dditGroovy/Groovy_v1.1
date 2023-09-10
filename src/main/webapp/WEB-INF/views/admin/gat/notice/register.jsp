@@ -33,14 +33,16 @@
             contentType: false,
             processData: false,
             success: function (notiEtprCode) {
+                console.log(notiEtprCode)
                 let url = '/notice/noticeDetail?notiEtprCode=' + notiEtprCode;
                 let alarmVO = {
+                    "ntcnUrl": url,
                     "ntcnCn": content.val(),
                     "commonCodeNtcnKind": 'NTCN013'
                 }
                 $.ajax({
                     type: 'post',
-                    url: '/common/insertAlarm',
+                    url: '/alarm/insertAlarm',
                     data: alarmVO,
                     success: function(rslt) {
                         if (socket) {

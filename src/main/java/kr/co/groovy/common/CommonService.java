@@ -19,12 +19,7 @@ public class CommonService {
         this.mapper = mapper;
     }
 
-
     public List<EmployeeVO> loadOrgChart(String depCode) {
         return mapper.loadOrgChart(depCode);
-    }
-
-    public void insertAlarm(AlarmVO alarmVO) {
-        mapper.insertAlarm(alarmVO);
     }
 }

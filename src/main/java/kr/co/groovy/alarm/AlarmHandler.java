@@ -1,5 +1,7 @@
 package kr.co.groovy.alarm;
 
+import kr.co.groovy.employee.EmployeeService;
+import kr.co.groovy.vo.NotificationVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -19,19 +21,24 @@ public class AlarmHandler extends TextWebSocketHandler {
     //1:1
     Map<String, WebSocketSession> userSessionMap = new HashMap<>();
 
+    final EmployeeService service;
+
+    public AlarmHandler(EmployeeService service) {
+        this.service = service;
+    }
+
     //서버 접속성공
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         log.info("Socket 연결");
         sessions.add(session);
-        log.info("현재 접속한 사원 id: {}", currentUserName(session));
-        String senderId = currentUserName(session);
+        log.info("현재 접속한 사원 id: {}", currentUserId(session));
+        String senderId = currentUserId(session);
         userSessionMap.put(senderId, session);
     }
-
-    private String currentUserName(WebSocketSession session) {
+    //현재 접속 사원
+    private String currentUserId(WebSocketSession session) {
         String loginUserId;
-
         if (session.getPrincipal() == null) {
             loginUserId = null;
         } else {
@@ -45,6 +52,7 @@ public class AlarmHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String msg = message.getPayload(); //javascript 넘어온 message
         log.info("msg: {}", msg);
+
         if (msg!=null) {
             String[] msgs = msg.split(",");
 
@@ -53,16 +61,22 @@ public class AlarmHandler extends TextWebSocketHandler {
                 String url = msgs[1];
                 if (category.equals("noti")) {
                     for (WebSocketSession webSocketSession : sessions) {
-                        if (webSocketSession.isOpen()) {
-                            webSocketSession.sendMessage(new TextMessage
-                                                        ("<a href=\" "+ url +"\">"+
-                                                        "<h1>[전체공지]</h1>" +
-                                                        "<p>관리자로부터 전체 공지사항이 등록되었습니다.</p>" +
-                                                        "</a>"));
+                        String userId = currentUserId(webSocketSession);
+                        NotificationVO noticeAt = service.getNoticeAt(userId);
+                        String companyNotice = noticeAt.getCompanyNotice();
+
+                        if (webSocketSession.isOpen() && companyNotice.equals("NTCN_AT010")) {
+                            String notificationHtml = String.format(
+                                    "<a href=\"%s\" id=\"fATag\">" +
+                                            "    <p>[전체공지] 관리자로부터 전체 공지사항이 등록되었습니다.</p>" +
+                                            "</a>"
+                                    ,
+                                    url
+                            );
+                            webSocketSession.sendMessage(new TextMessage(notificationHtml));
                         }
                     }
-
-                }
+                } //공지사항 알림 끝
             }
         }
     }
@@ -72,6 +86,6 @@ public class AlarmHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         log.info("socket END");
         sessions.remove(session);
-        userSessionMap.remove(currentUserName(session), session);
+        userSessionMap.remove(currentUserId(session), session);
     }
 }
