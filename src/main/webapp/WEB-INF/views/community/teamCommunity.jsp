@@ -66,7 +66,14 @@
         <c:forEach var="sntncVO" items="${sntncList}">
         <tr data-idx="${sntncVO.sntncEtprCode}" class="post">
             <td class="sntncEtprCode">${sntncVO.sntncEtprCode}</td>
-            <td>${sntncVO.emplNm}</td>
+            <td>
+                <c:forEach var="employee" items="${employeeList}">
+                    <c:if test="${employee.emplId == sntncVO.sntncWrtingEmplId}">
+                        <img src="/uploads/profile/\${employee.proflPhotoFileStreNm}" width="50px;"/>
+                        ${employee.emplNm}
+                    </c:if>
+                </c:forEach>
+            </td>
             <td>${sntncVO.sntncWrtingDate}</td>
             <td class="sntncCn">${sntncVO.sntncCn}</td>
             <td>${sntncVO.recomendCnt}</td>

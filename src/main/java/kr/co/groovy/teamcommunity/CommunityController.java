@@ -1,6 +1,8 @@
 package kr.co.groovy.teamcommunity;
 
 import kr.co.groovy.common.CommonService;
+import kr.co.groovy.vo.AnswerVO;
+import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.RecomendVO;
 import kr.co.groovy.vo.SntncVO;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +29,7 @@ public class CommunityController {
     final
     String uploadPath;
 
-    static String emplId;
+    String emplId;
 
     public CommunityController(CommunityService service, CommonService commonService, String uploadPath) {
         this.service = service;
@@ -40,6 +42,7 @@ public class CommunityController {
         emplId = principal.getName();
         /*String recomendEmplId = principal.getName();*/
         List<SntncVO> sntncList = service.loadPost(emplId);
+        List<EmployeeVO> employeeList = service.loadEmpl(emplId);
         Map<String, Integer> recomendPostCnt = new HashMap<>();
         Map<String, Integer> recomendedEmpleChk = new HashMap<>();
         HashMap<String, Object> map = new HashMap<>();
@@ -58,6 +61,7 @@ public class CommunityController {
 
         }
         mav.addObject("sntncList", sntncList);
+        mav.addObject("employeeList", employeeList);
         mav.addObject("recomendPostCnt", recomendPostCnt);
         mav.addObject("recomendedEmpleChk", recomendedEmpleChk);
         mav.setViewName("community/teamCommunity");
@@ -100,6 +104,13 @@ public class CommunityController {
         String sntncEtprCode = vo.getSntncEtprCode();
         int recomendCnt = service.loadRecomend(sntncEtprCode);
         return recomendCnt;
+    }
+
+    @ResponseBody
+    @PostMapping("inputAnswer")
+    public String inputAnswer(AnswerVO vo){
+        service.inputAnswer(vo);
+        return "success";
     }
 
 }
