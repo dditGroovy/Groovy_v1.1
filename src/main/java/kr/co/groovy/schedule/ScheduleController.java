@@ -29,9 +29,8 @@ import freemarker.core.ParseException;
 import kr.co.groovy.vo.ScheduleVO;
 
 
-
 @Controller
-@RequestMapping("/generalAffairs")
+@RequestMapping("/calendar")
 public class ScheduleController {
 	
 		final ScheduleService scheduleService;
@@ -39,6 +38,13 @@ public class ScheduleController {
 		public ScheduleController(ScheduleService scheduleService) {
 			this.scheduleService = scheduleService;
 		}
+		
+		
+		@RequestMapping("/emplScheduleMain") 
+		public String emplScheduleMain() {
+			return "schedule/emplCalendar";
+		}
+		
 	
 		@RequestMapping("/scheduleMain")
 		public String scheduleMain() {
@@ -110,7 +116,7 @@ public class ScheduleController {
 				scheduleService.inputSchedule(scheduleVO);
 			}
 	
-			return "/generalAffairs/scheduleMain";
+			return "/calendar/scheduleMain";
 		}
 	
 		@PutMapping("/schedule/{schdulSn}")

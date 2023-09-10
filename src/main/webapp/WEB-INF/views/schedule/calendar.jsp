@@ -43,7 +43,7 @@ $(document).ready(function(){
 	
 	$(function(){
 		var request = $.ajax({
-			url : "/generalAffairs/schedule",
+			url : "/calendar/schedule",
 			method : "GET",
 			dataType : "json"
 		});
@@ -94,7 +94,7 @@ $(document).ready(function(){
 				    
 				    $(function saveData(jsonData){
 				    	$.ajax({
-				    		url : "/generalAffairs/schedule",
+				    		url : "/calendar/schedule",
 				    		method : "POST",
 				    		dataType : "json",
 				    		data : JSON.stringify(events),
@@ -113,7 +113,7 @@ $(document).ready(function(){
 					let schdulSn = info.event.id;
 					
 					$.ajax({
-						url: `/generalAffairs/schedule/\${schdulSn}`,
+						url: `/calendar/schedule/\${schdulSn}`,
 				        method: "GET",
 				        dataType: "json",
 				        success: function (response) {
@@ -150,7 +150,7 @@ $(document).ready(function(){
 								events.push(obj);
 
 								$.ajax({
-									url : `/generalAffairs/schedule/\${schdulSn}`,
+									url : `/calendar/schedule/\${schdulSn}`,
 									method : "PUT",
 									dataType : "text",
 									data : JSON.stringify(events),
@@ -183,7 +183,7 @@ $(document).ready(function(){
 								events.push(obj);
 								
 								$.ajax({
-									url : "/generalAffairs/schedule",
+									url : "/calendar/schedule",
 									method : "DELETE",
 									dataType : "text",
 									data : JSON.stringify(events),
