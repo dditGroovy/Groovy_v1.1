@@ -35,7 +35,7 @@
         init(params){
             this.eGui = document.createElement('a');
             /* 매핑한거 넣으쇼*/
-            this.eGui.setAttribute('href',`/generalAffairs/noticeDetail?notiEtprCode=\${params.data.notiEtprCode}`);
+            this.eGui.setAttribute('href',`/notice/detailForAdmin?notiEtprCode=\${params.data.notiEtprCode}`);
             this.eGui.innerText = params.value;
         }
         getGui() {
@@ -54,8 +54,8 @@
             this.modifyBtn= this.eGui.querySelector(".modifyNotice");
             this.deleteBtn= this.eGui.querySelector(".deleteNotice");
             /*ajax나 뭐 알아서 추가 하기~*/
-            this.modifyBtn.onclick = () => {location.href = "/generalAffairs/deleteNotice?notiEtprCode="+ this.id};
-            this.deleteBtn.onclick = () => {location.href = "/generalAffairs/deleteNotice?notiEtprCode="+ this.id};
+            this.modifyBtn.onclick = () => {location.href = "/notice/deleteNotice?notiEtprCode="+ this.id};
+            this.deleteBtn.onclick = () => {location.href = "/notice/deleteNotice?notiEtprCode="+ this.id};
         }
         getGui() {
             return this.eGui;
@@ -106,7 +106,7 @@
 
     /*const modal = document.querySelector("#modal");*/
     insertNotiBtn.addEventListener("click",() => {
-        location.href= "/generalAffairs/inputNotice";
+        location.href= "/notice/inputNotice";
     })
 
     /*submitBtn.addEventListener("click",() => {

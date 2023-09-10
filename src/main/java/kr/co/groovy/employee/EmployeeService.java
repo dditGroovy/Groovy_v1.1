@@ -3,6 +3,7 @@ package kr.co.groovy.employee;
 import kr.co.groovy.enums.ClassOfPosition;
 import kr.co.groovy.enums.Department;
 import kr.co.groovy.security.CustomUser;
+import kr.co.groovy.vo.ConnectionLogVO;
 import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.NotificationVO;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -217,5 +219,10 @@ public class EmployeeService {
 //    public void inputConectLog(String emplId){
 //        mapper.inputConectLog(emplId);
 //    }
+
+    List<ConnectionLogVO> loadConnectionLog(String today) {
+        today = String.valueOf(LocalDate.now());
+        return mapper.loadConnectionLog(today);
+    }
 }
 

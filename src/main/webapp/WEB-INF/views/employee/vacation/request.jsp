@@ -19,6 +19,7 @@
                 </tr>
                 <tr>
                     <th>휴가 구분</th>
+                    <select name="approvalType"></select>
                     <td>
                         <input type="radio" name="vacationCate" id="">
                         <label for="">연차</label>
@@ -61,3 +62,24 @@
         </form>
     </div>
 </main>
+<script>
+    var inputData = {
+        key1: $('#inputField1').val(),
+        key2: $('#inputField2').val()
+    };
+
+    var jsonData = JSON.stringify(inputData);
+
+    $.ajax({
+        url: '/your-controller-mapping',
+        type: 'POST',
+        contentType: 'application/json', // 전송하는 데이터의 타입
+        data: jsonData, // JSON 데이터를 전송
+        success: function (data) {
+            // 서버에서 반환한 응답 데이터 처리
+        },
+        error: function (error) {
+            // AJAX 요청 실패 시 실행될 코드
+        }
+    });
+</script>

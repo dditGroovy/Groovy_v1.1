@@ -1,71 +1,28 @@
-package kr.co.groovy.admin.gat;
+package kr.co.groovy.reservation;
 
-import kr.co.groovy.common.CommonService;
-import kr.co.groovy.vo.NoticeVO;
-import kr.co.groovy.vo.UploadFileVO;
 import kr.co.groovy.vo.VehicleVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-
 @Slf4j
 @Controller
-@RequestMapping("/gat")
-public class GatController {
-    final
-    GatService service;
+@RequestMapping("/reserve")
+public class ReservationController {
 
     final
-    CommonService commonService;
+    ReservationService service;
 
-    public GatController(GatService service, CommonService commonService) {
+    public ReservationController(ReservationService service) {
         this.service = service;
-        this.commonService = commonService;
     }
 
-    @GetMapping("/manageNotice")
-    public ModelAndView manageNotice(ModelAndView mav) {
-        List<NoticeVO> list = commonService.loadNoticeListForAdmin();
-        mav.addObject("notiList", list);
-        mav.setViewName("admin/gat/notice/manage");
-        return mav;
-
-    }
-
-    @GetMapping("/inputNotice")
-    public String inputNoticeForm() {
-        return "admin/gat/notice/register";
-    }
-
-    @PostMapping("/inputNotice")
-    @ResponseBody
-    public String inputNotice(NoticeVO vo, MultipartFile[] notiFiles) {
-        return service.inputNotice(vo, notiFiles);
-    }
-
-    @GetMapping("/noticeDetail")
-    public ModelAndView loadNoticeDetail(ModelAndView mav, String notiEtprCode) {
-        NoticeVO vo = commonService.loadNoticeDetail(notiEtprCode);
-        List<UploadFileVO> list = commonService.loadNotiFiles(notiEtprCode);
-        mav.addObject("noticeDetail", vo);
-        mav.addObject("notiFiles", list);
-        mav.setViewName("admin/gat/notice/detail");
-        return mav;
-    }
-
-    @GetMapping("/deleteNotice")
-    public String deleteNotice(String notiEtprCode) {
-        service.deleteNotice(notiEtprCode);
-        return "redirect:/admin/gat/notice/manage";
-    }
-
+    /* 차량 예약 */
     @GetMapping("/manageVehicle")
     public ModelAndView loadReservedAndRegisteredVehicle(ModelAndView mav) {
         List<VehicleVO> allVehicles = service.getAllVehicles();

@@ -9,20 +9,29 @@
     </h2> <br/><br/>
 
     <ul id="sanctionStatus">
-        <li><button id="myDocument">기안 문서</button></li>
-        <li><button id="loadAwaiting">결재 문서</button></li>
+        <li>
+            <button id="request">기안 문서</button>
+        </li>
+        <li>
+            <button id="approve">결재 문서</button>
+        </li>
     </ul>
 
-    <div class="sanctionList">
+    <div id="inProgress">
+    </div>
+    <div id="finished">
+
     </div>
     <script>
         $(function () {
-            $("#loadAwaiting").click();
-
+            $("#request").click();
         })
 
-
-        $("#myDocument").on("click", function () {
+        /*
+           기안 문서 불러오기
+         */
+        $("#request").on("click", function () {
+            // 진행 중(상신)
             $.ajax({
                 type: "GET",
                 url: "/sanction/loadRequest?emplId=${CustomUser.employeeVO.emplId}",
@@ -30,7 +39,7 @@
                     let code = "<table border=1>";
                     code += `<thead><tr><th>문서번호</th>><th>결재양식</th><th>제목</th><th>기안일시</th><th>상태</th></thead><tbody>`;
                     if (res.length === 0) {
-                        code += "<td colspan='8'>진행 대기 문서가 없습니다</td>";
+                        code += "<td colspan='8'>기안한 문서가 없습니다</td>";
                     } else {
                         for (let i = 0; i < res.length; i++) {
                             code += `<td>\${res[i].elctrnSanctnEtprCode}</td>`;
@@ -42,15 +51,18 @@
                         }
                     }
                     code += "</tbody></table>";
-                    $(".sanctionList").html(code);
+                    $("#inProgress").html(code);
                 }
             });
         })
 
-        // 결재 대기 문서
-        $("#loadAwaiting").on("click", function () {
+        /*
+          결재 문서 불러오기
+        */
+        $("#approve").on("click", function () {
+            // 진행 중 (대기, 예정)
             $.ajax({
-                url: '/sanction/loadAwaiting?progrsCode=SANCTN015&emplId=' + '${CustomUser.employeeVO.emplId}',
+                url: '/sanction/loadAwaiting?progrsCode=SANCTN012&emplId=' + '${CustomUser.employeeVO.emplId}',
                 type: 'GET',
                 success: function (res) {
                     let code = "<table border=1>";
@@ -68,36 +80,34 @@
                         }
                     }
                     code += "</tbody></table>";
-                    $(".sanctionList").html(code);
+                    $("#inProgress").html(code);
+                }
+            })
+            // 완료 (반려, 승인)
+            $.ajax({
+                url: '/sanction/loadAwaiting?progrsCode=SANCTN013&emplId=' + '${CustomUser.employeeVO.emplId}',
+                type: 'GET',
+                success: function (res) {
+                    let code = "<table border=1>";
+                    code += `<thead><tr><th>문서번호</th>><th>제목</th><th>기안자</th><th>기안일시</th><th>상태</th></thead><tbody>`;
+                    if (res.length === 0) {
+                        code += "<td colspan='8'>진행 대기 문서가 없습니다</td>";
+                    } else {
+                        for (let i = 0; i < res.length; i++) {
+                            code += `<td>\${res[i].elctrnSanctnEtprCode}</td>`;
+                            code += `<td>\${res[i].elctrnSanctnSj}</td>`;
+                            code += `<td>\${res[i].emplNm}</td>`;
+                            code += `<td>\${res[i].elctrnSanctnRecomDate}</td>`;
+                            code += `<td>\${res[i].commonCodeSanctProgrs}</td>`;
+                            code += "</tr>";
+                        }
+                    }
+                    code += "</tbody></table>";
+                    $("#finished").html(code);
                 }
             })
         })
 
-        // 결재 예정 문서
-        $("#upcoming").on("click", function () {
-            $.ajax({
-                url: '/sanction/loadAwaiting?progrsCode=SANCTN016&emplId=' + '${CustomUser.employeeVO.emplId}',
-                type: 'GET',
-                success: function (res) {
-                    let code = "<table border=1>";
-                    code += `<thead><tr><th>문서번호</th>><th>제목</th><th>기안자</th><th>기안일시</th><th>상태</th></thead><tbody>`;
-                    if (res.length === 0) {
-                        code += "<td colspan='8'>진행 대기 문서가 없습니다</td>";
-                    } else {
-                        for (let i = 0; i < res.length; i++) {
-                            code += `<td>\${res[i].elctrnSanctnEtprCode}</td>`;
-                            code += `<td>\${res[i].elctrnSanctnSj}</td>`;
-                            code += `<td>\${res[i].emplNm}</td>`;
-                            code += `<td>\${res[i].elctrnSanctnRecomDate}</td>`;
-                            code += `<td>\${res[i].commonCodeSanctProgrs}</td>`;
-                            code += "</tr>";
-                        }
-                    }
-                    code += "</tbody></table>";
-                    $(".sanctionList").html(code);
-                }
-            })
-        })
     </script>
 
 </sec:authorize>

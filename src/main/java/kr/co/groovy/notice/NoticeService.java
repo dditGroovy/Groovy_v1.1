@@ -1,32 +1,28 @@
-package kr.co.groovy.admin.gat;
+package kr.co.groovy.notice;
 
-import kr.co.groovy.enums.Hipass;
+import kr.co.groovy.enums.NoticeKind;
 import kr.co.groovy.vo.NoticeVO;
-import kr.co.groovy.vo.VehicleVO;
+import kr.co.groovy.vo.UploadFileVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
+import java.util.*;
 @Slf4j
 @Service
-public class GatService {
+public class NoticeService {
     final
-    GatMapper mapper;
+    NoticeMapper mapper;
     final
     String uploadPath;
 
-    public GatService(GatMapper mapper, String uploadPath) {
+    public NoticeService(NoticeMapper mapper, String uploadPath) {
         this.mapper = mapper;
         this.uploadPath = uploadPath;
     }
-
+    /* 관리자 */
     public String inputNotice(NoticeVO vo, MultipartFile[] notiFiles) {
         int notiSeq = mapper.getNotiSeq();
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
@@ -71,30 +67,44 @@ public class GatService {
         return notiEtprCode; //알림 url
     }
 
+    public List<NoticeVO> loadNoticeListForAdmin() {
+        List<NoticeVO> list = mapper.loadNoticeList();
+        for (NoticeVO noticeVO : list) {
+            String iconFileName = noticeVO.getNotiCtgryIconFileStreNm();
+            String categoryLabel = NoticeKind.getCategoryLabel(iconFileName);
+            noticeVO.setNotiCtgryIconFileStreNm(categoryLabel);
+        }
+        return list;
+    }
+
     public void deleteNotice(String notiEtprCode) {
         mapper.deleteNotice(notiEtprCode);
     }
 
-    public List<VehicleVO> getTodayReservedVehicles() {
-        List<VehicleVO> todayReservedVehicles = mapper.getTodayReservedVehicles();
-        setCommonCodeToHipass(todayReservedVehicles);
-        return todayReservedVehicles;
+    public void modifyNoticeView(String notiEtprCode) {
+        mapper.modifyNoticeView(notiEtprCode);
     }
 
-    public List<VehicleVO> getAllVehicles() {
-        List<VehicleVO> allVehicles = mapper.getAllVehicles();
-        setCommonCodeToHipass(allVehicles);
-        return allVehicles;
+
+    /* 사원 */
+    public List<NoticeVO> loadNoticeList() {
+        return mapper.loadNoticeList();
     }
 
-    public int inputVehicle(VehicleVO vo) {
-        return mapper.inputVehicle(vo);
+    public List<UploadFileVO> loadNotiFiles(String notiEtprCode) {
+        return mapper.loadNotiFiles(notiEtprCode);
     }
 
-    private static void setCommonCodeToHipass(List<VehicleVO> list) {
-        for (VehicleVO vehicleVO : list) {
-            vehicleVO.setCommonCodeHipassAsnAt(Hipass.valueOf(vehicleVO.getCommonCodeHipassAsnAt()).getLabel());
-        }
+    public List<NoticeVO> findNotice(Map<String, Object> paramMap) {
+        return mapper.findNotice(paramMap);
+    }
+
+    public NoticeVO loadNoticeDetail(String notiSeq) {
+        return mapper.loadNoticeDetail(notiSeq);
+    }
+
+    public UploadFileVO downloadNotiFile(int uploadFileSn) {
+        return mapper.downloadNotiFile(uploadFileSn);
     }
 
 }

@@ -11,17 +11,7 @@ import java.util.Map;
 
 @Mapper
 public interface CommonMapper {
-    List<NoticeVO> loadNoticeList();
 
-    List<NoticeVO> findNotice(Map<String, Object> paramMap);
-
-    NoticeVO loadNoticeDetail(String notiSeq);
-
-    List<UploadFileVO> loadNotiFiles(String notiEtprCode);
-
-    UploadFileVO downloadNotiFile(int uploadFileSn);
-
-    void modifyNoticeView(String notiEtprCode);
 
     List<EmployeeVO> loadOrgChart (String depCode);
 

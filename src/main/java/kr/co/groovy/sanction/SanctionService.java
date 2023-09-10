@@ -65,7 +65,7 @@ public class SanctionService {
         vo.setElctrnSanctnSj(title);
         vo.setElctrnSanctnDc(content);
         vo.setElctrnSanctnDrftEmplId(writer);
-        vo.setCommonCodeSanctProgrs("SANCTN014");
+        vo.setCommonCodeSanctProgrs("SANCTN010");
         mapper.inputSanction(vo);
 
         List<String> approverList = (List<String>) requestData.get("approver");
@@ -77,9 +77,9 @@ public class SanctionService {
             lineVO.setElctrnSanctnemplId(approverList.get(i));
             lineVO.setSanctnLineOrdr(String.valueOf(i + 1));
             if (i == 0) {
-                lineVO.setCommonCodeSanctProgrs("SANCTN015");
+                lineVO.setCommonCodeSanctProgrs("SANCTN012");
             } else {
-                lineVO.setCommonCodeSanctProgrs("SANCTN016");
+                lineVO.setCommonCodeSanctProgrs("SANCTN013");
             }
             if (i == approverList.size() - 1) {
                 lineVO.setElctrnSanctnFinalAt("Y");

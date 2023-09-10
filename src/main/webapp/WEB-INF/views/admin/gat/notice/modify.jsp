@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<form action="${pageContext.request.contextPath}/generalAffairs/inputNotice" method="post" enctype="multipart/form-data">
+<form action="${pageContext.request.contextPath}/notice/inputNotice" method="post" enctype="multipart/form-data">
     <label for="noti-title">공지 제목</label>
     <input type="text" name="notiTitle" id="noti-title" required><br/>
     <label for="noti-content">공지 내용</label>

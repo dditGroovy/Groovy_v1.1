@@ -24,49 +24,7 @@ public class HrtController {
         this.service = service;
     }
 
-    // 연결 로그 로드
-    @GetMapping("/loadLog")
-    ModelAndView loadConnectionLog(ModelAndView mav, String today) {
-        List<ConnectionLogVO> list = service.loadConnectionLog(today);
-        mav.addObject("logList", list);
-        mav.setViewName("admin/hrt/employee/connectionLog");
-        return mav;
-    }
 
-    // 부서별 근무 관리 페이지
-    @GetMapping("/manageDclz")
-    public String manageDclz(Model model) {
-        List<String> deptList = service.loadDeptList();
-        List<Integer> deptTotalWorkTime = new ArrayList<>();
-        List<Integer> deptAvgWorkTime = new ArrayList<>();
 
-        for (String deptCode : deptList) {
-            int totalTime = service.deptTotalWorkTime(deptCode);
-            int avgTime = service.deptAvgWorkTime(deptCode);
-            deptTotalWorkTime.add(totalTime);
-            deptAvgWorkTime.add(avgTime);
-        }
-
-        List<Map<String, Object>> list = service.loadAllDclz();
-        Gson gson = new Gson();
-        String allDclzList = gson.toJson(list);
-
-        model.addAttribute("deptTotalWorkTime", deptTotalWorkTime);
-        model.addAttribute("deptAvgWorkTime", deptAvgWorkTime);
-        model.addAttribute("allDclzList", allDclzList);
-
-        return "admin/hrt/attendance/all";
-    }
-
-    @GetMapping("/manageDclz/{deptCode}")
-    public String manageDclzDept(Model model, @PathVariable String deptCode) {
-        log.info("deptCode : {}", deptCode);
-        List<Map<String, Object>> list = service.loadDeptDclz(deptCode);
-        log.info("list : {}", list);
-        Gson gson = new Gson();
-        String deptDclzList = gson.toJson(list);
-        model.addAttribute("deptDclzList", deptDclzList);
-        return "admin/hrt/attendance/dept";
-    }
 
 }

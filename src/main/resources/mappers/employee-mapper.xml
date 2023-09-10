@@ -312,4 +312,15 @@
             COMMON_CODE_HFFC_STTUS  = #{commonCodeHffcSttus}
         WHERE EMPL_ID = #{emplId}
     </update>
+    <select id="loadConnectionLog" parameterType="String" resultType="connectionLogVO">
+        SELECT C.EMPL_ID,
+               C.CONECT_LOG_MACADRS,
+               C.CONECT_LOG_IP,
+               C.CONECT_LOG_DATE,
+               E.EMPL_MACADRS
+        FROM CONECT_LOG C,
+             EMPL E
+        WHERE C.EMPL_ID = E.EMPL_ID
+          AND TO_CHAR(CONECT_LOG_DATE, 'yyyy-MM-dd') = #{today}
+    </select>
 </mapper>

@@ -26,14 +26,14 @@
         var formData = new FormData(form);
 
         $.ajax({
-            url: "/generalAffairs/inputNotice",
+            url: "/notice/inputNotice",
             type: 'POST',
             data: formData,
             dataType: 'text',
             contentType: false,
             processData: false,
             success: function (notiEtprCode) {
-                let url = '/common/noticeDetail?notiEtprCode=' + notiEtprCode;
+                let url = '/notice/noticeDetail?notiEtprCode=' + notiEtprCode;
                 let alarmVO = {
                     "ntcnCn": content.val(),
                     "commonCodeNtcnKind": 'NTCN013'
@@ -47,7 +47,7 @@
                             let msg = "noti,"+url;
                             socket.send(msg);
                         }
-                        location.href = "/generalAffairs/manageNotice";
+                        location.href = "/notice/manageNotice";
                     },
                     error: function (xhr) {
                         console.log(xhr.status);

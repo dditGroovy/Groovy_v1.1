@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.co.groovy.utils.FileMapper">
+<mapper namespace="kr.co.groovy.file.FileMapper">
     <select id="downloadFile" parameterType="int" resultType="uploadFileVO">
         SELECT UPLOAD_FILE_SN,
                UPLOAD_FILE_ETPR_CODE,
