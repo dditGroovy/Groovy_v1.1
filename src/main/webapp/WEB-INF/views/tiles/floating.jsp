@@ -1,20 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<style>
+    #fReadBtn {
+        position: absolute;
+        top: 30%;
+        right: 0;
+    }
+
+    #fATag {
+        width: 100%;
+        display: block;
+        border: 1px solid royalblue;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    #floatingAlarm {
+        width: 450px;
+        position: relative;
+    }
+</style>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
-
 <div id="floating">
-        <ul>
-            <li><a href="${pageContext.request.contextPath}/humanResources/loadLog"><i class="icon i-job"></i></a></li>
-            <li><a href="${pageContext.request.contextPath}/chat"><i class="icon i-chat"></i></a></li>
-        </ul>
-    </div>
-
-<div id="AlarmDiv" style="border: 1px solid black">
-    <h1>Alarm Test</h1>
-    <div id="alarm" role="alarm" style="border: 1px solid black"></div>
+    <ul>
+        <li><a href="${pageContext.request.contextPath}/humanResources/loadLog"><i class="icon i-job"></i></a></li>
+        <li><a href="${pageContext.request.contextPath}/chat"><i class="icon i-chat"></i></a></li>
+    </ul>
 </div>
 
+<div id="floatingAlarm" style="display: none">
+    <div id="aTagBox"></div>
+    <button type="button" id="fReadBtn">읽음</button>
+</div>
 <script>
     var socket = null;
     $(document).ready(function() {
@@ -27,14 +46,14 @@
         socket = sock;
 
         sock.onopen = function () {
-            console.log("info: connection opend");
+            console.log("info: connection opened");
         };
 
         sock.onmessage = function(event) {
             console.log(event.data);
-            let $socketAlarm = $("#alarm");
+            let $socketAlarm = $("#aTagBox");
+            $("#floatingAlarm").css("display", "block");
 
-            //handler에서 설정한 메시지 넣어준다.
             $socketAlarm.html(event.data);
         }
 
@@ -46,4 +65,22 @@
             console.log("ERROR: ", err);
         }
     }
+
+    //실시간 알림 읽음 처리
+    $("#fReadBtn").on("click", function () {
+        var ntcnUrl = $("#fATag").attr("href");
+        var data = {
+            "ntcnUrl": ntcnUrl
+        }
+        $.ajax({
+            type: 'delete',
+            url: '/alarm/deleteAlarm?ntcnUrl=' + ntcnUrl,
+            success: function () {
+
+            },
+            error: function (xhr) {
+                xhr.status;
+            }
+        });
+    })
 </script>

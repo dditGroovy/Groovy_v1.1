@@ -37,7 +37,7 @@
                COMMON_CODE_SANCT_PROGRS
         FROM ELCTRN_SANCTN
         WHERE ELCTRN_SANCTN_DRFT_EMPL_ID = #{elctrnSanctnDrftEmplId}
-          AND COMMON_CODE_SANCT_PROGRS = 'SANCTN014'
+          AND COMMON_CODE_SANCT_PROGRS = 'SANCTN010'
     </select>
 
 
@@ -110,7 +110,7 @@
           AND E.ELCTRN_SANCTN_DRFT_EMPL_ID = P.EMPL_ID
           AND L.COMMON_CODE_SANCT_PROGRS = #{progrsCode}
           AND L.ELCTRN_SANCTNEMPL_ID = #{emplId}
-    </select>
+        </select>
 <!--  loadAwaiting  loadUpcoming loadReference loadAcceptance-->
 
 </mapper>

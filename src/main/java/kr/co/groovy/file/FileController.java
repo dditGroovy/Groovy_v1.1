@@ -1,4 +1,4 @@
-package kr.co.groovy.utils;
+package kr.co.groovy.file;
 
 import kr.co.groovy.vo.UploadFileVO;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +16,14 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/file")
-public class FileUtil {
+public class FileController {
 
     final
     String uploadPath;
     final
     FileService service;
 
-    public FileUtil(String uploadPath, FileService service) {
+    public FileController(String uploadPath, FileService service) {
         this.uploadPath = uploadPath;
         this.service = service;
     }

@@ -1,29 +1,21 @@
-package kr.co.groovy.admin.hrt;
+package kr.co.groovy.attendance;
 
 import kr.co.groovy.vo.CommuteVO;
-import kr.co.groovy.vo.ConnectionLogVO;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @Service
-public class HrtService {
+public class AttendanceService {
+    final
+    AttendanceMapper mapper;
 
-    final HrtMapper mapper;
-
-    public HrtService(HrtMapper mapper) {
+    public AttendanceService(AttendanceMapper mapper) {
         this.mapper = mapper;
-    }
-
-    List<ConnectionLogVO> loadConnectionLog(String today) {
-        today = String.valueOf(LocalDate.now());
-        return mapper.loadConnectionLog(today);
     }
 
     List<Map<String, Object>> loadAllDclz() {

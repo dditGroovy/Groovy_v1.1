@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.groovy.teamcommunity.CommunityMapper">
+    <select id="loadEmpl" resultType="employeeVO" parameterType="String">
+        SELECT
+            E.EMPL_ID,
+            E.EMPL_NM,
+            UF.UPLOAD_FILE_STRE_NM AS PROFL_PHOTO_FILE_STRE_NM
+        FROM EMPL E
+                 JOIN PROFL PF ON PF.PROFL_EMPL_ID = E.EMPL_ID
+                 JOIN UPLOAD_FILE UF ON PF.PROFL_ETPR_CODE = UF.UPLOAD_FILE_ETPR_CODE
+        WHERE E.COMMON_CODE_DEPT = (
+            SELECT e1.COMMON_CODE_DEPT
+            FROM EMPL e1
+            WHERE e1.EMPL_ID = #{emplId}
+        )
+    </select>
     <insert id="inputPost" parameterType="sntncVO">
         INSERT INTO SNTNC(SNTNC_ETPR_CODE,
                           SNTNC_WRTING_EMPL_ID,
@@ -33,7 +47,6 @@
                s.SNTNC_WRTING_EMPL_ID,
                s.SNTNC_WRTING_DATE,
                s.COMMON_CODE_SNTNC_CTGRY,
-               e.EMPL_NM,
                u.UPLOAD_FILE_ORGINL_NM,
                u.UPLOAD_FILE_SN,
                u.UPLOAD_FILE_SIZE
@@ -73,6 +86,7 @@
         FROM RECOMEND
         WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId}
     </select>
+
     <insert id="inputRecomend" parameterType="recomendVO">
         INSERT INTO RECOMEND (SNTNC_ETPR_CODE, RECOMEND_EMPL_ID, RECOMEND_SN)
         VALUES (#{sntncEtprCode}, #{recomendEmplId}, RECOMEND_SEQ.NEXTVAL)
@@ -82,6 +96,36 @@
         FROM RECOMEND
         WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId}
     </delete>
+    <insert id="inputAnswer" parameterType="map">
+        INSERT INTO ANSWER( ANSWER_NO,
+                            SNTNC_ETPR_CODE,
+                            ANSWER_WRTING_EMPL_ID,
+                            ANSWER_CN,
+                            ANSWER_DATE)
+        VALUES (ANSWER_SEQ.NEXTVAL,
+                #{sntncEtprCode},
+                #{answerWrtingEmplId},
+                #{answerCn},
+                SYSDATE)
+    </insert>
+    <select id="loadAnswerCnt" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM ANSWER A
+        WHERE A.SNTNC_ETPR_CODE = #{sntncEtprCode}
+    </select>
+    <select id="loadAnswer" resultType="answerVO" parameterType="String">
+        SELECT
+            A.ANSWER_NO,
+            A.ANSWER_CN,
+            A.ANSWER_DATE,
+            A.ANSWER_WRTING_EMPL_ID,
+            UF.UPLOAD_FILE_STRE_NM AS proflPhotoFileStreNm
+        FROM ANSWER A
+                 JOIN PROFL P ON A.ANSWER_WRTING_EMPL_ID = P.PROFL_EMPL_ID
+                 JOIN UPLOAD_FILE UF ON UF.UPLOAD_FILE_ETPR_CODE = P.PROFL_ETPR_CODE
+        WHERE A.SNTNC_ETPR_CODE = #{sntncEtprCode}
+        ORDER BY A.ANSWER_NO
+    </select>
 
 
 </mapper>

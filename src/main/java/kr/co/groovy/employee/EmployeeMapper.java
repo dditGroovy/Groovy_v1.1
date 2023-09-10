@@ -44,5 +44,7 @@ public interface EmployeeMapper {
     void modifyNoticeAt(Map<String, Object> map);
 
     void inputConectLog(ConnectionLogVO vo);
+    List<ConnectionLogVO> loadConnectionLog(String date);
+
 }
 

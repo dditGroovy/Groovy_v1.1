@@ -24,7 +24,7 @@
             <div class="btnWrap">
                 <button id="getLine">결재선 지정</button>
                 <div id="approvalLine">
-                    <%@include file="line/line.jsp" %>
+                    <%@include file="../line/line.jsp" %>
                 </div>
             </div>
             <br/>
@@ -62,16 +62,21 @@
 
         const etprCode = "${etprCode}";
         const formatCode = "${format.commonCodeSanctnFormat}";
-        const writer = "${CustomUser.employeeVO.emplId}"
+        const writer = "${CustomUser.employeeVO.emplNm}"
         const today = year + '-' + month + '-' + day;
         const title = "${format.formatSj}";
         let content;
         let file = $('#sanctionFile')[0].files[0];
 
-        $(function () {
+        let receivedData = window.opener.dataFromParent;
+        console.log(receivedData);
+
+
+        $(document).ready(function () {
             $("#sanctionNo").html(etprCode);
             $("#writeDate").html(today);
             $("#writer").html(writer)
+            $("#sanctionTitle").text(receivedData.title)
 
         });
         $(".submitLine").on("click", function () {

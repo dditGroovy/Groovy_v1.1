@@ -1,6 +1,8 @@
 package kr.co.groovy.teamcommunity;
 
 import kr.co.groovy.common.CommonService;
+import kr.co.groovy.vo.AnswerVO;
+import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.RecomendVO;
 import kr.co.groovy.vo.SntncVO;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +29,7 @@ public class CommunityController {
     final
     String uploadPath;
 
-    static String emplId;
+    String emplId;
 
     public CommunityController(CommunityService service, CommonService commonService, String uploadPath) {
         this.service = service;
@@ -38,10 +40,11 @@ public class CommunityController {
     @GetMapping("")
     public ModelAndView teamComminity(Principal principal, ModelAndView mav) {
         emplId = principal.getName();
-        /*String recomendEmplId = principal.getName();*/
         List<SntncVO> sntncList = service.loadPost(emplId);
+        List<EmployeeVO> employeeList = service.loadEmpl(emplId);
         Map<String, Integer> recomendPostCnt = new HashMap<>();
         Map<String, Integer> recomendedEmpleChk = new HashMap<>();
+        Map<String, Integer> answerPostCnt = new HashMap<>();
         HashMap<String, Object> map = new HashMap<>();
 
         for (SntncVO post : sntncList) {
@@ -56,10 +59,15 @@ public class CommunityController {
             int recomendedChk = service.findRecomend(map);
             recomendedEmpleChk.put(sntncEtprCode, recomendedChk);
 
+            int answerCnt = service.loadAnswerCnt(sntncEtprCode);
+            answerPostCnt.put(sntncEtprCode, answerCnt);
+
         }
         mav.addObject("sntncList", sntncList);
+        mav.addObject("employeeList", employeeList);
         mav.addObject("recomendPostCnt", recomendPostCnt);
         mav.addObject("recomendedEmpleChk", recomendedEmpleChk);
+        mav.addObject("answerPostCnt", answerPostCnt);
         mav.setViewName("community/teamCommunity");
         return mav;
     }
@@ -100,6 +108,24 @@ public class CommunityController {
         String sntncEtprCode = vo.getSntncEtprCode();
         int recomendCnt = service.loadRecomend(sntncEtprCode);
         return recomendCnt;
+    }
+
+    @ResponseBody
+    @PostMapping("/inputAnswer")
+    public int inputAnswer(@RequestBody Map<String, Object> map){
+        map.put("answerWrtingEmplId",emplId);
+        String sntncEtprCode = (String) map.get("sntncEtprCode");
+        service.inputAnswer(map);
+        int answerCnt = service.loadAnswerCnt(sntncEtprCode);
+        return answerCnt;
+    }
+    @ResponseBody
+    @PostMapping("/loadAnswer")
+    public List<AnswerVO> loadAnswer(String sntncEtprCode){
+        log.info("sntncEtprCode" + sntncEtprCode);
+        List<AnswerVO> answerList = service.loadAnswer(sntncEtprCode);
+        log.info("answerList" + answerList);
+        return answerList;
     }
 
 }

@@ -1,7 +1,6 @@
 package kr.co.groovy.teamcommunity;
 
-import kr.co.groovy.vo.RecomendVO;
-import kr.co.groovy.vo.SntncVO;
+import kr.co.groovy.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
@@ -17,11 +16,14 @@ public interface CommunityMapper {
     int modifyPost(Map<String, Object> map);
     void deletePost(Map<String, Object> map);
     List<SntncVO> loadPost(String emplId);
-    /*List<RecomendVO> loadRecomend(String emplId);*/
-
+    List<EmployeeVO> loadEmpl(String emplId);
     int loadRecomend(String sntncEtprCode);
     int findRecomend(HashMap<String, Object> map);
 
     void inputRecomend(RecomendVO vo);
     void deleteRecomend(RecomendVO vo);
+    /*  댓글  */
+    void inputAnswer(Map<String, Object> map);
+    int loadAnswerCnt(String sntncEtprCode);
+    List<AnswerVO> loadAnswer(String sntncEtprCode);
 }

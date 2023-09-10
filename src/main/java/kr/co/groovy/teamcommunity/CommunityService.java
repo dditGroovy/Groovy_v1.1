@@ -1,5 +1,7 @@
 package kr.co.groovy.teamcommunity;
 
+import kr.co.groovy.vo.AnswerVO;
+import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.RecomendVO;
 import kr.co.groovy.vo.SntncVO;
 import lombok.extern.slf4j.Slf4j;
@@ -81,4 +83,9 @@ public class CommunityService {
 
     public void inputRecomend(RecomendVO vo){ mapper.inputRecomend(vo);}
     public void deleteRecomend(RecomendVO vo){ mapper.deleteRecomend(vo);}
+    public List<EmployeeVO> loadEmpl(String emplId){return mapper.loadEmpl(emplId);}
+    /*  댓글  */
+    public void inputAnswer(Map<String, Object> map){mapper.inputAnswer(map);}
+    public int loadAnswerCnt(String sntncEtprCode){return mapper.loadAnswerCnt(sntncEtprCode);}
+    public List<AnswerVO> loadAnswer(String sntncEtprCode){return mapper.loadAnswer(sntncEtprCode);}
 }

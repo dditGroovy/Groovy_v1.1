@@ -16,7 +16,6 @@ public class SntncVO {
     private String sntncWrtingEmplId;
     private String sntncSj;
     private String sntncCn;
-    private String emplNm;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date sntncWrtingDate;
     private String commonCodeSntncCtgry;

@@ -1,4 +1,4 @@
-package kr.co.groovy.utils;
+package kr.co.groovy.file;
 
 import kr.co.groovy.vo.UploadFileVO;
 import org.springframework.stereotype.Service;

@@ -21,8 +21,8 @@
 <script defer src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
 <div class="wrap">
     <ul>
-        <li><a href="/gat/manageVehicle" class="tab">차량 관리</a></li>
-        <li><a href="/gat/loadVehicle" class="tab">예약 현황</a></li>
+        <li><a href="/reserve/manageVehicle" class="tab">차량 관리</a></li>
+        <li><a href="/reserve/loadVehicle" class="tab">예약 현황</a></li>
     </ul>
 </div>
 <br/>

@@ -26,28 +26,30 @@
         var formData = new FormData(form);
 
         $.ajax({
-            url: "/generalAffairs/inputNotice",
+            url: "/notice/inputNotice",
             type: 'POST',
             data: formData,
             dataType: 'text',
             contentType: false,
             processData: false,
             success: function (notiEtprCode) {
-                let url = '/common/noticeDetail?notiEtprCode=' + notiEtprCode;
+                console.log(notiEtprCode)
+                let url = '/notice/noticeDetail?notiEtprCode=' + notiEtprCode;
                 let alarmVO = {
+                    "ntcnUrl": url,
                     "ntcnCn": content.val(),
                     "commonCodeNtcnKind": 'NTCN013'
                 }
                 $.ajax({
                     type: 'post',
-                    url: '/common/insertAlarm',
+                    url: '/alarm/insertAlarm',
                     data: alarmVO,
                     success: function(rslt) {
                         if (socket) {
                             let msg = "noti,"+url;
                             socket.send(msg);
                         }
-                        location.href = "/generalAffairs/manageNotice";
+                        location.href = "/notice/manageNotice";
                     },
                     error: function (xhr) {
                         console.log(xhr.status);
