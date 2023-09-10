@@ -5,8 +5,6 @@ import kr.co.groovy.vo.ChatRoomVO;
 import kr.co.groovy.vo.ChatVO;
 import kr.co.groovy.vo.EmployeeVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

@@ -20,15 +20,7 @@
 <h1>채팅방 개설</h1>
 <div>
     <ul id="employeeList">
-        <%--        <c:forEach items="${empListForChat}" var="employee">--%>
-        <%--            <li>--%>
-        <%--                <label>--%>
-        <%--                    <input type="checkbox" name="selectedEmpls" value="${employee.emplId}/${employee.emplNm}"--%>
-        <%--                           data-emplNm="${employee.emplNm}">--%>
-        <%--                        ${employee.deptNm}부 ${employee.emplNm} ${employee.clsfNm}--%>
-        <%--                </label>--%>
-        <%--            </li>--%>
-        <%--        </c:forEach>--%>
+
     </ul>
     <button type="button" id="createRoomBtn">채팅방 생성</button>
 </div>
@@ -37,14 +29,7 @@
 
 <h1>채팅방 목록</h1>
 <div id="chatRoomList">
-    <%--    <c:forEach items="${chatRoomList}" var="chatRoom">--%>
-    <%--        <div>--%>
-    <%--            <img src="/uploads/profile/${chatRoom.chatRoomThumbnail}" alt="${chatRoom.chatRoomThumbnail}"/>--%>
-    <%--            <p>${chatRoom.chttRoomNm}</p>--%>
-    <%--            <p>${chatRoom.latestChat}</p>--%>
-    <%--            <input type="hidden" value="${chatRoom.chttRoomNo}">--%>
-    <%--        </div>--%>
-    <%--    </c:forEach>--%>
+
 </div>
 
 <hr>
@@ -68,8 +53,8 @@
     let sockJS = new SockJS("/chat");
     let client = Stomp.over(sockJS);
 
-    let currentSubRoom; // 현재 구독 중인 채팅방
-    let currentRoomNo; // 현재 들어가 있는 채팅방 번호
+    let currentSubRoom;
+    let currentRoomNo;
 
     let isScrolled = false;
     let isEnd = false;
@@ -77,7 +62,6 @@
     function connectToStomp() {
         return new Promise(function(res, rej) {
             client.connect({}, function() {
-                console.log("stomp 연결 확인");
                 res();
             });
         });
@@ -87,7 +71,7 @@
         $("#button-send").on("click", function(){
             let message = msg.val();
             let date = new Date();
-            console.log(emplId + ":" + message);
+
             let chatVO = {
                 chttNo : 0,
                 chttRoomNo : chttRoomNo,
@@ -98,27 +82,22 @@
             }
             client.send('/public/chat/message', {}, JSON.stringify(chatVO));
 
-            console.log("msgData : ", chatVO);
             $.ajax({
                 url: "/chat/inputMessage",
                 type: "post",
                 data: JSON.stringify(chatVO),
                 contentType: "application/json;charset:utf-8",
-                success: function () {
+                success: function (result) {
 
                 },
                 error: function (request, status, error) {
                     alert("채팅 전송 실패")
-                    console.log("code: " + request.status)
-                    console.log("message: " + request.responseText)
-                    console.log("error: " + error);
                 }
             })
             msg.val('');
         });
 
         function enterRoom(currentRoomNo) {
-            console.log("currentRoomNo : ", currentRoomNo);
             $("#msgArea").html('');
             $("#msgArea").html(`<div class="myroom" id="room\${currentRoomNo}" style="border: 2px solid green"></div>`)
 
@@ -127,9 +106,6 @@
                 type: "get",
                 dataType: "json",
                 success: function (messages) {
-                    console.log(messages);
-                    alert("채팅 왔음")
-
                     code = "";
                     $.each(messages, function (idx, obj) {
                         if(obj.chttMbrEmplId == emplId) {
@@ -149,18 +125,16 @@
                 },
                 error: function (request, status, error) {
                     alert("채팅 로드 실패")
-                    console.log("code: " + request.status)
-                    console.log("message: " + request.responseText)
-                    console.log("error: " + error);
                 }
             })
             msg.val('');
         }
 
 
+
         $("#chatRoomList").on("click", ".rooms", function() {
             let selectedRoom = $(this);
-            let chttRoomNo = selectedRoom.find("input").val();
+            chttRoomNo = selectedRoom.find("input").val();
 
             currentRoomNo = chttRoomNo;
 
@@ -169,36 +143,30 @@
 
         function subscribeToChatRoom(chttRoomNo) {
             client.subscribe("/subscribe/chat/room/" + chttRoomNo, function (chat) {
-                console.log("message : ", chat);
                 let content = JSON.parse(chat.body);
 
                 let chttRoomNo = content.chttRoomNo;
-                console.log("subscribeToChatRoom chttRoomNo : ", chttRoomNo);
                 let chttMbrEmplId = content.chttMbrEmplId;
                 let chttMbrEmplNm = content.chttMbrEmplNm;
                 let chttCn = content.chttCn;
                 let chttInputDate = content.chttInputDate;
-                console.log("chttMbrEmplId : ", chttMbrEmplId);
-                console.log("chttMbrEmplNm : ", chttMbrEmplNm);
-                console.log("latestInputDate : ", latestInputDate);
 
                 let code = "";
                 if (chttMbrEmplId == emplId) {
-                    code += "<div style='border: 1px solid #0000cc'>";
+                    code += "<div style='border: 1px solid blue'>";
                     code += "<div>";
-                    code += "<b>" + chttMbrEmplNm + " : " + chttCn + "</b>";
+                    code += "<p>" + chttMbrEmplNm + " : " + chttCn + "</p>";
                     code += "</div></div>";
                     $(`#room\${chttRoomNo}`).append(code);
                 } else {
                     code += "<div style='border: 1px solid red'>";
                     code += "<div>";
-                    code += "<b>" + chttMbrEmplNm + " : " + chttCn + "</b>";
+                    code += "<p>" + chttMbrEmplNm + " : " + chttCn + "</p>";
                     code += "</div></div>";
                     $(`#room\${chttRoomNo}`).append(code);
                 }
-
                 updateLatestChttCn(chttRoomNo, chttCn, chttInputDate);
-                updateChatRoomList(chttRoomNo, chttCn, chttInputDate);
+                updateChatRoomList(chttRoomNo, chttCn);
             });
         }
 
@@ -213,66 +181,9 @@
             renderChatRoomList();
         }
 
-        function updateChatRoomList(chttRoomNo, latestChttCn, chttInputDate) {
+        function updateChatRoomList(chttRoomNo, latestChttCn) {
             let chatRoom = $("#chatRoomList" + chttRoomNo);
-            console.log("updateChatRoomList chatRoom : ", chatRoom);
             chatRoom.find("#latestChttCn").text(latestChttCn);
-            chatRoom.find("#latestInputDate").text(chttInputDate);
-        }
-
-        loadRoomList();
-
-        function loadRoomList() {
-            $.ajax({
-                url: "/chat/loadRooms",
-                type: "get",
-                dataType: "json",
-                success: function (result) {
-                    console.log("result : ", result)
-                    result.sort(function (a, b) {
-                        return new Date(b.latestInputDate) - new Date(a.latestInputDate);
-                    });
-
-                    chatRoomList = result;
-
-                    if (currentSubRoom) {
-                        currentSubRoom.unsubscribe();
-                    }
-
-                    for (let i = 0; i < chatRoomList.length; i++) {
-                        const chttRoomNo = chatRoomList[i].chttRoomNo;
-                        subscribeToChatRoom(chttRoomNo);
-                    }
-
-                    renderChatRoomList();
-                },
-                error: function (request, status, error) {
-                    // 오류 처리 코드를 추가할 수 있습니다.
-                }
-            })
-        }
-
-
-        let chatRoomList = [];
-
-        function renderChatRoomList() {
-            $("#chatRoomList").html(''); // 초기화
-
-            chatRoomList.forEach(room => room.latestInputDate = new Date(room.latestInputDate));
-            chatRoomList.sort((a, b) => b.latestInputDate - a.latestInputDate);
-
-            code = "";
-            $.each(chatRoomList, function (idx, obj) {
-                code += `<button class="rooms" id="chatRoom\${obj.chttRoomNo}">
-            <img src="/uploads/profile/\${obj.chttRoomThumbnail}" alt="\${obj.chttRoomThumbnail}"/>
-            <p>\${obj.chttRoomNm}</p>
-            <p id="latestChttCn">\${obj.latestChttCn}</p>
-            <p id="latestInputDate">\${obj.latestInputDate}</p>
-            <input type="hidden" value="\${obj.chttRoomNo}">
-            </button>`;
-            });
-
-            $("#chatRoomList").html(code);
         }
 
         var groupedEmployees = {};
@@ -289,16 +200,16 @@
         });
         </c:forEach>
 
-        var ul = $("#employeeList");
+        let ul = $("#employeeList");
         for (var deptNm in groupedEmployees) {
-            var li = $("<li>").text(deptNm);
+            let li = $("<li>").text(deptNm);
             ul.append(li);
 
-            var ulSub = $("<ul>");
+            let ulSub = $("<ul>");
             groupedEmployees[deptNm].forEach(function(employee) {
-                var liSub = $("<li>");
-                var label = $("<label>");
-                var input = $("<input>").attr({
+                let liSub = $("<li>");
+                let label = $("<label>");
+                let input = $("<input>").attr({
                     type: "checkbox",
                     name: "selectedEmpls",
                     value: employee.emplId + "/" + employee.emplNm
@@ -342,12 +253,61 @@
                 },
                 error: function (request, status, error) {
                     alert("채팅방 개설 실패")
-                    console.log("code: " + request.status)
-                    console.log("message: " + request.responseText)
-                    console.log("error: " + error);
                 }
             });
         });
+
+        loadRoomList();
+
+        function loadRoomList() {
+            $.ajax({
+                url: "/chat/loadRooms",
+                type: "get",
+                dataType: "json",
+                success: function (result) {
+                    result.sort((a, b) => b.latestInputDate - a.latestInputDate);
+
+                    chatRoomList = result;
+
+                    if (currentSubRoom) {
+                        currentSubRoom.unsubscribe();
+                    }
+
+                    for (let i = 0; i < chatRoomList.length; i++) {
+                        const chttRoomNo = chatRoomList[i].chttRoomNo;
+                        subscribeToChatRoom(chttRoomNo);
+                    }
+
+                    renderChatRoomList();
+                },
+                error: function (request, status, error) {
+                    alert("채팅방 목록 로드 실패")
+                }
+            })
+        }
+
+
+        let chatRoomList = [];
+
+        function renderChatRoomList() {
+            $("#chatRoomList").html('');
+
+            chatRoomList.forEach(room => room.latestInputDate = new Date(room.latestInputDate));
+            chatRoomList.sort((a, b) => b.latestInputDate - a.latestInputDate);
+
+
+            code = "";
+            $.each(chatRoomList, function (idx, obj) {
+                code += `<button class="rooms" id="chatRoom\${obj.chttRoomNo}">
+            <img src="/uploads/profile/\${obj.chttRoomThumbnail}" alt="\${obj.chttRoomThumbnail}"/>
+            <p>\${obj.chttRoomNm}</p>
+            <p id="latestChttCn">\${obj.latestChttCn}</p>
+            <input type="hidden" value="\${obj.chttRoomNo}">
+            </button>`;
+            });
+
+            $("#chatRoomList").html(code);
+        }
 
     });
 </script>
