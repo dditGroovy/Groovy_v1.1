@@ -24,5 +24,14 @@
         WHERE NTCN_EMPL_ID = #{ntcnEmplId}
           AND NTCN_URL = #{ntcnUrl}
     </delete>
+
+    <select id="getAlarmList" parameterType="String" resultType="alarmVO">
+        SELECT NTCN_CN,
+               NTCN_URL,
+               COMMON_CODE_NTCN_KIND
+        FROM NTCN
+        WHERE NTCN_EMPL_ID = #{ntcnEmplId}
+        ORDER BY NTCN_DATE DESC
+    </select>
 </mapper>
 

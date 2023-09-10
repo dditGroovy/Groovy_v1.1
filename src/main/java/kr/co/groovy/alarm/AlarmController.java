@@ -4,6 +4,7 @@ import kr.co.groovy.employee.EmployeeService;
 import kr.co.groovy.vo.AlarmVO;
 import kr.co.groovy.vo.EmployeeVO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -31,10 +32,17 @@ public class AlarmController {
         }
     }
 
-    @GetMapping("/getAlarmList")
-    public List<AlarmVO> getAlarmList(Principal principal) {
+    @GetMapping("/all")
+    public String all() {
+        return "common/allAlarm";
+    }
+
+    @GetMapping("/getAllAlarm")
+    @ResponseBody
+    public List<AlarmVO> alarmList(Principal principal) {
         String emplId = principal.getName();
-        return null;
+        List<AlarmVO> alarmList = service.getAlarmList(emplId);
+        return alarmList;
     }
 
     @DeleteMapping("/deleteAlarm")
@@ -45,4 +53,5 @@ public class AlarmController {
         alarmVO.setNtcnEmplId(emplId);
         service.deleteAlarm(alarmVO);
     }
+
 }

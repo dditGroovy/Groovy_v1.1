@@ -19,8 +19,6 @@
     <button type="button" id="submitBtn">등록</button>
 </form>
 <script>
-    let content = $("#noti-content");
-
     $("#submitBtn").on("click", function () {
         var form = $('#uploadForm')[0];
         var formData = new FormData(form);
@@ -35,9 +33,16 @@
             success: function (notiEtprCode) {
                 console.log(notiEtprCode)
                 let url = '/notice/noticeDetail?notiEtprCode=' + notiEtprCode;
+                let content = `<div class="alarmBox">
+                                  <a href="\${url}" class="aTag">
+                                    <h1>[전체공지]</h1>
+                                    <p>관리자로부터 전체 공지사항이 등록되었습니다.</p>
+                                  </a>
+                                  <button type="button" class="readBtn">읽음</button>
+                                </div>`;
                 let alarmVO = {
                     "ntcnUrl": url,
-                    "ntcnCn": content.val(),
+                    "ntcnCn": content,
                     "commonCodeNtcnKind": 'NTCN013'
                 }
                 $.ajax({
