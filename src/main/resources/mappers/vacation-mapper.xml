@@ -2,11 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.groovy.vacation.VacationMapper">
     <select id="loadVacationCnt" parameterType="string" resultType="vacationVO">
-        SELECT * FROM YRYC WHERE YRYC_EMP_ID = #{emplId}
+        SELECT YRYC_EMP_ID,
+               YRYC_USE_CO,
+               YRYC_NOW_CO
+        FROM YRYC
+        WHERE YRYC_EMP_ID = #{emplId}
     </select>
 
     <select id="loadVacationRecord" parameterType="string" resultType="vacationVO">
-        SELECT * FROM YRYC_USE_DTLS WHERE YRYC_USE_DTLS_EMPL_ID = #{emplId}
+        SELECT YRYC_USE_DTLS_SN,
+               YRYC_USE_DTLS_BEGIN_DATE,
+               YRYC_USE_DTLS_END_DATE,
+               YRYC_USE_DTLS_RM,
+               COMMON_CODE_YRYC_USE_KIND,
+               COMMON_CODE_YRYC_USE_SE,
+               YRYC_USE_DTLS_EMPL_ID
+        FROM YRYC_USE_DTLS
+        WHERE YRYC_USE_DTLS_EMPL_ID = #{emplId}
         ORDER BY YRYC_USE_DTLS_BEGIN_DATE DESC
     </select>
 </mapper>

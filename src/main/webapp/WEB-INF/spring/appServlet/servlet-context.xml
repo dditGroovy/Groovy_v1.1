@@ -54,4 +54,6 @@
 		</websocket:handshake-interceptors>
 		<websocket:sockjs />
 	</websocket:handlers>
+
+
 </beans:beans>

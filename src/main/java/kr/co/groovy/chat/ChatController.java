@@ -12,11 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,13 +26,6 @@ public class ChatController {
     public ChatController(ChatService chatService, EmployeeService employeeService) {
         this.chatService = chatService;
         this.employeeService = employeeService;
-    }
-
-    @MessageMapping("/hello/{chttRoomNo}")
-    @SendTo("/subscribe/chat/{chttRoomNo}")
-    public ChatVO broadcasting(ChatVO chatVO) {
-        chatVO.setChttInputDate(new Date());
-        return chatVO;
     }
 
     @GetMapping("")
@@ -70,7 +59,6 @@ public class ChatController {
         if (chttRoomNmpr == 2) {
             chttRoomTy = "0";
             chttRoomNm = roomMemList.stream().map(EmployeeVO::getEmplNm).collect(Collectors.joining(", "));
-            log.info("1:1 방이름 : {}", chttRoomNm);
         } else if (chttRoomNmpr > 2) {
             chttRoomTy = "1";
             chttRoomNm = hostEmpl.getEmplNm() + " 외 " + (chttRoomNmpr - 1) + "인";
@@ -80,11 +68,23 @@ public class ChatController {
         roomData.put("chttRoomNm", chttRoomNm);
         roomData.put("chttRoomTy", chttRoomTy);
         roomData.put("chttRoomNmpr", chttRoomNmpr);
-        chatService.insertChatRoom(roomData);
+        chatService.inputChatRoom(roomData);
 
         for (EmployeeVO employeeVO : roomMemList) {
             String chttMbrEmplId = employeeVO.getEmplId();
-            chatService.insertChatMember(chttMbrEmplId);
+            chatService.inputChatMember(chttMbrEmplId);
         }
+    }
+
+    @PostMapping("/inputMessage")
+    @ResponseBody
+    public int inputMessage(@RequestBody ChatVO chatVO) {
+        return chatService.inputMessage(chatVO);
+    }
+
+    @GetMapping("/loadRoomMessages/{chttRoomNo}")
+    @ResponseBody
+    public List<ChatVO> loadRoomMessages(@PathVariable int chttRoomNo) {
+        return chatService.loadRoomMessages(chttRoomNo);
     }
 }

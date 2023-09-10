@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.groovy.chat.ChatMapper">
 
-    <insert id="insertChatRoom" parameterType="map">
+    <insert id="inputChatRoom" parameterType="map">
         INSERT INTO CHTT_ROOM
         VALUES (
                    CHTT_ROOM_SEQ.NEXTVAL,
@@ -13,7 +13,7 @@
                )
     </insert>
 
-    <insert id="insertChatMember" parameterType="String">
+    <insert id="inputChatMember" parameterType="String">
         INSERT INTO CHTT_MBR
         VALUES (
                    CHTT_ROOM_SEQ.CURRVAL,
@@ -71,4 +71,29 @@
                  JOIN UPLOAD_FILE UF ON P.PROFL_ETPR_CODE = UF.UPLOAD_FILE_ETPR_CODE
         WHERE A.EMPL_ID != #{emplId}
     </select>
+
+    <select id="loadRoomMessages" parameterType="integer" resultType="chatVO">
+        SELECT C.CHTT_NO,
+               C.CHTT_ROOM_NO,
+               C.CHTT_MBR_EMPL_ID,
+               E.EMPL_NM AS CHTT_MBR_EMPL_NM,
+               C.CHTT_CN,
+               C.CHTT_INPUT_DATE
+        FROM CHTT C
+            JOIN EMPL E ON C.CHTT_MBR_EMPL_ID = E.EMPL_ID
+        WHERE C.CHTT_ROOM_NO = #{chttRoomNo}
+    </select>
+
+    <insert id="inputMessage" parameterType="chatVO">
+        INSERT INTO CHTT (CHTT_NO,
+                          CHTT_ROOM_NO,
+                          CHTT_MBR_EMPL_ID,
+                          CHTT_CN,
+                          CHTT_INPUT_DATE)
+        VALUES (CHTT_SEQ.nextval,
+                #{chttRoomNo},
+                #{chttMbrEmplId},
+                #{chttCn},
+                #{chttInputDate})
+    </insert>
 </mapper>
