@@ -70,8 +70,8 @@ public class SanctionController {
 
     @PostMapping("/approve")
     @ResponseBody
-    public void approve(@RequestBody Map<String, Object> request, Model model) {
-        service.approve(request, model);
+    public void approve(@RequestBody Map<String, Object> request) {
+        service.approve(request);
     }
 
 
@@ -99,7 +99,7 @@ public class SanctionController {
 
     @PostMapping("/inputSanction")
     @ResponseBody
-    public void inputSanction(@RequestBody Map<String, Object> requestData) {
+    public void inputSanction(@RequestBody ParamMap requestData) {
         service.inputSanction(requestData);
     }
 
@@ -110,16 +110,16 @@ public class SanctionController {
 
     // 구현할 거 ----------------------------------------------------------------------------------------------------------------
 
-    @GetMapping("/approve/{SANCTN015}")
-    public void approve(Map<String, Object> parameters, @PathVariable String SANCTN015) {
-        // 결재 승인 로직 추가
-        // 파라미터에서 결재자 정보 추출 및 승인 처리
-        String approver = (String) parameters.get("approver");
-
-        // 최종 승인 시 추가 로직
-        if (isFinalApproval(parameters)) {
-        }
-    }
+//    @GetMapping("/approve/{SANCTN015}")
+//    public void approve(Map<String, Object> parameters, @PathVariable String SANCTN015) {
+//        // 결재 승인 로직 추가
+//        // 파라미터에서 결재자 정보 추출 및 승인 처리
+//        String approver = (String) parameters.get("approver");
+//
+//        // 최종 승인 시 추가 로직
+//        if (isFinalApproval(parameters)) {
+//        }
+//    }
 
     @GetMapping("/reject/{SANCTN014}")
     public void reject(Map<String, Object> parameters, @PathVariable String SANCTN014) {

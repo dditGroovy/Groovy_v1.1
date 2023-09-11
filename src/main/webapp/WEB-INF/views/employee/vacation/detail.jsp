@@ -27,4 +27,7 @@
         $("#modifyVacation").prop("disabled", true)
         window.open(`/sanction/write/DEPT010?format=SANCTN_FORMAT011`, "결재", "width = 1200, height = 1200")
     })
+    function refreshParent() {
+        window.location.reload(); // 새로고침
+    }
 </script>
