@@ -30,5 +30,6 @@
         <typeAlias type="kr.co.groovy.vo.RecomendVO" alias="recomendVO"/>
         <typeAlias type="kr.co.groovy.vo.AlarmVO" alias="alarmVO"/>
         <typeAlias type="kr.co.groovy.vo.AnswerVO" alias="answerVO"/>
+        <typeAlias type="kr.co.groovy.vo.VoteVO" alias="voteVO"/>
     </typeAliases>
 </configuration>
