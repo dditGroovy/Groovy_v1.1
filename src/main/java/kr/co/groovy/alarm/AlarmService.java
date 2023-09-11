@@ -3,6 +3,8 @@ package kr.co.groovy.alarm;
 import kr.co.groovy.vo.AlarmVO;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AlarmService {
     final AlarmMapper mapper;
@@ -17,5 +19,9 @@ public class AlarmService {
 
     public void deleteAlarm(AlarmVO alarmVO) {
         mapper.deleteAlarm(alarmVO);
+    }
+
+    public List<AlarmVO> getAlarmList(String ntcnEmplId) {
+        return mapper.getAlarmList(ntcnEmplId);
     }
 }

@@ -10,8 +10,10 @@ import java.util.Date;
 @Setter
 @ToString
 public class ChatVO {
+    private Long chttNo;
     private int chttRoomNo;
     private String chttMbrEmplId;
+    private String chttMbrEmplNm;
     private String chttCn;
     private Date chttInputDate;
 

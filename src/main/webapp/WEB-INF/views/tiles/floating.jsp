@@ -9,11 +9,10 @@
     }
 
     #fATag {
-        width: 100%;
         display: block;
-        border: 1px solid royalblue;
-        border-radius: 8px;
         padding: 10px;
+        text-decoration: none;
+        color: #333;
     }
 
     #floatingAlarm {
@@ -50,7 +49,6 @@
         };
 
         sock.onmessage = function(event) {
-            console.log(event.data);
             let $socketAlarm = $("#aTagBox");
             $("#floatingAlarm").css("display", "block");
 
@@ -76,7 +74,7 @@
             type: 'delete',
             url: '/alarm/deleteAlarm?ntcnUrl=' + ntcnUrl,
             success: function () {
-
+                $("#floatingAlarm").remove();
             },
             error: function (xhr) {
                 xhr.status;

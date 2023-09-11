@@ -1,6 +1,7 @@
 package kr.co.groovy.chat;
 
 import kr.co.groovy.vo.ChatRoomVO;
+import kr.co.groovy.vo.ChatVO;
 import kr.co.groovy.vo.EmployeeVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,10 +13,14 @@ public interface ChatMapper {
 
     List<EmployeeVO> loadEmpListForChat(String emplId);
 
-    int insertChatRoom(Map<String, Object> data);
+    int inputChatRoom(Map<String, Object> data);
 
-    int insertChatMember(String emplId);
+    int inputChatMember(String emplId);
 
     List<ChatRoomVO> loadChatRooms(String emplId);
+
+    int inputMessage(ChatVO message);
+
+    List<ChatVO> loadRoomMessages(int chttRoomNo);
 
 }

@@ -1,6 +1,7 @@
 package kr.co.groovy.chat;
 
 import kr.co.groovy.vo.ChatRoomVO;
+import kr.co.groovy.vo.ChatVO;
 import kr.co.groovy.vo.EmployeeVO;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +21,24 @@ public class ChatService {
         return chatMapper.loadEmpListForChat(emplId);
     }
 
-    public int insertChatRoom(Map<String, Object> roomData) {
-        return chatMapper.insertChatRoom(roomData);
+    public int inputChatRoom(Map<String, Object> roomData) {
+        return chatMapper.inputChatRoom(roomData);
     }
 
-    public int insertChatMember(String emplId) {
-        return chatMapper.insertChatMember(emplId);
+    public int inputChatMember(String emplId) {
+        return chatMapper.inputChatMember(emplId);
     }
 
     public List<ChatRoomVO> loadChatRooms(String emplId) {
         return chatMapper.loadChatRooms(emplId);
+    }
+
+    public int inputMessage(ChatVO message) {
+        return chatMapper.inputMessage(message);
+    }
+
+    public List<ChatVO> loadRoomMessages(int chttRoomNo) {
+        return chatMapper.loadRoomMessages(chttRoomNo);
     }
 
 }
