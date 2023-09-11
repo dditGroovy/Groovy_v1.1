@@ -31,6 +31,7 @@
         <typeAlias type="kr.co.groovy.vo.AlarmVO" alias="alarmVO"/>
         <typeAlias type="kr.co.groovy.vo.AnswerVO" alias="answerVO"/>
         <typeAlias type="kr.co.groovy.vo.VacationUseVO" alias="vacationUseVO"/>
-        <typeAlias type="kr.co.groovy.vo.VoteRegistVO" alias="voteVO"/>
+        <typeAlias type="kr.co.groovy.vo.VoteRegistVO " alias="voteVO"/>
+        <typeAlias type="kr.co.groovy.MomoVO " alias="memoVO"/>
     </typeAliases>
 </configuration>
