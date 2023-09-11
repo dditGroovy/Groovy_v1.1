@@ -11,16 +11,16 @@ import java.util.Date;
 @ToString
 public class EmailVO {
     private String emailEtprCode;
-    private String emailSj;
-    private String emailCn;
-    private Date emailTrnsmisDt;
-    private int emailParntsEmailNo;
-    private String emailDsptchEmplId;
-    private String commonCodeMailRedngAt;
-    private String commonCodeMailImprtncAt;
-    private String commonCodeMailDeleteAt;
-    private String commonCodeMailTmprStreAt;
-    private String emailRecptnEmplId;
-    private String commonCodeMailRecpntKind;
-
+    private String emailFromAddr;
+    private String emaiFromSj;
+    private String emailFromCn;
+    private String emailFromCnType;
+    private Date emailFromSendDate;
+    private String emailFromTmprStreAt;
+    private String emailToAddr;
+    private Date emailToReceivedDate;
+    private String emailRedngAt;
+    private String emailImprtncAt;
+    private String emailDeleteAt;
+    private String emailCcAddr;
 }

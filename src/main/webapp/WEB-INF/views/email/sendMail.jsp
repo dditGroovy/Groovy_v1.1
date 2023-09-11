@@ -1,23 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="/resources/css/common.css">
-    <style>
-        input[type=text] {width: 100%; height: 30px}
-        textarea {width: 100%; height: 200px;}
-        .writeWrap {margin-top: 20px;}
-    </style>
-</head>
-<body>
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal" var="CustomUser"/>
     <div class="contentWrap">
         <form action="#" method="post">
-            <table border="1" style="width: 50%;>
+            <table border="1" style="width: 50%">
                 <tr>
                     <th>보내는 사람</th>
                     <td>
-                        <input type="text" name="emplId" id="emplId">
+                        ${CustomUser.employeeVO.emplEmail}
                     </td>
                 </tr>
                 <tr>
@@ -44,12 +34,12 @@
                         <input type="file" name="file" id="file">
                     </td>
                 </tr>
-            <tr>
-                <th>내용</th>
-                <td>
-                    <textarea name="emailCn" id="emailCn"></textarea>
-                </td>
-            </tr>
+                <tr>
+                    <th>내용</th>
+                    <td>
+                        <textarea name="emailCn" id="emailCn"></textarea>
+                    </td>
+                </tr>
             </table>
             <div class="serviceWrap">
                 <div class="serviceWrap">
@@ -62,5 +52,4 @@
             </div>
         </form>
     </div>
-</body>
-</html>
+</sec:authorize>

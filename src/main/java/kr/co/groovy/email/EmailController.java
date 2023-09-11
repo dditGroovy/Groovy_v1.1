@@ -1,73 +1,96 @@
 package kr.co.groovy.email;
 
+import kr.co.groovy.employee.EmployeeService;
 import kr.co.groovy.vo.EmailVO;
+import kr.co.groovy.vo.EmployeeVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import java.util.ArrayList;
-import java.util.List;
+import javax.mail.internet.MimeMultipart;
+import java.io.IOException;
+import java.security.Principal;
 import java.util.Properties;
 
 @Slf4j
 @Controller
 @RequestMapping("/email")
+@RequiredArgsConstructor
 public class EmailController {
-    @GetMapping("/allMails")
-    public ModelAndView getAllMails(ModelAndView mav, String userId, String password) {
-        List<EmailVO> list = new ArrayList<>();
-        userId = "groovytest@daum.net";
-        password = "groovy402dditfinal";
+    private final EmailService emailService;
+    private final EmployeeService employeeService;
 
-        Properties properties = new Properties();
-        properties.put("mail.store.protocol", "pop3");
-        properties.put("mail.pop3.ssl.enable", "true");
-        Session session = Session.getDefaultInstance(properties, null);
+    public int inputReceivedEmails(Principal principal, EmailVO emailVO) throws MessagingException, IOException {
+        EmployeeVO employeeVO = employeeService.loadEmp(principal.getName());
+        URLName url = getUrlName(employeeVO);
+        Session session = null;
+        if (session == null) {
+            Properties properties = null;
+            try {
+                properties = System.getProperties();
+            } catch (SecurityException e) {
+                properties = new Properties();
+            }
+            session = Session.getInstance(properties, null);
+        }
+        Store store = session.getStore(url);
+        store.connect();
+        Folder folder = store.getFolder("inbox");
+        folder.open(Folder.READ_ONLY);
 
-        try {
-            Store store = session.getStore("pop3");
-            store.connect("pop.daum.net", userId, password);
-
-            Folder folder = store.getFolder("INBOX");
-            folder.open(Folder.READ_ONLY);
-
-            Message[] messages = folder.getMessages();
-            for (Message mail : messages) {
-
-                EmailVO emailVO = new EmailVO();
-                String content = "";
-                if (mail.getContent().toString().contains("Multipart")) {
-                    Multipart mp = (Multipart) mail.getContent();
-                    for (int i = 0; i < mp.getCount(); i++) {
-                        MimeBodyPart bp = (MimeBodyPart) mp.getBodyPart(i);
-                        if (bp.getContentType().contains("text/html")) {
-                            content = bp.getContent().toString();
-                        }
-                    }
-                } else {
+        Message[] messages = folder.getMessages();
+        for (Message mail : messages) {
+            String content = null;
+            if (mail.getSubject() != null) {
+                content = "";
+                if (mail.isMimeType("multipart/*")) {
+                    MimeMultipart mimeMultipart = (MimeMultipart) mail.getContent();
+                    content = getTextFromMimeMultipart(mimeMultipart);
+                } else if (mail.isMimeType("text/*")) {
                     content = mail.getContent().toString();
                 }
-                emailVO.setEmailDsptchEmplId(InternetAddress.toUnicodeString(mail.getFrom()));
-                emailVO.setEmailRecptnEmplId(userId);
-                emailVO.setEmailCn(content);
-                emailVO.setEmailSj(mail.getSubject());
-                emailVO.setEmailTrnsmisDt(mail.getReceivedDate());
-                log.info("emailVO: " + emailVO);
-                list.add(emailVO);
             }
-            mav.addObject("list", list);
-            mav.setViewName("email/allMail");
-            folder.close();
-            store.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            e.getMessage();
+            emailVO.setEmailFromAddr(String.valueOf(mail.getFrom()[0]));
         }
-        return mav;
+        return 0;
     }
+
+    private URLName getUrlName(EmployeeVO employeeVO) {
+        String host = null;
+        int port = 993;
+        String emailAddr = employeeVO.getEmplEmail();
+        String emailPassword = employeeVO.getEmplPassword();
+        if (employeeVO.getEmplEmail().contains("gmail.com")) {
+            host = "imap.gmail.com";
+        } else if (employeeVO.getEmplEmail().contains("daum.net")) {
+            host = "imap.daum.net";
+        } else if (employeeVO.getEmplEmail().contains("naver.com")) {
+            host = "map.naver.com";
+        }
+
+        URLName url = new URLName("imaps", host, port, "INBOX", emailAddr, emailPassword);
+        return url;
+    }
+
+    private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws MessagingException, IOException {
+        String content = "";
+        int count = mimeMultipart.getCount();
+        for (int i = 0; i < count; i++) {
+            BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+            if (bodyPart.isMimeType("text/plain")) {
+                content = content + "\n" + bodyPart.getContent();
+                break; // without break same text appears twice in my tests
+            } else if (bodyPart.isMimeType("text/html")) {
+                String html = (String) bodyPart.getContent();
+                content = content + "\n" + Jsoup.parse(html).text();
+            } else if (bodyPart.getContent() instanceof MimeMultipart) {
+                content = content + getTextFromMimeMultipart((MimeMultipart) bodyPart.getContent());
+            }
+        }
+        return content;
+    }
+
 }
