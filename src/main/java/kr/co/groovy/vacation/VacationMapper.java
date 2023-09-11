@@ -11,9 +11,11 @@ public interface VacationMapper {
 
     VacationVO loadVacationCnt(String emplId);
 
-    List<VacationVO> loadVacationRecord(String emplId);
+    List<VacationUseVO> loadVacationRecord(String emplId);
 
-    void inputVacation(VacationUseVO vo);
+    int inputVacation(VacationUseVO vo);
 
     String getSeq(String dept);
+
+    VacationUseVO loadVacationDetail(int yrycUseDtlsSn);
 }

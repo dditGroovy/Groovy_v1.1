@@ -3,7 +3,6 @@ package kr.co.groovy.sanction;
 import kr.co.groovy.common.CommonService;
 import kr.co.groovy.enums.ClassOfPosition;
 import kr.co.groovy.enums.Department;
-import kr.co.groovy.utils.BeanInvoker;
 import kr.co.groovy.utils.ParamMap;
 import kr.co.groovy.vo.EmployeeVO;
 import kr.co.groovy.vo.SanctionFormatVO;
@@ -31,7 +30,7 @@ public class SanctionController {
     CommonService commonService;
 
 
-    public SanctionController(SanctionService service, CommonService commonService, BeanInvoker invoker, WebApplicationContext context) {
+    public SanctionController(SanctionService service, CommonService commonService,WebApplicationContext context) {
         this.service = service;
         this.commonService = commonService;
     }
@@ -69,12 +68,10 @@ public class SanctionController {
     }
 
 
-
-
     @PostMapping("/approve")
     @ResponseBody
-    public Map<String, Object> approve(@RequestBody Map<String, Object> request, ModelAndView mav) {
-        return service.approve(request);
+    public void approve(@RequestBody Map<String, Object> request, Model model) {
+        service.approve(request, model);
     }
 
 
@@ -83,6 +80,35 @@ public class SanctionController {
         ParamMap map = ParamMap.init();
         return map;
     }
+
+
+
+    // 양식 불러오기
+    @GetMapping("/write/{formatSanctnKnd}")
+    public String writeSanction(
+            @RequestParam("format") String format,
+            @PathVariable String formatSanctnKnd, Model model) {
+        String etprCode = service.getSeq(Department.valueOf(formatSanctnKnd).label());
+        SanctionFormatVO vo = service.loadFormat(format);
+        String template = vo.getFormatCn();
+        model.addAttribute("template", vo);
+        model.addAttribute("etprCode", etprCode);
+        return "sanction/template/write";
+    }
+
+
+    @PostMapping("/inputSanction")
+    @ResponseBody
+    public void inputSanction(@RequestBody Map<String, Object> requestData) {
+        service.inputSanction(requestData);
+    }
+
+
+
+
+
+
+    // 구현할 거 ----------------------------------------------------------------------------------------------------------------
 
     @GetMapping("/approve/{SANCTN015}")
     public void approve(Map<String, Object> parameters, @PathVariable String SANCTN015) {
@@ -111,60 +137,14 @@ public class SanctionController {
     }
 
 
-    @GetMapping("/box")
-    public String getSanctionBox() {
-        return "sanction/box";
-    }
 
-    @GetMapping("/document")
-    public String getInProgress() {
-        return "sanction/document";
-    }
-
-    // insert - 전자결재
-    @PostMapping("/inputSanction")
-    @ResponseBody
-    public void inputSanction(@RequestBody Map<String, Object> requestData) {
-        service.inputSanction(requestData);
-    }
-
-
-    @GetMapping("/loadRequest")
-    @ResponseBody
-    public List<SanctionVO> loadRequest(String emplId) {
-        return service.loadRequest(emplId);
-    }
-
-    @GetMapping("/loadAwaiting")
-    @ResponseBody
-    public List<SanctionLineVO> loadAwaiting(String progrsCode, String emplId) {
-        return service.loadAwaiting(progrsCode, emplId);
-    }
-
-
-    // 양식 불러오기
-    @GetMapping("/write")
-    public String writeSanction(
-                                @RequestParam("format") String format,
-                                @RequestParam("etprCode") String etprCode, Model model) {
-//        String etprCode = service.getSeq(Department.valueOf(formatSanctnKnd).label());
-        SanctionFormatVO vo = service.loadFormat(format);
-        String template = vo.getFormatCn();
-        model.addAttribute("template", template);
-        model.addAttribute("etprCode", etprCode);
-        return "sanction/template/write";
-    }
-
-
-    // 결재요청 - 결재건수 불러오기
+    // --------------------------------------------------------------------------------------------------------------------
     @GetMapping("/getStatus")
     @ResponseBody
     public String getStatus(@RequestParam("elctrnSanctnDrftEmplId") String elctrnSanctnDrftEmplId,
                             @RequestParam("commonCodeSanctProgrs") String commonCodeSanctProgrs) {
         return String.valueOf(service.getStatus(elctrnSanctnDrftEmplId, commonCodeSanctProgrs));
     }
-
-    // 결재선 불러오기
     @GetMapping("/loadOrgChart")
     @ResponseBody
     public List<EmployeeVO> loadOrgChart(ModelAndView mav) {
@@ -180,4 +160,29 @@ public class SanctionController {
         }
         return allEmployees;
     }
+
+    // --------------------------------------------------------------------------------------------------------------------
+
+    @GetMapping("/box")
+    public String getSanctionBox() {
+        return "sanction/box";
+    }
+
+    @GetMapping("/document")
+    public String getInProgress() {
+        return "sanction/document";
+    }
+
+    @GetMapping("/loadRequest")
+    @ResponseBody
+    public List<SanctionVO> loadRequest(String emplId) {
+        return service.loadRequest(emplId);
+    }
+
+    @GetMapping("/loadAwaiting")
+    @ResponseBody
+    public List<SanctionLineVO> loadAwaiting(String progrsCode, String emplId) {
+        return service.loadAwaiting(progrsCode, emplId);
+    }
+
 }

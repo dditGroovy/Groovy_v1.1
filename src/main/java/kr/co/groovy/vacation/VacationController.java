@@ -3,6 +3,7 @@ package kr.co.groovy.vacation;
 import kr.co.groovy.vo.VacationUseVO;
 import kr.co.groovy.vo.VacationVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ public class VacationController {
         this.service = vacationService;
     }
 
+
+    /* 내 휴가 관련 */
     @GetMapping("/vacation")
     public String vacation(Model model, Principal principal) {
         String emplId = principal.getName();
@@ -36,27 +39,41 @@ public class VacationController {
         return "employee/myVacation";
     }
 
-    @GetMapping("/salary")
-    public String salary() {
-        return "employee/mySalary";
+    @GetMapping("/record")
+    public String vacationRecord(Model model, Principal principal) {
+        String emplId = principal.getName();
+        List<VacationUseVO> vacationRecord = service.loadVacationRecord(emplId);
+        model.addAttribute("vacationRecord", vacationRecord);
+        return "employee/vacation/record";
     }
+
+    @GetMapping("/detail/{yrycUseDtlsSn}")
+    public String vacationDetail(@PathVariable int yrycUseDtlsSn, Model model) {
+        VacationUseVO vo = service.loadVacationDetail(yrycUseDtlsSn);
+        model.addAttribute("detailVO", vo);
+        return "employee/vacation/detail";
+    }
+
+    @GetMapping("/loadData/{yrycUseDtlsSn}")
+    @ResponseBody
+    public ResponseEntity<VacationUseVO> loadVacationData(@PathVariable int yrycUseDtlsSn) {
+        VacationUseVO vo = service.loadVacationDetail(yrycUseDtlsSn);
+        return ResponseEntity.ok(vo);
+    }
+
+    @PostMapping("/inputVacation")
+    public String inputVacation(VacationUseVO vo) {
+        service.inputVacation(vo);
+        int generatedKey = vo.getYrycUseDtlsSn();
+        return "redirect:/vacation/detail/" + generatedKey;
+    }
+
+
+    /* 휴가 신청 폼 */
     @GetMapping("/request")
     public String requestVacation() {
         return "employee/vacation/request";
     }
 
-
-    @GetMapping("/record")
-    public String vacationRecord(Model model, Principal principal) {
-        String emplId = principal.getName();
-        List<VacationVO> vacationRecord = service.loadVacationRecord(emplId);
-        model.addAttribute("vacationRecord", vacationRecord);
-        return "employee/vacationRecord";
-    }
-    @PostMapping(value = "/inputVacation", produces = "application/text; charset=utf8")
-    @ResponseBody
-    public int inputVacation(VacationUseVO vo){
-        return service.inputVacation(vo);
-    }
 
 }

@@ -9,7 +9,7 @@
         WHERE YRYC_EMP_ID = #{emplId}
     </select>
 
-    <select id="loadVacationRecord" parameterType="string" resultType="vacationVO">
+    <select id="loadVacationRecord" parameterType="string" resultType="vacationUseVO">
         SELECT YRYC_USE_DTLS_SN,
                YRYC_USE_DTLS_BEGIN_DATE,
                YRYC_USE_DTLS_END_DATE,
@@ -21,7 +21,7 @@
         WHERE YRYC_USE_DTLS_EMPL_ID = #{emplId}
         ORDER BY YRYC_USE_DTLS_BEGIN_DATE DESC
     </select>
-    <insert id="inputVacation" parameterType="vacationUseVO">
+    <insert id="inputVacation" parameterType="vacationUseVO" useGeneratedKeys="true" keyProperty="generatedKey">
         INSERT INTO YRYC_USE_DTLS( YRYC_USE_DTLS_SN
                                  , YRYC_USE_DTLS_BEGIN_DATE
                                  , YRYC_USE_DTLS_END_DATE
@@ -36,7 +36,21 @@
                 #{commonCodeYrycUseKind},
                 #{commonCodeYrycUseSe},
                 #{yrycUseDtlsEmplId})
+        <selectKey keyProperty="yrycUseDtlsSn" resultType="int" order="AFTER">
+            SELECT YRYC_USE_DTLS_SEQ.CURRVAL FROM DUAL
+        </selectKey>
     </insert>
+    <select id="loadVacationDetail" parameterType="int" resultType="vacationUseVO">
+        SELECT YRYC_USE_DTLS_SN,
+               YRYC_USE_DTLS_BEGIN_DATE,
+               YRYC_USE_DTLS_END_DATE,
+               YRYC_USE_DTLS_RM,
+               COMMON_CODE_YRYC_USE_KIND,
+               COMMON_CODE_YRYC_USE_SE,
+               ELCTRN_SANCTN_ETPR_CODE
+        FROM YRYC_USE_DTLS
+        WHERE YRYC_USE_DTLS_SN = #{yrycUseDtlsSn}
+    </select>
     <select id="getSeq" parameterType="String" resultType="String">
         SELECT #{formatSanctnKnd} || '-' || TO_CHAR(SYSDATE, 'YYYY') || '-' || LPAD(
                 (SELECT TO_NUMBER(COUNT(*)) + 1

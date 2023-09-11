@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
@@ -36,7 +37,7 @@ public class SanctionService {
 
 
     /*  리플랙션  */
-    public Map<String, Object> approve(@RequestBody Map<String, Object> request) {
+    public void approve(@RequestBody Map<String, Object> request, Model model) {
         try {
             String approvalType = (String) request.get("approvalType");
             String methodName = (String) request.get("methodName");
@@ -47,12 +48,13 @@ public class SanctionService {
 
             // 메서드를 동적으로 호출
             Method method = serviceType.getDeclaredMethod(methodName, Map.class);
+            Object result = method.invoke(serviceInstance, parameters);
 
-            return (Map<String, Object>) method.invoke(serviceInstance, parameters);
+            // 결과 데이터를 모델에 추가
+            model.addAttribute("result", result);
         } catch (Exception e) {
             e.printStackTrace();
             // 실패 시 에러 처리 로직을 이곳에 추가하세요.
-            return null; // 에러 페이지로 리다이렉트 또는 처리 방식에 따라 다르게 처리 가능
         }
 
     }
