@@ -106,7 +106,6 @@
                 },
                 error: function (request, status, error) {
                     alert("채팅 전송 실패")
-                    console.log("채팅 전송 실패 에러 : ", request.responseText)
                 }
             })
             msg.val('');
