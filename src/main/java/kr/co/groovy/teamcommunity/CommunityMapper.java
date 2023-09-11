@@ -26,4 +26,7 @@ public interface CommunityMapper {
     void inputAnswer(Map<String, Object> map);
     int loadAnswerCnt(String sntncEtprCode);
     List<AnswerVO> loadAnswer(String sntncEtprCode);
+
+    void inputTeamNoti(Map<String, Object> map);
+    List<SntncVO> loadTeamNoti(String emplId);
 }

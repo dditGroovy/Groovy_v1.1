@@ -25,17 +25,8 @@ public class CommunityService {
     }
     public void inputPost(SntncVO vo, MultipartFile postFile) throws IOException {
         /* sntncEtprCode */
-        int postSeq = mapper.getSeq();
-        /*'SNTNC-'||SNTNC_SEQ.nextval||'-'||TO_CHAR(sysdate,'yyyyMMdd')*/
-        // 현재 날짜 구하기
-        Date now = new Date();
-        // 날짜 포맷팅
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        String nowDate = format.format(now);
-
-        String sntncEtprCode = "SNTNC-" + postSeq + "-" + nowDate;
+        String sntncEtprCode = makeSntncEtprCode();
         vo.setSntncEtprCode(sntncEtprCode);
-        log.info(vo.getSntncCn(), vo.getSntncWrtingEmplId(), vo.getSntncEtprCode());
         mapper.inputPost(vo);
         boolean hasFile = postFile.isEmpty();
         log.info(postFile + "");
@@ -71,7 +62,14 @@ public class CommunityService {
 
 
     }
-
+    public void inputTeamNoti(Map<String, Object> map){
+        /* sntncEtprCode */
+        String sntncEtprCode = makeSntncEtprCode();
+        map.put("sntncEtprCode",sntncEtprCode);
+        log.info("service Map => " + map);
+        mapper.inputTeamNoti(map);
+    }
+    public List<SntncVO> loadTeamNoti(String emplId){return mapper.loadTeamNoti(emplId);}
     public List<SntncVO> loadPost(String emplId){
         return mapper.loadPost(emplId);
     };
@@ -88,4 +86,17 @@ public class CommunityService {
     public void inputAnswer(Map<String, Object> map){mapper.inputAnswer(map);}
     public int loadAnswerCnt(String sntncEtprCode){return mapper.loadAnswerCnt(sntncEtprCode);}
     public List<AnswerVO> loadAnswer(String sntncEtprCode){return mapper.loadAnswer(sntncEtprCode);}
+
+    public String makeSntncEtprCode(){
+        int postSeq = mapper.getSeq();
+        /*'SNTNC-'||SNTNC_SEQ.nextval||'-'||TO_CHAR(sysdate,'yyyyMMdd')*/
+        // 현재 날짜 구하기
+        Date now = new Date();
+        // 날짜 포맷팅
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        String nowDate = format.format(now);
+
+        String sntncEtprCode = "SNTNC-" + postSeq + "-" + nowDate;
+        return sntncEtprCode;
+    }
 }

@@ -96,6 +96,7 @@
         FROM RECOMEND
         WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND RECOMEND_EMPL_ID = #{recomendEmplId}
     </delete>
+    <!--댓글-->
     <insert id="inputAnswer" parameterType="map">
         INSERT INTO ANSWER( ANSWER_NO,
                             SNTNC_ETPR_CODE,
@@ -126,6 +127,35 @@
         WHERE A.SNTNC_ETPR_CODE = #{sntncEtprCode}
         ORDER BY A.ANSWER_NO
     </select>
-
-
+    <!--팀공지-->
+    <insert id="inputTeamNoti" parameterType="map">
+        INSERT INTO SNTNC(SNTNC_ETPR_CODE,
+                          SNTNC_WRTING_EMPL_ID,
+                          SNTNC_SJ,
+                          SNTNC_CN,
+                          SNTNC_WRTING_DATE,
+                          COMMON_CODE_SNTNC_CTGRY)
+        VALUES (#{sntncEtprCode},
+                #{sntncWrtingEmplId},
+                #{sntncSj},
+                #{sntncCn},
+                SYSDATE,
+                'SNTNC011')
+    </insert>
+    <select id="loadTeamNoti" resultType="sntncVO">
+        SELECT
+            S.SNTNC_ETPR_CODE,
+            S.SNTNC_WRTING_EMPL_ID,
+            S.SNTNC_SJ,
+            S.SNTNC_CN,
+            S.SNTNC_WRTING_DATE
+        FROM SNTNC S
+                 JOIN EMPL E ON E.EMPL_ID = S.SNTNC_WRTING_EMPL_ID
+        WHERE S.COMMON_CODE_SNTNC_CTGRY = 'SNTNC011'
+          AND E.COMMON_CODE_DEPT = (
+            SELECT E1.COMMON_CODE_DEPT
+            FROM EMPL E1
+            WHERE E1.EMPL_ID = #{emplId}
+        )
+    </select>
 </mapper>

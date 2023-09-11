@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">--%>
 
 <style>
     .recomend-icon-btn {
@@ -278,45 +279,33 @@
 </div>-->
 <br /><hr />
 <h2>팀 공지</h2>
-<button type="button" id="addTeamNotice">팀 공지 추가하기</button>
-<div id="modal-insert-notice">
-    <form action="#" enctype="application/x-www-form-urlencoded">
-        <label for="notiSntncEtprCode">글 전사적 코드</label> <br />
-        <input type="text" name="notisntncEtprCode" id="notisntncEtprCode"> <br />
-        <label for="notisntncWritingEmplId">글작성 사원아이디</label> <br />
-        <input type="text" name="notisntncWritingEmplId" id="notisntncWritingEmplId"> <br />
-        <label for="notisntncSj">공지 제목</label> <br />
-        <input type="text" name="notisntncSj" id="notisntncSj"> <br />
-        <label for="notisntncCn">공지 내용</label><br />
-        <textarea name="notisntncCn" id="notisntncCn" cols="30" rows="10"></textarea><br />
-        <input type="file" name="noticeFile" id="noticeFile"><br />
-        <label for="notisntncSj">글종류구분</label> <br />
-        <select name="noticommonCodeSntncCtgry" id="noticommonCodeSntncCtgry">
-            <option value="SNTNC010">공지</option>
-        </select>
-    </form>
+<div id="modal-insert-notice" style="display: none;">
+    <label for="notisntncSj">공지 제목</label> <br />
+    <input type="text" name="notisntncSj" id="notisntncSj"> <br />
+    <label for="notisntncCn">공지 내용</label><br />
+    <textarea name="notisntncCn" id="notisntncCn" cols="30" rows="10"></textarea><br />
     <button type="button" id="insertNotice">등록</button>
 </div>
+    <button type="button" id="teamNotice">팀 공지 보기</button>
+    <section class="team-enter">
+    </section>
 </sec:authorize>
 <br /><hr />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<%--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>--%>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const post = document.querySelectorAll(".post");
-        const recomendBtn = document.querySelectorAll(".recomendBtn");
-        const unRecomendBtn = document.querySelectorAll(".unRecomendBtn");
-        const modifyBtn = document.querySelectorAll(".modifyBtn");
+        const teamEnter = document.querySelector(".team-enter");
+        const addTeamNotice = document.querySelector("#addTeamNotice");
+        const insertNotice = document.querySelector("#insertNotice");
         const addVoteBtn = document.querySelector("#addVote");
-        const postInput = document.querySelector("#postContent");
-        const fileInput = document.querySelector("#postFile");
         const voteTitle = document.querySelector("#voteRegistTitle");
-        const insertPostBtn = document.querySelector("#insertPost");
         const insertOptionBtn = document.querySelector("#insertOption");
         const insertVoteBtn = document.querySelector("#insertPostBtn");
         const voteRegistStartDate = document.querySelector("#voteRegistStartDate");
         const sntncSj = document.querySelector("#sntncSj");
         const sntncCn = document.querySelector("#sntncCn");
-        const insertNotice = document.querySelector("#insertNotice");
         const noticeFile = document.querySelector("#noticeFile");
         const modifyVoteBtn = document.querySelector(".modifyVote");
         const deleteVoteBtn = document.querySelector("#deleteVoteBtn");
@@ -328,7 +317,28 @@
         let formData = undefined;
         let selectedFile = undefined;
         let num = 2;
+        function loadAnswerFn(sntncEtprCode,item){
+            $.ajax({
+                url: "/teamCommunity/loadAnswer",
+                type: "POST",
+                data: { sntncEtprCode: sntncEtprCode },
+                success: function(data) {
+                    let code = "";
+                    data.forEach(item => {
+                        code += `<td>
+                                            <img src="/uploads/profile/\${item.proflPhotoFileStreNm}" style="width: 50px; height: 50px;"/> <br />
+                                            \${item.answerCn}<br />
+                                            \${item.answerDate}
+                                         </td><br/>`
+                    })
+                    item.querySelector(".answerBox").innerHTML = code;
 
+                },
+                error: function(request, status, error){
+                    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            })
+        }
         /*  포스트에서 기능 */
         post.forEach((item) => {
             item.addEventListener("click",function(e){
@@ -475,114 +485,70 @@
                 }
             })
         })
-
-        function loadAnswerFn(sntncEtprCode,item){
+        function loadTeamNotiFnc(){
             $.ajax({
-                url: "/teamCommunity/loadAnswer",
+                url: "/teamCommunity/loadTeamNoti",
                 type: "POST",
-                data: { sntncEtprCode: sntncEtprCode },
                 success: function(data) {
-                    let code = "";
+                    let code = '<button type="button" id="addTeamNotice">팀 공지 추가하기</button>' +
+                        '<div class="inner">';
                     data.forEach(item => {
-                        code += `<td>
-                                            <img src="/uploads/profile/\${item.proflPhotoFileStreNm}" style="width: 50px; height: 50px;"/> <br />
-                                            \${item.answerCn}<br />
-                                            \${item.answerDate}
-                                         </td><br/>`
+                        code += `<div class="card">
+                                    <div class="accordion">
+                                        <div class="accordion-item" id="\${item.sntncEtprCode}">
+                                            <details>
+                                             <summary>\${item.sntncSj} \${item.sntncWrtingDate}</summary>
+                                              <p>\${item.sntncCn}</p>
+                                            </details>
+                                          </div>
+                                    </div>
+                                </div>`
                     })
-                    item.querySelector(".answerBox").innerHTML = code;
-
+                    teamEnter.innerHTML = code;
                 },
                 error: function(request, status, error){
                     console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 }
             })
         }
-        addVoteBtn.addEventListener("click", () => {
-            document.querySelector("#modal-insert-vote").style.display = "block";
+        /*  팀 공지 관련 */
+        document.querySelector("#teamNotice").addEventListener("click",()=>{
+           loadTeamNotiFnc();
         })
-        insertVoteBtn.addEventListener("click", () => {
-            const voteVO = {
-                "voteRegistTitle" : voteTitle.value,
-                "voteRegistStartDate" : voteRegistStartDate.value,
-                "voteRegistEndDate" : voteRegistEndDate.value
+        teamEnter.addEventListener("click",function(e) {
+            const target = e.target;
+            if(target.id == "addTeamNotice"){
+                document.querySelector("#modal-insert-notice").style.display = "block";
             }
-            // 알아서 쓰시오
-            /* $.ajax({
-
-            }) */
-            document.querySelector("#modal-insert-vote").style.display = "none";
-        })
-
-        insertNotice.addEventListener("click",()=>{
-            const noticeTitle = sntncSj.value;
-            const noticeContent = sntncCn.value;
-            formData = new FormData();
-            formData.append("noticeTitle", noticeTitle);
-            formData.append("noticeContent", noticeContent);
-
-            selectedFile = noticeFile.files[0];
-            formData.append("file", selectedFile);
-
-            if(noticeTitle == "" ||noticeContent == ""){
-                alert("모든 항목을 입력해주세요.")
-                return;
+        });
+        insertNotice.addEventListener("click",()=> {
+            const notisntncSj = document.querySelector("#notisntncSj");
+            const notisntncCn = document.querySelector("#notisntncCn");
+            const notiSntncVO = {
+                sntncSj: notisntncSj.value,
+                sntncCn: notisntncCn.value,
             }
-
-            /* $.ajax({
-                // 입력하세요.
-            }) */
-            document.querySelector("#modal-insert-notice").style.display = "none";
-        })
-
-        /*  const getVoteList = () => {
-            $.ajax({
-                type: "get",
-                // url: "",
-                dataType: "json",
-                success: function (res) {
-                    console.log("체크 : ",res);
-                    //form 에 class voteModifyForm 넣어주세용
-                },
-                error: function (xhr, status, error) {
-                    console.log("code: " + xhr.status);
-                    console.log("message: " + xhr.responseText);
-                    console.log("error: " + error);
-                }
-            });
-        }
-        getVoteList(); */
-
-        const forms = document.querySelectorAll('.voteRegistId');
-        forms.forEach(form => {
-            console.log(form);
-            const modifyVoteBtn = document.querySelector(".modifyVote");
-
-            form.addEventListener("click", function(event) {
-                console.log(event.target)
-                if (event.target === modifyVoteBtn) {
-                    if (form.style.display != "none") {
-                        form.style.display = "none";
-                        document.querySelector(".modifyRegist").style.display = "block";
+                $.ajax({
+                    url: "/teamCommunity/inputTeamNoti",
+                    type: "POST",
+                    data: JSON.stringify(notiSntncVO),
+                    contentType: "application/json",
+                    dataType: "text",
+                    success: function (data) {
+                        notisntncSj.value = "";
+                        notisntncCn.value = "";
+                        document.querySelector("#modal-insert-notice").style.display = "none";
+                        loadTeamNotiFnc();
+                    },
+                    error: function (request, status, error) {
+                        console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                     }
-                }
-            });
+                })
         })
 
-        /* updateVoteBtn.addEventListener("click",() => {
 
-        }) */
 
-        /*deleteOptionBtn.forEach(btn => {
-            const thisParent = btn.parentNode;
-            thisParent.addEventListener("click", function(event){
-                event.target.remove();
-                num = optionContainers.length;
-                console.log(event.target, num);
-            })
-
-        })*/
-        options.addEventListener("click",(event) => {
+        /*options.addEventListener("click",(event) => {
             console.log(event.target);
             if(event.target.classList.contains("deleteOption")){
                 const thisParnt = event.target.closest(".option");
@@ -592,8 +558,8 @@
                     console.log("num : " + num , "options.children : " + options.children);
                 }
             }
-        });
-        insertOptionBtn.addEventListener("click",() => {
+        });*/
+        /*insertOptionBtn.addEventListener("click",() => {
 
             if(num >= 5) {
                 alert("옵션은 5개까지 가능합니다.")
@@ -624,63 +590,7 @@
             newDiv.appendChild(newBtn);
 
             options.appendChild(newDiv);
-        })
-
-        /* 등록된 투표 수정*/
-        document.addEventListener("click",function(event){
-            if(event.target.classList.contains("modifyVote")){
-                const table = event.target.closest("table");
-                const inputText = table.querySelectorAll("input[type=text]");
-                const inputRadio = table.querySelectorAll("input[type=radio]");
-
-                event.target.style.display = "none";
-                event.target.nextElementSibling.style.display = "block";
-
-                inputText.forEach(item => {
-                    item.readOnly = false;
-                })
-                inputRadio.forEach(item => {
-                    item.disabled = false;
-                })
-
-            };
-            if(event.target.classList.contains("updateVote")){
-                event.target.style.display = "none";
-                event.target.previousElementSibling.style.display = "block";
-
-                const table = event.target.closest("table");
-                const inputText = table.querySelectorAll("input[type=text]");
-                const inputRadio = table.querySelectorAll("input[type=radio]");
-
-                inputText.forEach(item => {
-                    item.readOnly = true;
-                })
-                inputRadio.forEach(item => {
-                    item.disabled = true;
-                })
-            }
-        })
-        /*voteList.forEach(vote => {
-            vote.addEventListener("click",event => {
-                const title = document.querySelector("input[name=vote1]");
-                const startDate = document.querySelector("input[name=vote1RegistStartDate]");
-                const endDate = document.querySelector("input[name=vote1RegistEndDate]");
-
-                for (let i = 1; i < ; i++) {
-
-                }
-                console.log(event.target);
-                if(event.target.classList.contains("modifyVote")){
-                    document.querySelector("#modifyVoteModal").style.display = "block";
-                };
-            })
-
         })*/
-        updateVote.addEventListener("click",()=>{
-            document.querySelector("#modifyVoteModal").style.display = "none";
-        })
-        document.querySelector("#addTeamNotice").addEventListener("click",() => {
-            document.querySelector("#modal-insert-notice").style.display = "block";
-        })
-    })
+
+    });
 </script>

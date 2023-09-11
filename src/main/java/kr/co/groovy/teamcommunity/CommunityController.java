@@ -122,10 +122,23 @@ public class CommunityController {
     @ResponseBody
     @PostMapping("/loadAnswer")
     public List<AnswerVO> loadAnswer(String sntncEtprCode){
-        log.info("sntncEtprCode" + sntncEtprCode);
         List<AnswerVO> answerList = service.loadAnswer(sntncEtprCode);
-        log.info("answerList" + answerList);
         return answerList;
+    }
+
+    @ResponseBody
+    @PostMapping("/inputTeamNoti")
+    public String inputTeamNoti(@RequestBody Map<String, Object> map){
+        map.put("sntncWrtingEmplId",emplId);
+        log.info("controller Map => " + map);
+        service.inputTeamNoti(map);
+        return "success";
+    }
+
+    @ResponseBody
+    @PostMapping("/loadTeamNoti")
+    public List<SntncVO> loadTeamNoti(){
+        return service.loadTeamNoti(emplId);
     }
 
 }
