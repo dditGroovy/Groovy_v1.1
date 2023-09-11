@@ -89,7 +89,9 @@ public class CommunityController {
     /*  포스트 삭제 */
     @ResponseBody
     @DeleteMapping("/deletePost")
-    public void deltePost(@RequestBody Map<String, Object> map){
+    public void deletePost(@RequestBody Map<String, Object> map){
+        map.put("sntncWrtingEmplId", emplId);
+        log.info("map ====> " + map);
         service.deletePost(map);
     }
     /* 좋아요 구현 */
@@ -130,7 +132,6 @@ public class CommunityController {
     @PostMapping("/inputTeamNoti")
     public String inputTeamNoti(@RequestBody Map<String, Object> map){
         map.put("sntncWrtingEmplId",emplId);
-        log.info("controller Map => " + map);
         service.inputTeamNoti(map);
         return "success";
     }
@@ -140,5 +141,13 @@ public class CommunityController {
     public List<SntncVO> loadTeamNoti(){
         return service.loadTeamNoti(emplId);
     }
+    @ResponseBody
+    @PutMapping("/modifyTeamNoti")
+    public String loadTeamNoti(@RequestBody Map<String, Object> map){
+        map.put("sntncWrtingEmplId",emplId);
+        service.modifyTeamNoti(map);
+        return "success";
+    }
+
 
 }

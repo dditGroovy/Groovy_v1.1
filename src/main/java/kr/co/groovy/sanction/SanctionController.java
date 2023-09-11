@@ -11,6 +11,7 @@ import kr.co.groovy.vo.SanctionLineVO;
 import kr.co.groovy.vo.SanctionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,6 +42,35 @@ public class SanctionController {
 
     }
 
+    @GetMapping("/showForm")
+    public String showForm(Model model) {
+        // HTML 템플릿 파일 로드
+//        String template = formService.loadFormTemplate();
+//
+//        // 템플릿을 모델에 추가
+//        model.addAttribute("template", template);
+
+        return "form";
+    }
+
+
+    @PostMapping("/submitForm")
+    public String submitForm(@RequestParam Map<String, String> formData, Model model) {
+//        // 사용자가 입력한 데이터를 템플릿에 적용
+//        String template = formService.loadFormTemplate();
+//        for (Map.Entry<String, String> entry : formData.entrySet()) {
+//            template = template.replace("{{" + entry.getKey() + "}}", entry.getValue());
+//        }
+//
+//        // 채워진 양식을 모델에 추가
+//        model.addAttribute("filledTemplate", template);
+
+        return "form_result";
+    }
+
+
+
+
     @PostMapping("/approve")
     @ResponseBody
     public Map<String, Object> approve(@RequestBody Map<String, Object> request, ModelAndView mav) {
@@ -50,8 +80,6 @@ public class SanctionController {
 
     @GetMapping("/loadSanction")
     public Map<?, ?> loadSanction(@RequestParam String sanctionNo) {
-        // no를 통해 데이터베이스에서 결재 정보를 리플랙션으로 클래스 정보를 받아와서 자동으로 vo의 필드값과 매칭하여 파람맵으로 만들어 맵형태의
-        // 객체로 반환하여 jsp로 보낸다. ${}를 통해 jsp에서 결재 정보를 출력한다.
         ParamMap map = ParamMap.init();
         return map;
     }
@@ -115,14 +143,16 @@ public class SanctionController {
 
 
     // 양식 불러오기
-    @GetMapping("/write/{formatSanctnKnd}")
-    public ModelAndView writeSanction(@PathVariable("formatSanctnKnd") String formatSanctnKnd, @RequestParam("format") String format, ModelAndView mav) {
-        String etprCode = service.getSeq(Department.valueOf(formatSanctnKnd).label());
+    @GetMapping("/write")
+    public String writeSanction(
+                                @RequestParam("format") String format,
+                                @RequestParam("etprCode") String etprCode, Model model) {
+//        String etprCode = service.getSeq(Department.valueOf(formatSanctnKnd).label());
         SanctionFormatVO vo = service.loadFormat(format);
-        mav.addObject("format", vo);
-        mav.addObject("etprCode", etprCode);
-        mav.setViewName("sanction/template/write");
-        return mav;
+        String template = vo.getFormatCn();
+        model.addAttribute("template", template);
+        model.addAttribute("etprCode", etprCode);
+        return "sanction/template/write";
     }
 
 
