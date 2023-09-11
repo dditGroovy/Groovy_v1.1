@@ -24,4 +24,12 @@ public class AlarmService {
     public List<AlarmVO> getAlarmList(String ntcnEmplId) {
         return mapper.getAlarmList(ntcnEmplId);
     }
+
+    public Integer getMaxAlarm () {
+        if (mapper.getMaxAlarm() == null) {
+            return 0;
+        }
+        
+        return mapper.getMaxAlarm();
+    }
 }

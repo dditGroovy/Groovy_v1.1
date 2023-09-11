@@ -56,9 +56,10 @@ public class AlarmHandler extends TextWebSocketHandler {
         if (msg!=null) {
             String[] msgs = msg.split(",");
 
-            if (msgs!=null && msgs.length == 2) {
-                String category = msgs[0];
-                String url = msgs[1];
+            if (msgs!=null && msgs.length == 3) {
+                String seq = msgs[0];
+                String category = msgs[1];
+                String url = msgs[2];
                 if (category.equals("noti")) {
                     for (WebSocketSession webSocketSession : sessions) {
                         String userId = currentUserId(webSocketSession);
@@ -67,11 +68,11 @@ public class AlarmHandler extends TextWebSocketHandler {
 
                         if (webSocketSession.isOpen() && companyNotice.equals("NTCN_AT010")) {
                             String notificationHtml = String.format(
-                                    "<a href=\"%s\" id=\"fATag\">" +
+                                    "<a href=\"%s\" data-seq=\"%s\" id=\"fATag\">" +
                                             "    <p>[전체공지] 관리자로부터 전체 공지사항이 등록되었습니다.</p>" +
                                             "</a>"
                                     ,
-                                    url
+                                    url, seq
                             );
                             webSocketSession.sendMessage(new TextMessage(notificationHtml));
                         }

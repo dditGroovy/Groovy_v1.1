@@ -19,6 +19,8 @@
     <button type="button" id="submitBtn">등록</button>
 </form>
 <script>
+    let maxNum;
+    
     $("#submitBtn").on("click", function () {
         var form = $('#uploadForm')[0];
         var formData = new FormData(form);
@@ -31,35 +33,49 @@
             contentType: false,
             processData: false,
             success: function (notiEtprCode) {
-                console.log(notiEtprCode)
-                let url = '/notice/noticeDetail?notiEtprCode=' + notiEtprCode;
-                let content = `<div class="alarmBox">
-                                  <a href="\${url}" class="aTag">
-                                    <h1>[전체공지]</h1>
-                                    <p>관리자로부터 전체 공지사항이 등록되었습니다.</p>
-                                  </a>
-                                  <button type="button" class="readBtn">읽음</button>
-                                </div>`;
-                let alarmVO = {
-                    "ntcnUrl": url,
-                    "ntcnCn": content,
-                    "commonCodeNtcnKind": 'NTCN013'
-                }
-                $.ajax({
-                    type: 'post',
-                    url: '/alarm/insertAlarm',
-                    data: alarmVO,
-                    success: function(rslt) {
-                        if (socket) {
-                            let msg = "noti,"+url;
-                            socket.send(msg);
-                        }
-                        location.href = "/notice/manageNotice";
-                    },
-                    error: function (xhr) {
-                        console.log(xhr.status);
-                    }
-                })
+                console.log(notiEtprCode);
+                // 최대 알람 번호 가져오기
+                $.get("/alarm/getMaxAlarm")
+                    .then(function (maxNum) {
+                        maxNum = parseInt(maxNum) + 1;
+                        console.log("최대 알람 번호:", maxNum);
+
+                        let url = '/notice/noticeDetail?notiEtprCode=' + notiEtprCode;
+                        let content = `<div class="alarmBox">
+                                            <a href="\${url}" class="aTag" data-seq="\${maxNum}">
+                                                <h1>[전체공지]</h1>
+                                                <p>관리자로부터 전체 공지사항이 등록되었습니다.</p>
+                                            </a>
+                                            <button type="button" class="readBtn">읽음</button>
+                                        </div>`;
+
+                        let alarmVO = {
+                            "ntcnSn": maxNum,
+                            "ntcnUrl": url,
+                            "ntcnCn": content,
+                            "commonCodeNtcnKind": 'NTCN013'
+                        };
+
+                        // 알림 생성 및 페이지 이동
+                        $.ajax({
+                            type: 'post',
+                            url: '/alarm/insertAlarm',
+                            data: alarmVO,
+                            success: function (rslt) {
+                                if (socket) {
+                                    let msg = maxNum + ",noti," + url;
+                                    socket.send(msg);
+                                }
+                                location.href = "/notice/manageNotice";
+                            },
+                            error: function (xhr) {
+                                console.log(xhr.status);
+                            }
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log("최대 알람 번호 가져오기 오류:", error);
+                    });
             },
             error: function (xhr) {
                 console.log(xhr.status)

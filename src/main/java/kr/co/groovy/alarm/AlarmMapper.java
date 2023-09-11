@@ -12,4 +12,6 @@ public interface AlarmMapper {
     void deleteAlarm(AlarmVO alarmVO);
 
     List<AlarmVO> getAlarmList(String ntcnEmplId);
+
+    Integer getMaxAlarm();
 }

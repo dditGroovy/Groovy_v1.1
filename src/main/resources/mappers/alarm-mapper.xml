@@ -10,7 +10,7 @@
             NTCN_DATE,
             COMMON_CODE_NTCN_KIND)
         VALUES (
-                   NOTI_SEQ.NEXTVAL,
+                   #{ntcnSn},
                    #{ntcnEmplId},
                    #{ntcnCn},
                    #{ntcnUrl},
@@ -22,7 +22,7 @@
         DELETE
         FROM NTCN
         WHERE NTCN_EMPL_ID = #{ntcnEmplId}
-          AND NTCN_URL = #{ntcnUrl}
+          AND NTCN_SN = #{ntcnSn}
     </delete>
 
     <select id="getAlarmList" parameterType="String" resultType="alarmVO">
@@ -32,6 +32,11 @@
         FROM NTCN
         WHERE NTCN_EMPL_ID = #{ntcnEmplId}
         ORDER BY NTCN_DATE DESC
+    </select>
+
+    <select id="getMaxAlarm" resultType="int">
+        SELECT MAX(NTCN_SN)
+        FROM NTCN
     </select>
 </mapper>
 

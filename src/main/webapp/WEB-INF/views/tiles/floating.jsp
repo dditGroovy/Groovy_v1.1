@@ -66,13 +66,10 @@
 
     //실시간 알림 읽음 처리
     $("#fReadBtn").on("click", function () {
-        var ntcnUrl = $("#fATag").attr("href");
-        var data = {
-            "ntcnUrl": ntcnUrl
-        }
+        var ntcnSn = $("#fATag").attr("data-seq");
         $.ajax({
             type: 'delete',
-            url: '/alarm/deleteAlarm?ntcnUrl=' + ntcnUrl,
+            url: '/alarm/deleteAlarm?ntcnSn=' + ntcnSn,
             success: function () {
                 $("#floatingAlarm").remove();
             },

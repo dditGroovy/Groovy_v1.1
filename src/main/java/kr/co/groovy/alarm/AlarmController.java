@@ -54,4 +54,9 @@ public class AlarmController {
         service.deleteAlarm(alarmVO);
     }
 
+    @GetMapping("/getMaxAlarm")
+    @ResponseBody
+    public int getMaxAlarm() {
+        return service.getMaxAlarm();
+    }
 }

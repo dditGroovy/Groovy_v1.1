@@ -57,7 +57,23 @@
       console.log("ERROR: ", err);
     }
   }
+document.querySelector(".alarmContainer").addEventListener("click",(e)=>{
+   const target = e.target;
+   if(target.classList.contains("readBtn")){
+     var ntcnSn = target.previousElementSibling.getAttribute("data-seq");
+     $.ajax({
+       type: 'delete',
+       url: '/alarm/deleteAlarm?ntcnSn=' + ntcnSn,
+       success: function () {
+         target.parentElement.remove();
+       },
+       error: function (xhr) {
+         xhr.status;
+       }
+     });
 
+   }
+})
 function getList() {
   $.ajax({
     type: 'get',
@@ -72,7 +88,5 @@ function getList() {
     }
   });
 }
-
-
 </script>
 
