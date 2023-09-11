@@ -9,29 +9,27 @@ import java.util.Map;
 
 @Mapper
 public interface FacilityMapper {
-    public List<VehicleVO> getVehicles();
+    List<VehicleVO> getVehicles();
 
-    public List<VehicleVO> getReservedVehicleByVhcleNo(String vhcleNo);
+    List<VehicleVO> getReservedVehicleByVhcleNo(String vhcleNo);
 
-    public List<VehicleVO> getReservedVehicleByEmplId(String vhcleResveEmplId);
+    List<VehicleVO> getReservedVehicleByEmplId(String vhcleResveEmplId);
 
-    public int inputVehicleReservation(VehicleVO vehicleVO);
+    int inputVehicleReservation(VehicleVO vehicleVO);
 
-    public int deleteReservedByVhcleResveNo(int vhcleResveNo);
+    int deleteReservedByVhcleResveNo(int vhcleResveNo);
 
-//    public List<FacilityVO> getMeetingRooms();
+    List<FacilityVO> getRooms(String commonCodeFcltyKind);
 
-    public List<FacilityVO> getRooms(String commonCodeFcltyKind);
+    List<FacilityVO> getReservedRoomsByFcltyKind(String commonCodeFcltyKind);
 
-    public List<FacilityVO> getReservedRoomsByFcltyKind(String commonCodeFcltyKind);
+    List<FacilityVO> getReservedRoomByFcltyResveEmplId(Map<String, String> map);
 
-    public List<FacilityVO> getReservedRoomByFcltyResveEmplId(Map<String, String> map);
+    int inputRestReservation(FacilityVO facilityVO);
 
-    public int inputRestReservation(FacilityVO facilityVO);
+    int deleteReservedByFcltyResveSn(int fcltyResveSn);
 
-    public int deleteReservedByFcltyResveSn(int fcltyResveSn);
-
-    public FacilityVO getFixturesByFcltyKind(String commonCodeFcltyKind);
+    FacilityVO getFixturesByFcltyKind(String commonCodeFcltyKind);
 
 
 }
