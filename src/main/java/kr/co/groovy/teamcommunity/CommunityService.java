@@ -70,6 +70,7 @@ public class CommunityService {
         mapper.inputTeamNoti(map);
     }
     public List<SntncVO> loadTeamNoti(String emplId){return mapper.loadTeamNoti(emplId);}
+    public void modifyTeamNoti(Map<String, Object> map){mapper.modifyTeamNoti(map);}
     public List<SntncVO> loadPost(String emplId){
         return mapper.loadPost(emplId);
     };
