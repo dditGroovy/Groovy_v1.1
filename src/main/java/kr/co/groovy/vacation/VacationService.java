@@ -25,8 +25,8 @@ public class VacationService {
     public List<VacationVO> loadVacationRecord(String emplId) {
         return vacationMapper.loadVacationRecord(emplId);
     }
-    public String inputVacation(VacationUseVO vo){
-        vo.setYrycUseDtlsSn(vacationMapper.getSeq("인사"));
+    public int inputVacation(VacationUseVO vo){
+//        vo.setYrycUseDtlsSn(vacationMapper.getSeq("인사"));
         vacationMapper.inputVacation(vo);
         return vo.getYrycUseDtlsSn();
     }

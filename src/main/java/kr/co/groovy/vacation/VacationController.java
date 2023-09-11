@@ -55,7 +55,7 @@ public class VacationController {
     }
     @PostMapping(value = "/inputVacation", produces = "application/text; charset=utf8")
     @ResponseBody
-    public String inputVacation(VacationUseVO vo){
+    public int inputVacation(VacationUseVO vo){
         return service.inputVacation(vo);
     }
 
