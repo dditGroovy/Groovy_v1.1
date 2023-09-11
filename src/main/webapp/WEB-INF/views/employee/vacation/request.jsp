@@ -14,7 +14,7 @@
     <main>
         <h1>휴가 신청</h1>
         <div>
-            <form action="#" id="vacationForm">
+            <form action="/vacation/inputVacation" method="post">
                 <table border="1">
                     <input type="hidden" name="yrycUseDtlsEmplId" value="${CustomUser.employeeVO.emplId}"/>
                         <%--                <tr>--%>
@@ -30,19 +30,19 @@
                             <label for="vacation1">연차</label>
 
                             <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation2">
-                            <label for="vacation2">생일</label>
+                            <label for="vacation2">공가</label>
 
-                            <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation3">
-                            <label for="vacation3">여름휴가</label>
+<%--                            <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation3">--%>
+<%--                            <label for="vacation3">여름휴가</label>--%>
 
-                            <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation4">
-                            <label for="vacation4">경사</label>
+<%--                            <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation4">--%>
+<%--                            <label for="vacation4">경사</label>--%>
 
-                            <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation5">
-                            <label for="vacation5">조사</label>
+<%--                            <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation5">--%>
+<%--                            <label for="vacation5">조사</label>--%>
 
-                            <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation6">
-                            <label for="vacation6">병가</label>
+<%--                            <input type="radio" name="commonCodeYrycUseKind" value="YRYC011" id="vacation6">--%>
+<%--                            <label for="vacation6">병가</label>--%>
                         </td>
                     </tr>
                     <tr>
@@ -70,62 +70,8 @@
                         </td>
                     </tr>
                 </table>
-                <button type="button" id="save">저장하기</button>
-                <button type="button" id="insertSanction">결재하기</button>
+                <button type="submit" id="save">저장하기</button>
             </form>
         </div>
     </main>
-    <script>
-        let etprCode;
-        let formData;
-
-        $("#save").on("click", function () {
-            formData = new FormData(document.getElementById("vacationForm"));
-
-            $.ajax({
-                url: '/vacation/inputVacation',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    console.log("휴가 insert 성공");
-                    console.log(data)
-                    etprCode = data;
-                    $("#insertSanction").prop("hidden", false)
-                },
-                error: function (error) {
-                    console.log("휴가 insert 실패");
-                }
-            })
-        })
-
-        $("#insertSanction").on("click", function () {
-            let childWindow = window.open(`/sanction/write?format=SANCTN_FORMAT011&etprCode=\${etprCode}`, "결재", "width = 1200, height = 1200")
-            childWindow.dataFromParent = formData;
-
-            /*
-             $.ajax({
-                 url: '/sanction/approve',
-                 type: 'POST',
-                 data: JSON.stringify({
-                     approvalType: 'kr.co.groovy.sanction.AnnualLeaveService',
-                     methodName: 'viewSanction',
-                     parameters: formData
-                 }),
-                 contentType: 'application/json',
-                 success: function (data) {
-                     console.log("결재 insert 성공");
-                     console.log(data)
-                     let childWindow = ;
-                     childWindow.dataFromParent = data;
-
-
-                 },
-                 error: function (error) {
-                     console.log("결재 insert 실패");
-                 }
-             });*/
-        });
-    </script>
 </sec:authorize>

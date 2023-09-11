@@ -29,7 +29,7 @@
             </div>
             <br/>
             <div class="formTitle">
-                    ${format.formatSj}
+                    ${template.formatSj}
             </div>
         </div>
         <div class="approvalWrap">
@@ -43,7 +43,7 @@
         </div>
         <div class="formContent">
             <!--결재양식 들어오는 영역-->
-                ${format.formatCn}
+                ${template.formatCn}
             </tr>
         </div>
         <br/><br/>
@@ -61,35 +61,44 @@
         let receiver;
         let referrer;
 
-        <%--const etprCode = "${etprCode}";--%>
+        const etprCode = "${etprCode}";
         const formatCode = "${format.commonCodeSanctnFormat}";
         const writer = "${CustomUser.employeeVO.emplNm}"
         const today = year + '-' + month + '-' + day;
         const title = "${format.formatSj}";
         let content;
         let file = $('#sanctionFile')[0].files[0];
+        let vacationId = opener.$("#vacationId").text()
 
-        let formData = {
-            title: opener.$("#title").val(),
-            vacationKind: opener.$("input[name='commonCodeYrycUseKind']:checked + label").text(),
-            vacationSe: opener.$("input[name='commonCodeYrycUseSe']:checked + label").text(),
-            startDay: opener.$("#startDay").val(),
-            endDay: opener.$("#endDay").val(),
-            content: opener.$("#content").val()
-
-
-        };
-        // vacationCategory: opener.$("input[name='vacationCate']:checked").val(),
-        // vacationType: opener.$("input[name='vacationType']:checked").val(),
         $(document).ready(function () {
-            // $("#sanctionNo").html(etprCode);
+            $("#sanctionNo").html(etprCode);
             $("#writeDate").html(today);
             $("#writer").html(writer)
-            $("#vacationKind").text(formData.vacationKind)
-            $("#vacationSe").text(formData.vacationSe)
-            $("#startDay").text(formData.startDay)
-            $("#endDate").text(formData.endDay)
-            $("#sanctionContent").text(content)
+
+            $.ajax({
+                url: `/vacation/loadData/\${vacationId}`,
+                type: "GET",
+                success: function (data) {
+                    console.log(data)
+
+                    for (var key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            var value = data[key];
+
+                            // HTML 요소에 해당 키로 접근하여 값을 설정
+                            var element = document.getElementById(key);
+                            if (element) {
+                                element.textContent = value;
+                            }
+                        }
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            })
+
+
 
         });
         $(".submitLine").on("click", function () {
