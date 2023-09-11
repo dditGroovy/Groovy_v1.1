@@ -29,4 +29,6 @@ public interface CommunityMapper {
 
     void inputTeamNoti(Map<String, Object> map);
     List<SntncVO> loadTeamNoti(String emplId);
+    void modifyTeamNoti(Map<String, Object> map);
+    void deleteTeamNoti(Map<String, Object> map);
 }

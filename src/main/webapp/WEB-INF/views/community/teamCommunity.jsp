@@ -285,11 +285,12 @@
     <label for="notisntncCn">공지 내용</label><br />
     <textarea name="notisntncCn" id="notisntncCn" cols="30" rows="10"></textarea><br />
     <button type="button" id="insertNotice">등록</button>
+    <button type="button" id="modifyNotice" style="display: none;">수정</button>
 </div>
     <button type="button" id="teamNotice">팀 공지 보기</button>
     <section class="team-enter">
     </section>
-</sec:authorize>
+
 <br /><hr />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <%--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>--%>
@@ -297,8 +298,12 @@
     document.addEventListener("DOMContentLoaded", () => {
         const post = document.querySelectorAll(".post");
         const teamEnter = document.querySelector(".team-enter");
+        const notisntncSj = document.querySelector("#notisntncSj");
+        const notisntncCn = document.querySelector("#notisntncCn");
         const addTeamNotice = document.querySelector("#addTeamNotice");
         const insertNotice = document.querySelector("#insertNotice");
+        const modifyNotice = document.querySelector("#modifyNotice");
+        const deleteNotice = document.querySelector("#deleteNotice");
         const addVoteBtn = document.querySelector("#addVote");
         const voteTitle = document.querySelector("#voteRegistTitle");
         const insertOptionBtn = document.querySelector("#insertOption");
@@ -317,6 +322,8 @@
         let formData = undefined;
         let selectedFile = undefined;
         let num = 2;
+        const emplId = "${CustomUser.employeeVO.emplId}";
+        let sntncEtprCode;
         function loadAnswerFn(sntncEtprCode,item){
             $.ajax({
                 url: "/teamCommunity/loadAnswer",
@@ -440,9 +447,8 @@
                     $.ajax({
                         url: "/teamCommunity/deletePost",
                         type: "Delete",
-                        data: JSON.stringify(sntncVO),
-                        contentType: "application/json",
-                        dataType: "text",
+                        data: JSON.stringify({ sntncEtprCode: sntncEtprCode }),
+                        contentType: 'application/json',
                         success: function(data) {
                             item.remove();
                         },
@@ -481,7 +487,6 @@
                 /*  댓글 불러오기 */
                 if(target.classList.contains("loadAnswer")){
                     loadAnswerFn(sntncEtprCode,item);
-
                 }
             })
         })
@@ -493,12 +498,19 @@
                     let code = '<button type="button" id="addTeamNotice">팀 공지 추가하기</button>' +
                         '<div class="inner">';
                     data.forEach(item => {
-                        code += `<div class="card">
+                        code += `<div class="card" id="\${item.sntncEtprCode}">`;
+                                if(emplId == item.sntncWrtingEmplId){
+                                    code +=
+                                    `<button type="button" class="notimodifyBtn">수정</button>
+                                    <button type="button" class="notideleteBtn">삭제</button>`
+                                }
+                                code+=`
                                     <div class="accordion">
-                                        <div class="accordion-item" id="\${item.sntncEtprCode}">
+                                        <div class="accordion-item">
                                             <details>
-                                             <summary>\${item.sntncSj} \${item.sntncWrtingDate}</summary>
-                                              <p>\${item.sntncCn}</p>
+                                             <summary><span class="noti-title">\${item.sntncSj}</span> \${item.sntncWrtingDate}
+                                            </summary>
+                                              <p class="noti-content">\${item.sntncCn}</p>
                                             </details>
                                           </div>
                                     </div>
@@ -520,10 +532,35 @@
             if(target.id == "addTeamNotice"){
                 document.querySelector("#modal-insert-notice").style.display = "block";
             }
+            if(target.classList.contains("notimodifyBtn")){
+                const card = target.closest(".card");
+                sntncEtprCode = target.closest(".card").id;
+                modifyNotice.style.display = "block";
+                insertNotice.style.display = "none";
+                document.querySelector("#modal-insert-notice").style.display = "block";
+                notisntncSj.value = card.querySelector(".noti-title").innerText;
+                console.log(card.querySelector(".noti-content").innerText);
+                notisntncCn.value = card.querySelector(".noti-content").innerHTML;
+             }
+            if(target.classList.contains("notideleteBtn")){
+                const card = target.closest(".card");
+                sntncEtprCode = target.closest(".card").id;
+                console.log(sntncEtprCode);
+                $.ajax({
+                    url: "/teamCommunity/deletePost",
+                    type: "Delete",
+                    data: JSON.stringify({ sntncEtprCode: sntncEtprCode }),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        loadTeamNotiFnc();
+                    },
+                    error: function (request, status, error) {
+                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    }
+                })
+            }
         });
         insertNotice.addEventListener("click",()=> {
-            const notisntncSj = document.querySelector("#notisntncSj");
-            const notisntncCn = document.querySelector("#notisntncCn");
             const notiSntncVO = {
                 sntncSj: notisntncSj.value,
                 sntncCn: notisntncCn.value,
@@ -545,9 +582,29 @@
                     }
                 })
         })
-
-
-
+        modifyNotice.addEventListener("click",()=> {
+            const notiSntncVO = {
+                sntncEtprCode: sntncEtprCode,
+                sntncSj: notisntncSj.value,
+                sntncCn: notisntncCn.value
+            }
+                $.ajax({
+                    url: "/teamCommunity/modifyTeamNoti",
+                    type: "Put",
+                    data: JSON.stringify(notiSntncVO),
+                    contentType: "application/json",
+                    dataType: "text",
+                    success: function (data) {
+                        notisntncSj.value = "";
+                        notisntncCn.value = "";
+                        document.querySelector("#modal-insert-notice").style.display = "none";
+                        loadTeamNotiFnc();
+                    },
+                    error: function (request, status, error) {
+                        console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    }
+                })
+        })
         /*options.addEventListener("click",(event) => {
             console.log(event.target);
             if(event.target.classList.contains("deleteOption")){
@@ -593,4 +650,5 @@
         })*/
 
     });
+</sec:authorize>
 </script>

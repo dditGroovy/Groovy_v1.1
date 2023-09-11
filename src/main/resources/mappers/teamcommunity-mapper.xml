@@ -158,4 +158,10 @@
             WHERE E1.EMPL_ID = #{emplId}
         )
     </select>
+    <update id="modifyTeamNoti" parameterType="map">
+        UPDATE SNTNC
+        SET SNTNC_SJ = #{sntncSj},
+            SNTNC_CN = #{sntncCn}
+        WHERE SNTNC_ETPR_CODE = #{sntncEtprCode} AND SNTNC_WRTING_EMPL_ID = #{sntncWrtingEmplId}
+    </update>
 </mapper>
