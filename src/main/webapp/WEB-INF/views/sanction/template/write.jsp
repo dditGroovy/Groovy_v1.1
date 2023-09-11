@@ -44,6 +44,7 @@
         <div class="formContent">
             <!--결재양식 들어오는 영역-->
                 ${format.formatCn}
+            </tr>
         </div>
         <br/><br/>
         <button type="button" id="sanctionSubmit">결재 제출</button>
@@ -60,7 +61,7 @@
         let receiver;
         let referrer;
 
-        const etprCode = "${etprCode}";
+        <%--const etprCode = "${etprCode}";--%>
         const formatCode = "${format.commonCodeSanctnFormat}";
         const writer = "${CustomUser.employeeVO.emplNm}"
         const today = year + '-' + month + '-' + day;
@@ -68,15 +69,27 @@
         let content;
         let file = $('#sanctionFile')[0].files[0];
 
-        let receivedData = window.opener.dataFromParent;
-        console.log(receivedData);
+        let formData = {
+            title: opener.$("#title").val(),
+            vacationKind: opener.$("input[name='commonCodeYrycUseKind']:checked + label").text(),
+            vacationSe: opener.$("input[name='commonCodeYrycUseSe']:checked + label").text(),
+            startDay: opener.$("#startDay").val(),
+            endDay: opener.$("#endDay").val(),
+            content: opener.$("#content").val()
 
 
+        };
+        // vacationCategory: opener.$("input[name='vacationCate']:checked").val(),
+        // vacationType: opener.$("input[name='vacationType']:checked").val(),
         $(document).ready(function () {
-            $("#sanctionNo").html(etprCode);
+            // $("#sanctionNo").html(etprCode);
             $("#writeDate").html(today);
             $("#writer").html(writer)
-            $("#sanctionTitle").text(receivedData.title)
+            $("#vacationKind").text(formData.vacationKind)
+            $("#vacationSe").text(formData.vacationSe)
+            $("#startDay").text(formData.startDay)
+            $("#endDate").text(formData.endDay)
+            $("#sanctionContent").text(content)
 
         });
         $(".submitLine").on("click", function () {
@@ -144,30 +157,5 @@
                 }
             });
         }
-
-
-        // 파일 드래그 앤 드롭 (쓰려면 파일 처리 기능 추가해야 됨)
-        const dropbox = document.querySelector('.file_box');
-        const input_filename = document.querySelector('.file_name');
-
-        //박스 안에 drag 하고 있을 때
-        dropbox.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            this.style.backgroundColor = 'rgb(13 110 253 / 25%)';
-        });
-
-        //박스 밖으로 drag가 나갈 때
-        dropbox.addEventListener('dragleave', function (e) {
-            this.style.backgroundColor = 'white';
-        });
-
-        //박스 안에 drop 했을 때
-        dropbox.addEventListener('drop', function (e) {
-            e.preventDefault();
-            this.style.backgroundColor = 'white';
-
-            //파일 이름을 text로 표시
-            input_filename.innerHTML = e.dataTransfer.files[0].name;
-        });
     </script>
 </sec:authorize>

@@ -82,6 +82,7 @@
         FROM CHTT C
             JOIN EMPL E ON C.CHTT_MBR_EMPL_ID = E.EMPL_ID
         WHERE C.CHTT_ROOM_NO = #{chttRoomNo}
+        ORDER BY CHTT_INPUT_DATE
     </select>
 
     <insert id="inputMessage" parameterType="chatVO">

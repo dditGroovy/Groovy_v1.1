@@ -1,11 +1,11 @@
 package kr.co.groovy.vacation;
 
+import kr.co.groovy.vo.VacationUseVO;
 import kr.co.groovy.vo.VacationVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -15,16 +15,16 @@ import java.util.List;
 @RequestMapping("/vacation")
 public class VacationController {
 
-    private final VacationService vacationService;
+    private final VacationService service;
 
     public VacationController(VacationService vacationService) {
-        this.vacationService = vacationService;
+        this.service = vacationService;
     }
 
     @GetMapping("/vacation")
     public String vacation(Model model, Principal principal) {
         String emplId = principal.getName();
-        VacationVO vacationVO = vacationService.loadVacationCnt(emplId);
+        VacationVO vacationVO = service.loadVacationCnt(emplId);
         if (vacationVO != null) {
             int usedVacationCnt = vacationVO.getYrycUseCo();
             int nowVacationCnt = vacationVO.getYrycNowCo();
@@ -49,9 +49,14 @@ public class VacationController {
     @GetMapping("/record")
     public String vacationRecord(Model model, Principal principal) {
         String emplId = principal.getName();
-        List<VacationVO> vacationRecord = vacationService.loadVacationRecord(emplId);
+        List<VacationVO> vacationRecord = service.loadVacationRecord(emplId);
         model.addAttribute("vacationRecord", vacationRecord);
         return "employee/vacationRecord";
+    }
+    @PostMapping(value = "/inputVacation", produces = "application/text; charset=utf8")
+    @ResponseBody
+    public int inputVacation(VacationUseVO vo){
+        return service.inputVacation(vo);
     }
 
 }
