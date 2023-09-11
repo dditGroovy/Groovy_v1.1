@@ -15,6 +15,11 @@
         cursor: pointer;
     }
 
+    .myroom {
+        overflow-y:auto;
+        height:300px;
+    }
+
 </style>
 <hr>
 <h1>채팅방 개설</h1>
@@ -39,8 +44,8 @@
     <div id="msgArea">
 
     </div>
-    <input type="text" id="msg" class="form-control">
-    <button type="button" id="button-send">전송</button>
+    <input type="text" id="msg">
+    <button type="button" id="sendBtn">전송</button>
 </div>
 
 <script>
@@ -56,9 +61,6 @@
     let currentSubRoom;
     let currentRoomNo;
 
-    let isScrolled = false;
-    let isEnd = false;
-
     function connectToStomp() {
         return new Promise(function(res, rej) {
             client.connect({}, function() {
@@ -68,9 +70,21 @@
     }
 
     connectToStomp().then(function() {
-        $("#button-send").on("click", function(){
+        $("#msg").on("keyup", function(event) {
+            if (event.keyCode === 13) {
+                sendMessage();
+            }
+        });
+
+        $("#sendBtn").on("click", function(){
+            sendMessage();
+        });
+
+        function sendMessage() {
             let message = msg.val();
             let date = new Date();
+
+            if(message.length == 0) return;
 
             let chatVO = {
                 chttNo : 0,
@@ -92,10 +106,11 @@
                 },
                 error: function (request, status, error) {
                     alert("채팅 전송 실패")
+                    console.log("채팅 전송 실패 에러 : ", request.responseText)
                 }
             })
             msg.val('');
-        });
+        }
 
         function enterRoom(currentRoomNo) {
             $("#msgArea").html('');
@@ -106,22 +121,22 @@
                 type: "get",
                 dataType: "json",
                 success: function (messages) {
-                    code = "";
                     $.each(messages, function (idx, obj) {
                         if(obj.chttMbrEmplId == emplId) {
-                            code = "<div style='border: 1px solid blue' id='\${obj.chttNo}'>";
+                            var code = `<div style='border: 1px solid blue' id='\${obj.chttNo}'>`;
                             code += "<div>";
                             code += `<p>\${obj.chttMbrEmplNm} : \${obj.chttCn}</p>`;
                             code += "</div></div>";
                             $(`#room\${currentRoomNo}`).append(code);
                         } else {
-                            code = "<div style='border: 1px solid red' id='\${obj.chttNo}'>";
+                            var code = `<div style='border: 1px solid red' id='\${obj.chttNo}'>`;
                             code += "<div>";
                             code += `<p>\${obj.chttMbrEmplNm} : \${obj.chttCn}</p>`;
                             code += "</div></div>";
                             $(`#room\${currentRoomNo}`).append(code);
                         }
                     });
+                    scrollToBottom();
                 },
                 error: function (request, status, error) {
                     alert("채팅 로드 실패")
@@ -130,7 +145,10 @@
             msg.val('');
         }
 
-
+        function scrollToBottom() {
+            const scrollRoom = document.getElementById("room" + currentRoomNo);
+            scrollRoom.scrollTop = scrollRoom.scrollHeight;
+        }
 
         $("#chatRoomList").on("click", ".rooms", function() {
             let selectedRoom = $(this);
@@ -158,13 +176,16 @@
                     code += "<p>" + chttMbrEmplNm + " : " + chttCn + "</p>";
                     code += "</div></div>";
                     $(`#room\${chttRoomNo}`).append(code);
+                    scrollToBottom();
                 } else {
                     code += "<div style='border: 1px solid red'>";
                     code += "<div>";
                     code += "<p>" + chttMbrEmplNm + " : " + chttCn + "</p>";
                     code += "</div></div>";
                     $(`#room\${chttRoomNo}`).append(code);
+                    scrollToBottom();
                 }
+
                 updateLatestChttCn(chttRoomNo, chttCn, chttInputDate);
                 updateChatRoomList(chttRoomNo, chttCn);
             });
@@ -294,7 +315,6 @@
 
             chatRoomList.forEach(room => room.latestInputDate = new Date(room.latestInputDate));
             chatRoomList.sort((a, b) => b.latestInputDate - a.latestInputDate);
-
 
             code = "";
             $.each(chatRoomList, function (idx, obj) {
