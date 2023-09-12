@@ -42,16 +42,12 @@
             </div>
         </div>
         <div class="formContent">
-<<<<<<< HEAD
             <!--결재양식 들어오는 영역-->
                 ${template.formatCn}
             </tr>
-=======
-                ${template.formatCn}
->>>>>>> origin/main
         </div>
         <br/><br/>
-            <button type="button" id="sanctionSubmit" disabled>결재 제출</button>
+        <button type="button" id="sanctionSubmit">결재 제출</button>
     </div>
 
     <script>
@@ -66,15 +62,10 @@
         let referrer;
 
         const etprCode = "${etprCode}";
-<<<<<<< HEAD
         const formatCode = "${format.commonCodeSanctnFormat}";
         const writer = "${CustomUser.employeeVO.emplNm}"
-=======
-        const formatCode = "${template.commonCodeSanctnFormat}";
-        const writer = "${CustomUser.employeeVO.emplId}"
->>>>>>> origin/main
         const today = year + '-' + month + '-' + day;
-        const title = "${template.formatSj}";
+        const title = "${format.formatSj}";
         let content;
         let file = $('#sanctionFile')[0].files[0];
         let vacationId = opener.$("#vacationId").text()
@@ -93,11 +84,8 @@
                     for (var key in data) {
                         if (data.hasOwnProperty(key)) {
                             var value = data[key];
-<<<<<<< HEAD
 
                             // HTML 요소에 해당 키로 접근하여 값을 설정
-=======
->>>>>>> origin/main
                             var element = document.getElementById(key);
                             if (element) {
                                 element.textContent = value;
@@ -110,32 +98,23 @@
                 }
             })
 
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/main
 
         });
         $(".submitLine").on("click", function () {
             approver = $("#sanctionLine input[type=hidden]").map(function () {
                 return $(this).val();
             }).get();
-            // receiver = $("#receiveLine input[type=hidden]").map(function () {
-            //     return $(this).val();
-            // }).get();
+            receiver = $("#receiveLine input[type=hidden]").map(function () {
+                return $(this).val();
+            }).get();
             referrer = $("#refrnLine input[type=hidden]").map(function () {
                 return $(this).val();
             }).get();
             console.log(file);
-            if (approver.length > 0) {
-                $("#sanctionSubmit").prop("disabled", false);
-            } else {
-                $("#sanctionSubmit").prop("disabled", true);
-            }
         })
         $("#sanctionSubmit").on("click", function () {
-
-            updateVacation()
+            $("#sanctionContent").text("윤하늘 바보")
             content = $(".formContent").html();
             const jsonData = {
                 approver: approver,
@@ -147,7 +126,6 @@
                 today: today,
                 title: title,
                 content: content,
-                vacationId: vacationId
             };
 
             $.ajax({
@@ -157,12 +135,9 @@
                 contentType: "application/json",
                 success: function (data) {
                     console.log("결재 제출 성공");
-
                     if (file != null) {
                         uploadFile();
 
-                    } else {
-                        closeWindow()
                     }
                 },
                 error: function (xhr) {
@@ -185,41 +160,11 @@
                 processData: false, // 필수
                 success: function (data) {
                     console.log("결재 파일 업로드 성공");
-                    closeWindow()
                 },
                 error: function (xhr) {
                     console.log("결재 파일 업로드 실패");
                 }
             });
-        }
-
-        function updateVacation() {
-            let data = {
-                approvalType: 'kr.co.groovy.sanction.AnnualLeaveService',
-                methodName: 'afterApprove',
-                parameters: {
-                    approveId: vacationId,
-                    elctrnSanctnEtprCode: etprCode
-                }
-            };
-            $.ajax({
-                url: `/sanction/approve`,
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                success: function (data) {
-                    console.log("연차 테이블 업데이트 성공");
-                },
-                error: function (xhr) {
-                    console.log("연차 테이블 업데이트 실패");
-                }
-            });
-        }
-
-        function closeWindow() {
-            alert("결재 상신이 완료되었습니다.")
-            window.opener.refreshParent();
-            window.close();
         }
     </script>
 </sec:authorize>

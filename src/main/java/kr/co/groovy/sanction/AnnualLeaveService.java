@@ -1,37 +1,29 @@
 package kr.co.groovy.sanction;
 
-import kr.co.groovy.utils.ParamMap;
-import kr.co.groovy.vacation.VacationMapper;
+import kr.co.groovy.enums.Department;
+import kr.co.groovy.vo.SanctionFormatVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
 import java.security.Principal;
 import java.util.HashMap;
-=======
->>>>>>> origin/main
 import java.util.Map;
-
 @Slf4j
 @Service
 public class AnnualLeaveService {
     final
-    VacationMapper mapper;
+    SanctionMapper mapper;
 
-    public AnnualLeaveService(VacationMapper mapper) {
+    public AnnualLeaveService(SanctionMapper mapper) {
         this.mapper = mapper;
     }
 
-    public void afterApprove(Map<String, Object> paramMap) {
-        log.info("오남?");
-        ParamMap map = ParamMap.init();
-        map.put("approveId", paramMap.get("approveId"));
-        map.put("elctrnSanctnEtprCode", paramMap.get("elctrnSanctnEtprCode"));
-        mapper.modifySanctionCode(map);
+    public void approve(Map<String, Object> parameters) {
+        String approver = (String) parameters.get("approver");
     }
 
 
-<<<<<<< HEAD
     public Map<String, Object> viewSanction(Map<String, Object> parameters) throws Exception {
         log.info("왔남");
         String etprCode = mapper.getSeq(Department.valueOf((String) parameters.get("etprCode")).label());
@@ -51,6 +43,4 @@ public class AnnualLeaveService {
 
     }
 
-=======
->>>>>>> origin/main
 }

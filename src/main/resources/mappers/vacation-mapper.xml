@@ -16,8 +16,7 @@
                YRYC_USE_DTLS_RM,
                COMMON_CODE_YRYC_USE_KIND,
                COMMON_CODE_YRYC_USE_SE,
-               YRYC_USE_DTLS_EMPL_ID,
-               ELCTRN_SANCTN_ETPR_CODE
+               YRYC_USE_DTLS_EMPL_ID
         FROM YRYC_USE_DTLS
         WHERE YRYC_USE_DTLS_EMPL_ID = #{emplId}
         ORDER BY YRYC_USE_DTLS_BEGIN_DATE DESC
@@ -56,14 +55,10 @@
         SELECT #{formatSanctnKnd} || '-' || TO_CHAR(SYSDATE, 'YYYY') || '-' || LPAD(
                 (SELECT TO_NUMBER(COUNT(*)) + 1
                  FROM YRYC_USE_DTLS
-                 WHERE SUBSTR(YRYC_USE_DTLS_SN, 1, INSTR(YRYC_USE_DTLS_SN, '-') - 1) = #{formatSanctnKnd}), 4, '0'
+                 WHERE SUBSTR(YRYC_USE_DTLS_SN, 1, INSTR(YRYC_USE_DTLS_SN, '-') - 1) =
+                       #{formatSanctnKnd}),
+                4, '0'
             ) AS elctrnSanctnEtprCode
         FROM DUAL
     </select>
-
-    <update id="modifySanctionCode" parameterType="map">
-        UPDATE YRYC_USE_DTLS
-        SET ELCTRN_SANCTN_ETPR_CODE = #{elctrnSanctnEtprCode}
-        WHERE YRYC_USE_DTLS_SN = #{approveId}
-    </update>
 </mapper>
