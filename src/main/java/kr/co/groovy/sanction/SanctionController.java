@@ -70,8 +70,13 @@ public class SanctionController {
 
     @PostMapping("/approve")
     @ResponseBody
+<<<<<<< HEAD
     public void approve(@RequestBody Map<String, Object> request, Model model) {
         service.approve(request, model);
+=======
+    public void approve(@RequestBody Map<String, Object> request) {
+        service.approve(request);
+>>>>>>> origin/main
     }
 
 
@@ -81,6 +86,7 @@ public class SanctionController {
         return map;
     }
 
+<<<<<<< HEAD
 
 
     // 양식 불러오기
@@ -115,11 +121,47 @@ public class SanctionController {
         // 결재 승인 로직 추가
         // 파라미터에서 결재자 정보 추출 및 승인 처리
         String approver = (String) parameters.get("approver");
+=======
+>>>>>>> origin/main
 
-        // 최종 승인 시 추가 로직
-        if (isFinalApproval(parameters)) {
-        }
+
+    // 양식 불러오기
+    @GetMapping("/write/{formatSanctnKnd}")
+    public String writeSanction(
+            @RequestParam("format") String format,
+            @PathVariable String formatSanctnKnd, Model model) {
+        String etprCode = service.getSeq(Department.valueOf(formatSanctnKnd).label());
+        SanctionFormatVO vo = service.loadFormat(format);
+        String template = vo.getFormatCn();
+        model.addAttribute("template", vo);
+        model.addAttribute("etprCode", etprCode);
+        return "sanction/template/write";
     }
+
+
+    @PostMapping("/inputSanction")
+    @ResponseBody
+    public void inputSanction(@RequestBody ParamMap requestData) {
+        service.inputSanction(requestData);
+    }
+
+
+
+
+
+
+    // 구현할 거 ----------------------------------------------------------------------------------------------------------------
+
+//    @GetMapping("/approve/{SANCTN015}")
+//    public void approve(Map<String, Object> parameters, @PathVariable String SANCTN015) {
+//        // 결재 승인 로직 추가
+//        // 파라미터에서 결재자 정보 추출 및 승인 처리
+//        String approver = (String) parameters.get("approver");
+//
+//        // 최종 승인 시 추가 로직
+//        if (isFinalApproval(parameters)) {
+//        }
+//    }
 
     @GetMapping("/reject/{SANCTN014}")
     public void reject(Map<String, Object> parameters, @PathVariable String SANCTN014) {
