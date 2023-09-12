@@ -327,170 +327,170 @@
     const emplId = "${CustomUser.employeeVO.emplId}";
     let sntncEtprCode;
     function loadAnswerFn(sntncEtprCode,item){
-    $.ajax({
-    url: "/teamCommunity/loadAnswer",
-    type: "POST",
-    data: { sntncEtprCode: sntncEtprCode },
-    success: function(data) {
-    let code = "";
-    data.forEach(item => {
-    code += `<td>
-    <img src="/uploads/profile/\${item.proflPhotoFileStreNm}" style="width: 50px; height: 50px;"/> <br />
-    \${item.answerCn}<br />
-    \${item.answerDate}
-    </td><br/>`
-    })
-    item.querySelector(".answerBox").innerHTML = code;
+        $.ajax({
+        url: "/teamCommunity/loadAnswer",
+        type: "POST",
+        data: { sntncEtprCode: sntncEtprCode },
+        success: function(data) {
+        let code = "";
+        data.forEach(item => {
+        code += `<td>
+        <img src="/uploads/profile/\${item.proflPhotoFileStreNm}" style="width: 50px; height: 50px;"/> <br />
+        \${item.answerCn}<br />
+        \${item.answerDate}
+        </td><br/>`
+        })
+        item.querySelector(".answerBox").innerHTML = code;
 
-    },
-    error: function(request, status, error){
-    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    }
-    })
+        },
+        error: function(request, status, error){
+        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+        }
+        })
     }
     /*  포스트에서 기능 */
     post.forEach((item) => {
-    item.addEventListener("click",function(e){
-    e.preventDefault();
-    console.log(e.target);
-    const target = e.target;
-    const recomendEmplId = "${CustomUser.employeeVO.emplId}";
-    const sntncEtprCode =  `\${item.getAttribute("data-idx")}`;
-    const sntncCnbox = item.querySelector(".sntncCn");
-    let recomendVo = {
-    "recomendEmplId":recomendEmplId,
-    "sntncEtprCode":sntncEtprCode
-    }
-    let sntncVO = {
-    "sntncWrtingEmplId":recomendEmplId,
-    "sntncEtprCode":sntncEtprCode
-    }
-    /*  좋아요 */
-    if(target.classList.contains("unRecomendBtn")){
-    const btn = item.querySelector(".unRecomendBtn");
-    $.ajax({
-    url: "/teamCommunity/inputRecomend",
-    type: "POST",
-    data: recomendVo,
-    dataType: "text",
-    success: function(data) {
-    const like = item.querySelector(".recomentCnt");
-    like.innerText = data;
-    if(btn.classList.contains("unRecomendBtn")){
-    btn.classList.remove("unRecomendBtn");
-    btn.classList.add("recomendBtn");
-    }
-    },
-    error: function(request, status, error){
-    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    }
-    })
-    return;
-    }
-    /*  좋아요 취소 */
-    if(target.classList.contains("recomendBtn")){
-    const btn = item.querySelector(".recomendBtn");
-    $.ajax({
-    url: "/teamCommunity/deleteRecomend",
-    type: "POST",
-    data: recomendVo,
-    dataType: "text",
-    success: function(data) {
-    const like = item.querySelector(".recomentCnt");
-    like.innerText = data;
-    if(btn.classList.contains("recomendBtn")){
-    btn.classList.remove("recomendBtn");
-    btn.classList.add("unRecomendBtn");
-    }
-    },
-    error: function(request, status, error){
-    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    }
-    })
-    return;
-    }
-    /*  포스트 수정  */
-    if(target.classList.contains("modifyBtn")){
+        item.addEventListener("click",function(e){
+        e.preventDefault();
+        console.log(e.target);
+        const target = e.target;
+        const recomendEmplId = "${CustomUser.employeeVO.emplId}";
+        const sntncEtprCode =  `\${item.getAttribute("data-idx")}`;
+        const sntncCnbox = item.querySelector(".sntncCn");
+        let recomendVo = {
+            "recomendEmplId":recomendEmplId,
+            "sntncEtprCode":sntncEtprCode
+        }
+        let sntncVO = {
+            "sntncWrtingEmplId":recomendEmplId,
+            "sntncEtprCode":sntncEtprCode
+        }
+        /*  좋아요 */
+        if(target.classList.contains("unRecomendBtn")){
+            const btn = item.querySelector(".unRecomendBtn");
+            $.ajax({
+                url: "/teamCommunity/inputRecomend",
+                type: "POST",
+                data: recomendVo,
+                dataType: "text",
+                success: function(data) {
+                    const like = item.querySelector(".recomentCnt");
+                    like.innerText = data;
+                    if(btn.classList.contains("unRecomendBtn")){
+                    btn.classList.remove("unRecomendBtn");
+                    btn.classList.add("recomendBtn");
+            }
+        },
+                error: function(request, status, error){
+                    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        })
+            return;
+        }
+        /*  좋아요 취소 */
+        if(target.classList.contains("recomendBtn")){
+            const btn = item.querySelector(".recomendBtn");
+            $.ajax({
+                url: "/teamCommunity/deleteRecomend",
+                type: "POST",
+                data: recomendVo,
+                dataType: "text",
+                success: function(data) {
+                    const like = item.querySelector(".recomentCnt");
+                    like.innerText = data;
+                    if(btn.classList.contains("recomendBtn")){
+                    btn.classList.remove("recomendBtn");
+                    btn.classList.add("unRecomendBtn");
+                }
+            },
+                error: function(request, status, error){
+                    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            })
+            return;
+        }
+        /*  포스트 수정  */
+        if(target.classList.contains("modifyBtn")){
 
-    const content = sntncCnbox.innerText;
-    const textArea = document.createElement("textarea");
-    textArea.classList = "modifySntncCn";
-    textArea.value = content;
+            const content = sntncCnbox.innerText;
+            const textArea = document.createElement("textarea");
+            textArea.classList = "modifySntncCn";
+            textArea.value = content;
 
-    const saveBtn = document.createElement("button");
-    saveBtn.classList = "saveMoidfyBtn";
-    saveBtn.innerText = "수정";
+            const saveBtn = document.createElement("button");
+            saveBtn.classList = "saveMoidfyBtn";
+            saveBtn.innerText = "수정";
 
-    sntncCnbox.innerHTML = "";
-    sntncCnbox.appendChild(textArea);
-    sntncCnbox.appendChild(saveBtn);
-    }
-    if(target.classList.contains("saveMoidfyBtn")){
-    const modisntncCn = document.querySelector(".modifySntncCn").value;
-    sntncVO.sntncCn = modisntncCn;
-    $.ajax({
-    url: "/teamCommunity/modifyPost",
-    type: "PUT",
-    data: JSON.stringify(sntncVO),
-    contentType: "application/json",
-    dataType: "text",
-    success: function(data) {
-    item.querySelector(".modifySntncCn").remove();
-    sntncCnbox.innerText = sntncVO.sntncCn;
-    target.remove();
-    },
-    error: function(request, status, error){
-    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    }
-    })
-    }
-    /*  포스트 삭제  */
-    if(target.classList.contains("deleteBtn")){
-    $.ajax({
-    url: "/teamCommunity/deletePost",
-    type: "Delete",
-    data: JSON.stringify({ sntncEtprCode: sntncEtprCode }),
-    contentType: 'application/json',
-    success: function(data) {
-    item.remove();
-    },
-    error: function(request, status, error){
-    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    }
-    })
+            sntncCnbox.innerHTML = "";
+            sntncCnbox.appendChild(textArea);
+            sntncCnbox.appendChild(saveBtn);
+        }
+        if(target.classList.contains("saveMoidfyBtn")){
+            const modisntncCn = document.querySelector(".modifySntncCn").value;
+            sntncVO.sntncCn = modisntncCn;
+            $.ajax({
+                url: "/teamCommunity/modifyPost",
+                type: "PUT",
+                data: JSON.stringify(sntncVO),
+                contentType: "application/json",
+                dataType: "text",
+                success: function(data) {
+                    item.querySelector(".modifySntncCn").remove();
+                    sntncCnbox.innerText = sntncVO.sntncCn;
+                    target.remove();
+                },
+                error: function(request, status, error){
+                    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                    }
+                })
+        }
+        /*  포스트 삭제  */
+        if(target.classList.contains("deleteBtn")){
+            $.ajax({
+            url: "/teamCommunity/deletePost",
+            type: "Delete",
+            data: JSON.stringify({ sntncEtprCode: sntncEtprCode }),
+            contentType: 'application/json',
+            success: function(data) {
+                item.remove();
+            },
+            error: function(request, status, error){
+                console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+            })
     }
     /*  댓글 등록   */
     if(target.classList.contains("inputAnswer")){
-    const answerCnt = item.querySelector(".answerCnt")
-    const answerContent = item.querySelector(".answerCn");
-    const answerValue = answerContent.value;
-    const answerVO = {
-    "sntncEtprCode" : sntncEtprCode,
-    "answerCn" : answerValue,
+        const answerCnt = item.querySelector(".answerCnt")
+        const answerContent = item.querySelector(".answerCn");
+        const answerValue = answerContent.value;
+        const answerVO = {
+        "sntncEtprCode" : sntncEtprCode,
+        "answerCn" : answerValue,
+        }
+        if(answerValue !== ""){
+            $.ajax({
+            url: "/teamCommunity/inputAnswer",
+            type: "POST",
+            data: JSON.stringify(answerVO),
+            contentType: "application/json",
+            dataType: "text",
+            success: function(data) {
+                answerCnt.innerText = data;
+                answerContent.value = "";
+                loadAnswerFn(sntncEtprCode,item);
+            },
+            error: function(request, status, error){
+                console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            })
+        }
     }
-    if(answerValue !== ""){
-    $.ajax({
-    url: "/teamCommunity/inputAnswer",
-    type: "POST",
-    data: JSON.stringify(answerVO),
-    contentType: "application/json",
-    dataType: "text",
-    success: function(data) {
-    answerCnt.innerText = data;
-    answerContent.value = "";
-    loadAnswerFn(sntncEtprCode,item);
-    },
-    error: function(request, status, error){
-    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-    }
-    })
-    }
-    }
-    /*  댓글 불러오기 */
-    if(target.classList.contains("loadAnswer")){
-    loadAnswerFn(sntncEtprCode,item);
-    }
-    })
+        /*  댓글 불러오기 */
+        if(target.classList.contains("loadAnswer")){
+            loadAnswerFn(sntncEtprCode,item);
+        }
+        })
     })
     function loadTeamNotiFnc(){
     $.ajax({
