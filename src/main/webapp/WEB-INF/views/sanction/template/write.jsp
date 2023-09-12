@@ -29,7 +29,7 @@
             </div>
             <br/>
             <div class="formTitle">
-                    ${format.formatSj}
+                    ${template.formatSj}
             </div>
         </div>
         <div class="approvalWrap">
@@ -42,12 +42,10 @@
             </div>
         </div>
         <div class="formContent">
-            <!--결재양식 들어오는 영역-->
-                ${format.formatCn}
-            </tr>
+                ${template.formatCn}
         </div>
         <br/><br/>
-        <button type="button" id="sanctionSubmit">결재 제출</button>
+            <button type="button" id="sanctionSubmit" disabled>결재 제출</button>
     </div>
 
     <script>
@@ -61,51 +59,63 @@
         let receiver;
         let referrer;
 
-        <%--const etprCode = "${etprCode}";--%>
-        const formatCode = "${format.commonCodeSanctnFormat}";
-        const writer = "${CustomUser.employeeVO.emplNm}"
+        const etprCode = "${etprCode}";
+        const formatCode = "${template.commonCodeSanctnFormat}";
+        const writer = "${CustomUser.employeeVO.emplId}"
         const today = year + '-' + month + '-' + day;
-        const title = "${format.formatSj}";
+        const title = "${template.formatSj}";
         let content;
         let file = $('#sanctionFile')[0].files[0];
+        let vacationId = opener.$("#vacationId").text()
 
-        let formData = {
-            title: opener.$("#title").val(),
-            vacationKind: opener.$("input[name='commonCodeYrycUseKind']:checked + label").text(),
-            vacationSe: opener.$("input[name='commonCodeYrycUseSe']:checked + label").text(),
-            startDay: opener.$("#startDay").val(),
-            endDay: opener.$("#endDay").val(),
-            content: opener.$("#content").val()
-
-
-        };
-        // vacationCategory: opener.$("input[name='vacationCate']:checked").val(),
-        // vacationType: opener.$("input[name='vacationType']:checked").val(),
         $(document).ready(function () {
-            // $("#sanctionNo").html(etprCode);
+            $("#sanctionNo").html(etprCode);
             $("#writeDate").html(today);
             $("#writer").html(writer)
-            $("#vacationKind").text(formData.vacationKind)
-            $("#vacationSe").text(formData.vacationSe)
-            $("#startDay").text(formData.startDay)
-            $("#endDate").text(formData.endDay)
-            $("#sanctionContent").text(content)
+
+            $.ajax({
+                url: `/vacation/loadData/\${vacationId}`,
+                type: "GET",
+                success: function (data) {
+                    console.log(data)
+
+                    for (var key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            var value = data[key];
+                            var element = document.getElementById(key);
+                            if (element) {
+                                element.textContent = value;
+                            }
+                        }
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            })
+
 
         });
         $(".submitLine").on("click", function () {
             approver = $("#sanctionLine input[type=hidden]").map(function () {
                 return $(this).val();
             }).get();
-            receiver = $("#receiveLine input[type=hidden]").map(function () {
-                return $(this).val();
-            }).get();
+            // receiver = $("#receiveLine input[type=hidden]").map(function () {
+            //     return $(this).val();
+            // }).get();
             referrer = $("#refrnLine input[type=hidden]").map(function () {
                 return $(this).val();
             }).get();
             console.log(file);
+            if (approver.length > 0) {
+                $("#sanctionSubmit").prop("disabled", false);
+            } else {
+                $("#sanctionSubmit").prop("disabled", true);
+            }
         })
         $("#sanctionSubmit").on("click", function () {
-            $("#sanctionContent").text("윤하늘 바보")
+
+            updateVacation()
             content = $(".formContent").html();
             const jsonData = {
                 approver: approver,
@@ -117,6 +127,7 @@
                 today: today,
                 title: title,
                 content: content,
+                vacationId: vacationId
             };
 
             $.ajax({
@@ -126,9 +137,12 @@
                 contentType: "application/json",
                 success: function (data) {
                     console.log("결재 제출 성공");
+
                     if (file != null) {
                         uploadFile();
 
+                    } else {
+                        closeWindow()
                     }
                 },
                 error: function (xhr) {
@@ -151,11 +165,41 @@
                 processData: false, // 필수
                 success: function (data) {
                     console.log("결재 파일 업로드 성공");
+                    closeWindow()
                 },
                 error: function (xhr) {
                     console.log("결재 파일 업로드 실패");
                 }
             });
+        }
+
+        function updateVacation() {
+            let data = {
+                approvalType: 'kr.co.groovy.sanction.AnnualLeaveService',
+                methodName: 'afterApprove',
+                parameters: {
+                    approveId: vacationId,
+                    elctrnSanctnEtprCode: etprCode
+                }
+            };
+            $.ajax({
+                url: `/sanction/approve`,
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    console.log("연차 테이블 업데이트 성공");
+                },
+                error: function (xhr) {
+                    console.log("연차 테이블 업데이트 실패");
+                }
+            });
+        }
+
+        function closeWindow() {
+            alert("결재 상신이 완료되었습니다.")
+            window.opener.refreshParent();
+            window.close();
         }
     </script>
 </sec:authorize>

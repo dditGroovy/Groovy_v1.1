@@ -20,5 +20,8 @@ public class VacationUseVO {
     private String commonCodeYrycUseKind;
     private String commonCodeYrycUseSe;
     private String yrycUseDtlsEmplId;
+    private String elctrnSanctnEtprCode;
+
+    private int generatedKey;
 
 }
