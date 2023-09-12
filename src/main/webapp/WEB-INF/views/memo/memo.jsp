@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
     .memo {
         border: 1px solid red;
@@ -27,10 +28,13 @@
     <div id="memoLists">
         <div id="appendMemo"></div>
         <div id="memoList">
+        <c:forEach items="${memoList}" var="list">
             <div class="memo">
-                제목: <p>dfsdfsedf</p>
-                내용: <p>sdfdga;wethg;agh</p>
+               <p>${list.memoSj}</p>
+               <p>${list.memoCn}</p>
+               <p>${list.memoWrtngDate}</p>
             </div>
+         </c:forEach>
         </div>
     </div>
 </div>
@@ -71,9 +75,41 @@
     memoLists.addEventListener("click",(e)=>{
         if(e.target.classList.contains("savebtn")){
             const target = e.target;
-            /* ajax 처리 */
+            
+            const memoElem = target.parentElement;
+            const memoTitleInput = memoElem.querySelector('input[name="memoSj"]');
+            const memoContentTextarea = memoElem.querySelector('textarea[name="memoCn"]');
+            
+            const memoSj = memoTitleInput.value;
+            const memoCn = memoContentTextarea.value;
+            
+            const memoData = {
+            		memoSj: memoSj,
+            		memoCn: memoCn
+            	};
+            
+            $.ajax({
+                    url: "/memo/memoMain",
+                    type: "POST",
+                    data: JSON.stringify(memoData),
+                    contentType: "application/json;charset=UTF-8",
+                    success:function(data){
+	                    		if(data=="success") {
+	                               location.href=location.href;                    			
+	                    		}
+	                    		else {
+	                    			alert("메모 추가를 실패했습니다");
+	                    		}
+                            },
+                    error: function (request, status, error) {
+                          console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                        }            
+
+        })
             flug = true;
+        
         }
     })
+   
 
 </script>

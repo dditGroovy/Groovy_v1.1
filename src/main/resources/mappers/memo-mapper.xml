@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.groovy.memo.MemoMapper">
 
-<select id="getMemo" resultType="memoVO">
+<select id="getMemo" parameterType="String" resultType="memoVO">
 	SELECT 
 		MEMO_SN, 
 		MEMO_EMPL_ID, 
@@ -11,8 +11,10 @@
 		MEMO_WRTNG_DATE, 
 		COMMON_CODE_FIXING_AT, 
 		COMMON_CODE_BKMK_AT 
-	FROM
-	MEMO
+	FROM 
+		MEMO
+	WHERE 
+		MEMO_EMPL_ID=#{memoEmplId}
 </select>
 
 <select id="getOneMemo" parameterType="int" resultType="memoVO">
