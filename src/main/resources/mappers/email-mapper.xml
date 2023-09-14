@@ -6,14 +6,14 @@
         begin
             insert into EMAIL_FROM( email_etpr_code
                                   , email_from_addr
-                                  , emai_from_sj
+                                  , email_from_sj
                                   , email_from_cn
                                   , email_from_cn_type
                                   , email_from_send_date
                                   , EMAIL_FROM_TMPR_STRE_AT)
             values ( 'EMAIL-' || EMAIL_SEQ.nextval || '-' || to_char(#{emailFromSendDate}, 'yyyymmdd')
                    , #{emailFromAddr}
-                   , #{emaiFromSj}
+                   , #{emailFromSj}
                    , #{emailFromCn}
                    , #{emailFromCnType}
                    , #{emailFromSendDate}
@@ -26,16 +26,14 @@
                                 , email_redng_at
                                 , email_imprtnc_at
                                 , email_delete_at)
-            SELECT ef.EMAIL_ETPR_CODE,
-                   ef.EMAIL_FROM_ADDR,
-                   #{emailToAddr},
-                   #{emailToReceivedDate},
-                   #{emailRedngAt},
-                   #{emailImprtncAt},
-                   #{emailDeleteAt}
-            FROM EMAIL_FROM ef
-            WHERE ef.EMAIL_ETPR_CODE = #{emailEtprCode}
-              AND ef.EMAIL_FROM_ADDR = #{emailFromAddr};
+            values ( 'EMAIL-' || EMAIL_SEQ.currval || '-' || to_char(#{emailFromSendDate}, 'yyyymmdd')
+                   , #{emailFromAddr}
+                   , #{emailToAddr}
+                   , #{emailToReceivedDate}
+                   , #{emailRedngAt}
+                   , #{emailImprtncAt}
+                   , #{emailDeleteAt});
+
 
             insert into EMAIL_CC( email_etpr_code
                                 , email_from_addr
@@ -44,16 +42,13 @@
                                 , email_redng_at
                                 , email_imprtnc_at
                                 , email_delete_at)
-            SELECT ef.EMAIL_ETPR_CODE,
-                   ef.EMAIL_FROM_ADDR,
-                   #{emailCcAddr},
-                   #{emailToReceivedDate},
-                   #{emailRedngAt},
-                   #{emailImprtncAt},
-                   #{emailDeleteAt}
-            FROM EMAIL_FROM ef
-            WHERE ef.EMAIL_ETPR_CODE = #{emailEtprCode}
-              AND ef.EMAIL_FROM_ADDR = #{emailFromAddr};
+            values ( 'EMAIL-' || EMAIL_SEQ.currval || '-' || to_char(#{emailFromSendDate}, 'yyyymmdd')
+                   , #{emailFromAddr}
+                   , #{emailCcAddr}
+                   , #{emailToReceivedDate}
+                   , #{emailRedngAt}
+                   , #{emailImprtncAt}
+                   , #{emailDeleteAt});
         end}
     </insert>
 </mapper>
